@@ -1,17 +1,15 @@
-import React, { useState } from "react";
+import { Button, Checkbox } from "@heathmont/moon-core-tw";
+import { ControlsPlus, GenericPicture } from "@heathmont/moon-icons-tw";
 import Head from "next/head";
+import { useRouter } from "next/router";
+import { NFTStorage } from "nft.storage";
+import React, { useState } from "react";
 import UseFormInput from "../../components/components/UseFormInput";
 import UseFormTextArea from "../../components/components/UseFormTextArea";
-import { Header } from "../../components/layout/Header";
-import NavLink from "next/link";
-import { useRouter } from "next/router";
-import useContract from '../../services/useContract'
-import isServer from "../../components/isServer";
-import { NFTStorage, File } from "nft.storage";
+import useContract from '../../services/useContract';
 import styles from "./CreateDao.module.css";
-import { Button } from "@heathmont/moon-core-tw";
-import { GenericPicture, ControlsPlus } from "@heathmont/moon-icons-tw";
-import { Checkbox } from "@heathmont/moon-core-tw";
+
+import isServer from "../../components/isServer";
 
 export default function CreateDao() {
   const [DaoImage, setDaoImage] = useState([]);
@@ -51,8 +49,6 @@ export default function CreateDao() {
     id: "subs_price",
   });
 
-  if (isServer()) return null;
-
   //Downloading plugin function
   function downloadURI(uri, name) {
     var link = document.createElement("a");
@@ -62,7 +58,9 @@ export default function CreateDao() {
     link.click();
     document.body.removeChild(link);
   }
-  CheckTransaction();
+  if(!isServer()) {
+    CheckTransaction();
+  }
 
   //Creating plugin function
   async function CreatePlugin(src) {
@@ -135,7 +133,7 @@ export default function CreateDao() {
     };
     console.log("======================>Creating Dao");
     try {
-      const valueAll = await contract.get_all_daos() //Getting dao URI from smart contract       
+      const valueAll = await contract.get_all_daos() //Getting dao URI from smart contract
 
       // //Getting the dao id of new one
       let daoid = valueAll.length;
@@ -154,7 +152,7 @@ export default function CreateDao() {
         value: allFiles[0].url
       }]
       let formatted_template = formatTemplate(template,changings)
-     
+
       // Creating Dao in Smart contract from metamask chain
       await sendTransaction(await window.contract.populateTransaction.create_dao(signerAddress, JSON.stringify(createdObject), formatted_template));
 
@@ -223,7 +221,6 @@ export default function CreateDao() {
         <meta name="description" content="Create DAO" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Header></Header>
       <div
         className={`${styles.container} flex items-center justify-center flex-col gap-8`}
       >
@@ -306,7 +303,7 @@ export default function CreateDao() {
                     onClick={AddBTNClick}
                     variant="secondary"
                     style={{ height: 80, padding: "1.5rem" }}
-                    iconLeft
+                    iconLeft="true"
                     size="lg"
                   >
                     <GenericPicture className="text-moon-24" />

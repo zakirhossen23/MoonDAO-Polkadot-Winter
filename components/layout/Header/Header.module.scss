@@ -1,8 +1,9 @@
 .header {
-  position: inherit;
-  background:var(--background-header);
+  position: relative;
+  background: linear-gradient(0deg, #EC1F52 -366.48%, #09013E 100%);
   color: var(--fg-header);
-  box-shadow: 0px 12px 12px -6px rgba(0, 0, 0, 0.16), 0px 0px 1px rgba(0, 0, 0, 0.4);
+  box-shadow: 0px 12px 12px -6px rgba(0,0,0,.16);
+
   @media (min-width: 320px ) {
     zoom:0.6;
   }

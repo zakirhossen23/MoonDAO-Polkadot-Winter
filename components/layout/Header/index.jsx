@@ -1,17 +1,26 @@
 import Image from "next/image";
-import Link from "next/link";
-import styles from "./Header.module.scss";
 import { Nav } from "../Nav";
+import styles from "./Header.module.scss";
 
 export const Header = () => {
   return (
-    <header className={`w-full p-4 gap-4 flex justify-between z-1 ${styles.header}`}>
+    <header className={`w-full px-8 py-4 gap-4 flex justify-between z-1 ${styles.header}`}>
       <a href="/" >
-        <div className={`px-2 inline-flex ${styles.logo}`}>
-          <Image height={60} width={60} src="/favicon.png" alt="MoonDAO" />
+        <div className={`inline-flex ${styles.logo}`}>
+          <Image
+            height={48}
+            width={119}
+            src="/images/logo.png"
+            alt="planetDAO"
+            style={{
+              maxWidth: "119px",
+              height: "auto"
+            }} />
         </div>
       </a>
       <Nav />
     </header>
   );
 };
+
+export default Header;

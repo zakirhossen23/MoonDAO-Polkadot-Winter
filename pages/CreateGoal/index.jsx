@@ -1,20 +1,18 @@
-import React, { useEffect, useState } from "react";
+import { Button } from "@heathmont/moon-core-tw";
+import { ControlsPlus, GenericPicture } from "@heathmont/moon-icons-tw";
 import Head from "next/head";
+import NavLink from "next/link";
+import { NFTStorage } from "nft.storage";
+import { useState } from "react";
 import UseFormInput from "../../components/components/UseFormInput";
 import UseFormTextArea from "../../components/components/UseFormTextArea";
-import { Header } from "../../components/layout/Header";
-import NavLink from "next/link";
 import isServer from "../../components/isServer";
-import useContract from '../../services/useContract'
-import { NFTStorage, File } from "nft.storage";
+import useContract from '../../services/useContract';
 import styles from "./CreateGoal.module.css";
-import { Button } from "@heathmont/moon-core-tw";
-import { GenericPicture, ControlsPlus } from "@heathmont/moon-icons-tw";
 
 export default function CreateGoal() {
   const [GoalImage, setGoalImage] = useState([]);
   const { contract, signerAddress,sendTransaction } = useContract()
-  if (isServer()) return null;
 
   //Storage API for images and videos
   const NFT_STORAGE_TOKEN =
@@ -71,8 +69,9 @@ export default function CreateGoal() {
     }
   }
 
-  CheckTransaction();
-
+  if (!isServer()) { // All this kinda stuff should be in useEffects()
+    CheckTransaction();
+  }
 
   //Function after clicking Create Goal Button
   async function createGoal() {
@@ -138,19 +137,17 @@ export default function CreateGoal() {
   }
 
   function CreateGoalBTN() {
-    return (
-      <>
-        <div className="flex gap-4 justify-end">
-          <NavLink href="/daos">
-            <Button variant="secondary">Cancel</Button>
-          </NavLink>
-          <Button id="CreateGoalBTN" onClick={createGoal}>
-            <ControlsPlus className="text-moon-24" />
-            Create goal
-          </Button>
-        </div>
-      </>
-    );
+    return <>
+      <div className="flex gap-4 justify-end">
+        <NavLink href="/daos" legacyBehavior>
+          <Button variant="secondary">Cancel</Button>
+        </NavLink>
+        <Button id="CreateGoalBTN" onClick={createGoal}>
+          <ControlsPlus className="text-moon-24" />
+          Create goal
+        </Button>
+      </div>
+    </>;
   }
   function FilehandleChange(goal) {
     // If user uploaded images/videos
@@ -206,7 +203,6 @@ export default function CreateGoal() {
         <meta name="description" content="Create Goal" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Header></Header>
       <div
         className={`${styles.container} flex items-center justify-center flex-col gap-8`}
       >
@@ -283,7 +279,7 @@ export default function CreateGoal() {
                     onClick={AddBTNClick}
                     variant="secondary"
                     style={{ height: 80, padding: "1.5rem" }}
-                    iconLeft
+                    iconLeft="true"
                     size="lg"
                   >
                     <GenericPicture className="text-moon-24" />
@@ -321,7 +317,7 @@ export default function CreateGoal() {
               </div>
             </div>
           </div>
-  
+
           <CreateGoalBTN />
         </div>
       </div>

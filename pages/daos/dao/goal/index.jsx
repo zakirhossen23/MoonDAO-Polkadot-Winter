@@ -1,18 +1,14 @@
-import React, { useState, useEffect } from "react";
-import Head from "next/head"
-import Image from "next/image"
-import NavLink from "next/link"
-import useContract from "../../../../services/useContract"
-
-import { Header } from "../../../../components/layout/Header"
-import isServer from "../../../../components/isServer"
-import styles from "../../daos.module.css"
-import Card from "../../../../components/components/Card/Card"
-import { ControlsPlus, ControlsChevronRight, ControlsChevronLeft } from "@heathmont/moon-icons-tw"
-import { Button } from "@heathmont/moon-core-tw"
-import Skeleton from "@mui/material/Skeleton"
+import { Button } from "@heathmont/moon-core-tw";
+import { ControlsChevronLeft, ControlsChevronRight, ControlsPlus } from "@heathmont/moon-icons-tw";
+import Skeleton from "@mui/material/Skeleton";
+import Head from "next/head";
+import NavLink from "next/link";
+import React, { useEffect, useState } from "react";
+import Card from "../../../../components/components/Card/Card";
+import isServer from "../../../../components/isServer";
+import useContract from "../../../../services/useContract";
+import styles from "../../daos.module.css";
 let running = true
-
 
 export default function Goal() {
 	//Variables
@@ -47,15 +43,17 @@ export default function Goal() {
 	setInterval(function () {
 		calculateTimeLeft()
 	}, 1000)
-	if (isServer()) return null
-	const str = decodeURIComponent(window.location.search)
+	if (!isServer()) {
+    const str = decodeURIComponent(window.location.search)
 
-	while ((m = regex.exec(str)) !== null) {
-		if (m.index === regex.lastIndex) {
-			regex.lastIndex++
-		}
-		id = m[1]
-	}
+    while ((m = regex.exec(str)) !== null) {
+      if (m.index === regex.lastIndex) {
+        regex.lastIndex++
+      }
+      id = m[1]
+    }
+  }
+
 	function calculateTimeLeft() {
 		//Calculate time left
 		try {
@@ -67,11 +65,6 @@ export default function Goal() {
 			}
 		} catch (error) {}
 	}
-
-	const formatter = new Intl.NumberFormat("en-US", {
-		minimumFractionDigits: 2,
-		maximumFractionDigits: 2
-	})
 
 	async function fetchContractData() {
 		//Fetching data from Smart contract
@@ -95,13 +88,13 @@ export default function Goal() {
 							Title: object.properties.Title.description,
 							Description: object.properties.Description.description,
 							wallet: object.properties.wallet.description,
-							logo: object.properties.logo.description.url,
+							logo: object.properties.logo.description?.url,
 							allfiles: object.properties.allfiles
 						})
 					}
 				}
 				setList(arr)
-				
+
 				setGoalURI({
 					goalId: Number(id),
 					Title: goalURI.properties.Title.description,
@@ -109,7 +102,7 @@ export default function Goal() {
 					Budget: goalURI.properties.Budget.description,
 					End_Date: goalURI.properties.End_Date?.description,
 					wallet: goalURI.properties.wallet.description,
-					logo: goalURI.properties.logo.description.url,
+					logo: goalURI.properties.logo.description?.url,
 					isOwner: goalURI.properties.wallet.description.toString().toLocaleLowerCase() === signerAddress.toString().toLocaleLowerCase() ? true : false
 				})
 
@@ -142,106 +135,103 @@ export default function Goal() {
 			return element
 		}
 	}
-	return (
-		<>
-			<Header></Header>
-			<Head>
-				<title>Goal</title>
-				<meta name="description" content="Goal" />
-				<link rel="icon" href="/favicon.ico" />
-			</Head>
-			<div className={`${styles.container} flex items-center flex-col gap-8 relative`}>
-				<div className={`${styles.title} gap-8 flex flex-col relative`}>
-					<div>
-						<h1 className="text-moon-32 font-bold" style={{ width: "78%" }}>
-							{GoalURI.Title}
-						</h1>
-						<a
-							style={{ width: "135px", position: "absolute", right: "1rem", top: "0" }}
-							onClick={() => {
-								window.history.back()
-							}}>
-							<Button iconleft style={{ width: "135px" }}>
-								<ControlsChevronLeft />
-								Back
-							</Button>
-						</a>
-					</div>
+	return <>
+        <Head>
+            <title>Goal</title>
+            <meta name="description" content="Goal" />
+            <link rel="icon" href="/favicon.ico" />
+        </Head>
+        <div className={`${styles.container} flex items-center flex-col gap-8 relative`}>
+            <div className={`${styles.title} gap-8 flex flex-col relative`}>
+                <div>
+                    <h1 className="text-moon-32 font-bold" style={{ width: "78%" }}>
+                        {GoalURI.Title}
+                    </h1>
+                    <a
+                        style={{ width: "135px", position: "absolute", right: "1rem", top: "0" }}
+                        onClick={() => {
+                            window.history.back()
+                        }}>
+                        <Button iconleft style={{ width: "135px" }}>
+                            <ControlsChevronLeft />
+                            Back
+                        </Button>
+                    </a>
+                </div>
 
-					<div className={`${styles.tabs} flex gap-4`}>
-						<NavLink href="?q=All">
-							<a className="DonationBarLink tab block px-3 py-2 active">All</a>
-						</NavLink>
-						<NavLink href="?q=Today">
-							<a className="DonationBarLink tab block px-3 py-2">Today</a>
-						</NavLink>
-						<NavLink href="?q=This Month">
-							<a className="DonationBarLink tab block px-3 py-2">This Month</a>
-						</NavLink>
-						{!GoalURI.isOwner ? (
-							<>
-								<a href={`/CreateIdeas?[${goalId}]`}>
-									<Button style={{ width: "150px", position: "absolute", right: "1rem" }} iconLeft>
-										<ControlsPlus className="text-moon-24" />
-										<div className="card BidcontainerCard">
-											<div className="card-body bidbuttonText">Create Ideas</div>
-										</div>
-									</Button>
-								</a>
-							</>
-						) : (
-							<></>
-						)}
-					</div>
-				</div>
+                <div className={`${styles.tabs} flex gap-4`}>
+                    <NavLink href="?q=All" className="DonationBarLink tab block px-3 py-2 active">
+                        All
+                    </NavLink>
+                    <NavLink href="?q=Today" className="DonationBarLink tab block px-3 py-2">
+                        Today
+                    </NavLink>
+                    <NavLink href="?q=This Month" className="DonationBarLink tab block px-3 py-2">
+                        This Month
+                    </NavLink>
+                    {!GoalURI.isOwner ? (
+                        <>
+                            <a href={`/CreateIdeas?[${goalId}]`}>
+                                <Button style={{ width: "150px", position: "absolute", right: "1rem" }} iconLeft="true">
+                                    <ControlsPlus className="text-moon-24" />
+                                    <div className="card BidcontainerCard">
+                                        <div className="card-body bidbuttonText">Create Ideas</div>
+                                    </div>
+                                </Button>
+                            </a>
+                        </>
+                    ) : (
+                        <></>
+                    )}
+                </div>
+            </div>
 
-				<div className={styles.divider}></div>
+            <div className={styles.divider}></div>
 
-				<Loader
-					element={
-						<div className="flex flex-col gap-8">
-							<img src={GoalURI.logo} />{" "}
-						</div>
-					}
-					width="90%"
-					height={578}
-				/>
-				<Loader
-					element={
-						<div className="flex flex-col gap-8">
-							{list.map((listItem, index) => (
-								<Card height={300} width={640} key={index} className="p-10">
-									<div className="flex flex-col gap-8 w-full">
-										<div className="flex gap-6 w-full">
-											<span className={styles.image}>
-												<img alt="" src={listItem.logo} />
-											</span>
-											<div className="flex flex-col gap-2 overflow-hidden text-left">
-												<div className="font-bold">{listItem.Title}</div>
-												<div>{listItem.Description.substring(0, 120)}</div>
-											</div>
-										</div>
-										<div className="flex justify-between align-center ">
-											<div name="DateCount" date={GoalURI.End_Date} status={listItem.status} className="flex items-center font-bold">
-												{LeftDate(GoalURI.End_Date, listItem.status)}
-											</div>
+            <Loader
+                element={
+                    <div className="flex flex-col gap-8">
+                        <img src={GoalURI.logo} />{" "}
+                    </div>
+                }
+                width="90%"
+                height={578}
+            />
+            <Loader
+                element={
+                    <div className="flex flex-col gap-8">
+                        {list.map((listItem, index) => (
+                            <Card height={300} width={640} key={index} className="p-10">
+                                <div className="flex flex-col gap-8 w-full">
+                                    <div className="flex gap-6 w-full">
+                                        <span className={styles.image}>
+                                            <img alt="" src={listItem.logo} />
+                                        </span>
+                                        <div className="flex flex-col gap-2 overflow-hidden text-left">
+                                            <div className="font-bold">{listItem.Title}</div>
+                                            <div>{listItem.Description.substring(0, 120)}</div>
+                                        </div>
+                                    </div>
+                                    <div className="flex justify-between align-center ">
+                                        <div name="DateCount" date={GoalURI.End_Date} status={listItem.status} className="flex items-center font-bold">
+                                            {LeftDate(GoalURI.End_Date, listItem.status)}
+                                        </div>
 
-											<a href={`/daos/dao/goal/ideas?[${listItem.ideasId}]`}>
-												<Button iconleft>
-													<ControlsChevronRight />
-													See more
-												</Button>
-											</a>
-										</div>
-									</div>
-								</Card>
-							))}
-						</div>
-					}
-					width="90%"
-					height={578}
-				/>
-			</div>
-		</>
-	)
+                                        <a href={`/daos/dao/goal/ideas?[${listItem.ideasId}]`}>
+                                            <Button iconleft="true">
+                                                <ControlsChevronRight />
+                                                See more
+                                            </Button>
+                                        </a>
+                                    </div>
+                                </div>
+                            </Card>
+                        ))}
+                    </div>
+                }
+                width="90%"
+                height={578}
+            />
+        </div>
+    </>;
 }

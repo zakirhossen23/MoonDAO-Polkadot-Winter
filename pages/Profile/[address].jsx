@@ -1,14 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
-import Head from "next/head"
-import useContract from "../../services/useContract"
-import { Header } from "../../components/layout/Header"
-import isServer from "../../components/isServer"
-import styles from "../daos/daos.module.css"
-import Card from "../../components/components/Card/Card"
-import { ControlsPlus, ControlsChevronRight, ControlsChevronLeft } from "@heathmont/moon-icons-tw"
+import Skeleton from "@mui/material/Skeleton";
 import { formatDistance } from "date-fns";
-import Skeleton from "@mui/material/Skeleton"
+import Head from "next/head";
+import isServer from "../../components/isServer";
+import useContract from "../../services/useContract";
+import styles from "../daos/daos.module.css";
 
 
 let running = true;
@@ -33,11 +30,16 @@ export default function Profile() {
 	const [DontatedIdeas, setDontatedIdeas] = useState([])
 	const [RepliesIdeas, setRepliesIdeas] = useState([])
 	const [AllMessages, setAllMessages] = useState([])
+  const [hasMounted, setHasMounted] = useState([]);
 
 
 	useEffect(() => {
 		fetchContractData();
 	}, [contract])
+
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
 
 
 	if (isServer()) return null;
@@ -211,11 +213,12 @@ export default function Profile() {
 		tabPanels[panelIndex].style.backgroundColor = "white";
 	}
 
-
+  if (!hasMounted) {
+    return null;
+  }
 
 	return (
 		<>
-			<Header></Header>
 			<Head>
 				<title>Profile</title>
 				<meta name="description" content="Profile" />

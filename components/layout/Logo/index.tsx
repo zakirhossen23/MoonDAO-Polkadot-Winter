@@ -6,11 +6,11 @@ export function Logo(): JSX.Element {
     return (
         <div className="logo">
 
-            <NavLink href="/">
+            <NavLink href="/" legacyBehavior>
                 <div style={{ "display": "flex" }}>
                     <img className="NavImg" src="/favicon.png" />
                 </div>
             </NavLink>
         </div>
-    )
+    );
 }

@@ -1,16 +1,13 @@
-import React, { useEffect, useState } from "react"
-import Head from "next/head"
-import UseFormInput from "../../components/components/UseFormInput"
-import UseFormTextArea from "../../components/components/UseFormTextArea"
-import { Header } from "../../components/layout/Header"
-import NavLink from "next/link"
-
-import useContract from "../../services/useContract"
-import isServer from "../../components/isServer"
-import { NFTStorage, File } from "nft.storage"
-import styles from "./CreateIdeas.module.css"
-import { Button } from "@heathmont/moon-core-tw"
-import { GenericPicture, ControlsPlus } from "@heathmont/moon-icons-tw"
+import { Button } from "@heathmont/moon-core-tw";
+import { ControlsPlus, GenericPicture } from "@heathmont/moon-icons-tw";
+import Head from "next/head";
+import { NFTStorage } from "nft.storage";
+import React, { useState } from "react";
+import UseFormInput from "../../components/components/UseFormInput";
+import UseFormTextArea from "../../components/components/UseFormTextArea";
+import isServer from "../../components/isServer";
+import useContract from "../../services/useContract";
+import styles from "./CreateIdeas.module.css";
 
 export default function CreateIdeas() {
 	const [IdeasImage, setIdeasImage] = useState([])
@@ -136,7 +133,6 @@ export default function CreateIdeas() {
 		} catch (error) {
 			console.error(error)
 			return
-			window.location.href = "/login?[/]" //If found any error then it will let the user to login page
 		}
 		window.location.href = `daos/dao/goal?[${id}]` //After the success it will redirect the user to goal page
 	}
@@ -216,7 +212,6 @@ export default function CreateIdeas() {
 				<meta name="description" content="Create Ideas" />
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
-			<Header></Header>
 			<div className={`${styles.container} flex items-center justify-center flex-col gap-8`}>
 				<div className={`${styles.title} gap-8 flex flex-col`}>
 					<h1 className="text-moon-32 font-bold">Create ideas</h1>
@@ -264,7 +259,7 @@ export default function CreateIdeas() {
 									)
 								})}
 								<div className="Ideas-ImageAdd">
-									<Button id="Add-Image" onClick={AddBTNClick} variant="secondary" style={{ height: 80, padding: "1.5rem" }} iconLeft size="lg">
+									<Button id="Add-Image" onClick={AddBTNClick} variant="secondary" style={{ height: 80, padding: "1.5rem" }} iconLeft="true" size="lg">
 										<GenericPicture className="text-moon-24" />
 										Add Content
 									</Button>

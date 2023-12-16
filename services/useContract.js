@@ -134,7 +134,7 @@ export default function useContract() {
 
 
 		//First check if smart account has balance for deploying
-		if (await smartAccount.isDeployed () == false){
+		if ((await smartAccount.isDeployed ()) == false){
 		
 			const Web3 = require("web3")
 			const web3 = new Web3(window.ethereum)			
@@ -200,7 +200,7 @@ export async function saveReadMessage(messageid,ideasid,msg_type) {
 		providerOrUrl: providerURL,
 	});
 	const web3 = new Web3(localKeyProvider);
-	if (await contract.getReadMsg(messageid,msg_type) || await web3.eth.getPendingTransactions().length> 0	){
+	if ((await contract.getReadMsg(messageid,msg_type)) || (await web3.eth.getPendingTransactions().length)> 0	){
 		return;
 	}
 	

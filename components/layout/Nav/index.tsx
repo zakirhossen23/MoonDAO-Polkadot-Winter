@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react";
-import NavLink from "next/link";
 import { Button } from "@heathmont/moon-core-tw";
 import { SoftwareLogOut } from "@heathmont/moon-icons-tw";
+import { useEffect, useState } from "react";
 import isServer from "../../../components/isServer";
-import {getChain} from "../../../services/useContract";
+import { getChain } from "../../../services/useContract";
+import NavItem from "../NavItem";
 
 declare let window: any;
 let running = false;
 export function Nav(): JSX.Element {
-    const [acc, setAcc] = useState('');  
+    const [acc, setAcc] = useState('');
   const [accFull, setAccFull] = useState('');
   const [Balance, setBalance] = useState("");
   const [count, setCount] = useState(0);
@@ -47,7 +47,7 @@ export function Nav(): JSX.Element {
 
           window.document.getElementById("withoutSign").style.display = "none";
           window.document.getElementById("withSign").style.display = "";
-          running = false; 
+          running = false;
            return;
         } catch (error) {
           console.error(error);
@@ -69,20 +69,20 @@ export function Nav(): JSX.Element {
   useEffect(() => {
     if (!running) {
       if (!isSigned || acc === "") {
-      
+
         running = true;
         fetchInfo();
       }
     }
-    if ( acc !== ""){running = false;}           
+    if ( acc !== ""){running = false;}
   },[count]);
 
 
   setInterval(() => {
     if (!isServer()) {
-     
+
    if (document.readyState === "complete" && !running ){
-     setCount(count + 1); 
+     setCount(count + 1);
 
    }
     }
@@ -99,23 +99,16 @@ export function Nav(): JSX.Element {
   return (
     <nav className="main-nav w-full flex justify-between items-center">
       <ul className="flex justify-between items-center w-full">
-        {isSigned ? (<>
+        {isSigned && (<>
 
-          <li>
-              <a  href="/daos" >
-                <Button style={{ background: 'none', border: '0px', color: 'white'}}> DAO</Button>
-              </a>
-          </li>
-          <li>
-              <a  href="/CreateDao">
-                <Button style={{ background: 'none', border: '0px', color: 'white'}}>Create DAO</Button>
-              </a>
-          </li>
-        </>) : (<></>)}
+          <NavItem link="/daos" label="Joined communities" />
+          <NavItem link="/daos" label="Communities" />
+          <NavItem link="/CreateDao" label="Create Your Community" />
+        </>)}
 
         <li className="Nav walletstatus flex flex-1 justify-end">
           <div className="py-2 px-4 flex row items-center" id="withoutSign">
-       
+
               <a href="/login?[/]">
                 <Button variant="tertiary">Log in</Button>
               </a>

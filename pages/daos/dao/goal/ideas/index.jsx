@@ -1,19 +1,17 @@
 import { Button } from "@heathmont/moon-core-tw";
-import Head from "next/head";
-import { useEffect, useState } from "react";
-import SlideShow from "../../../../../components/components/Slideshow";
-import useContract from "../../../../../services/useContract";
 import { ControlsChevronLeft } from "@heathmont/moon-icons-tw";
-import {useSnackbar} from 'notistack';
+import Skeleton from "@mui/material/Skeleton";
+import Head from "next/head";
+import { useSnackbar } from 'notistack';
+import { useEffect, useState } from "react";
+import CommentBox from "../../../../../components/components/Card/Comment";
+import SlideShow from "../../../../../components/components/Slideshow";
 import UseFormTextArea from "../../../../../components/components/UseFormTextArea";
-import isServer from "../../../../../components/isServer";
 import DonateCoin from "../../../../../components/components/modal/DonateCoin";
 import VoteConviction from "../../../../../components/components/modal/VoteConviction";
-import { Header } from "../../../../../components/layout/Header";
+import { useUtilsContext } from '../../../../../contexts/UtilsContext';
+import useContract from "../../../../../services/useContract";
 import styles from "../../../daos.module.css";
-import Skeleton from "@mui/material/Skeleton";
-import CommentBox from "../../../../../components/components/Card/Comment";
-import {useUtilsContext} from '../../../../../contexts/UtilsContext';
 
 let IdeasEnd = "";
 let IdeasWaiting = false;
@@ -53,7 +51,7 @@ export default function GrantIdeas() {
 			date: ""
 		}]
 	}]);
-	
+
 	let m;
 	let id = ""; //Ideas id from url
 	let Goalid = ""; //Goal id
@@ -114,7 +112,6 @@ export default function GrantIdeas() {
 		DesignSlide();
 	});
 
-	if (isServer()) return null;
 	const regex = /\[(.*)\]/g;
 	const str = decodeURIComponent(window.location.search);
 
@@ -153,7 +150,7 @@ export default function GrantIdeas() {
 					Description: object.properties.Description.description,
 					Referenda: object.properties?.Referenda?.description,
 					wallet: object.properties.wallet.description,
-					logo: object.properties.logo.description.url,
+					logo: object.properties.logo.description?.url,
 					End_Date: goalURI.properties.End_Date?.description,
 					voted: Object.keys(Allvotes).length,
 					donation: Number((await contract._ideas_uris(Number(id))).donation) / 1e18,
@@ -230,7 +227,7 @@ export default function GrantIdeas() {
 		threshold: 1, // set offset 0.1 means trigger if atleast 10% of element in viewport
 	  })
 
-	  
+
 	const observerReply = new window.IntersectionObserver(async([entry]) => {
 		if (entry.isIntersecting) {
 			let elm = entry.target;
@@ -345,8 +342,8 @@ export default function GrantIdeas() {
 		console.log("Saved Reply")
 	}
 
-	  
-	  
+
+
 
 
 	return (
@@ -356,7 +353,6 @@ export default function GrantIdeas() {
 				<meta name="description" content={IdeasURI.Title} />
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
-			<Header></Header>
 			<div className={`${styles.container} flex flex-col items-center gap-8`}>
 				<div className={`${styles.title} flex flex-col gap-2`}>
 					<div style={{ position: "relative" }}>
@@ -401,7 +397,7 @@ export default function GrantIdeas() {
 
 					<Loader element={<div className="flex">Voted: {IdeasURI.voted} </div>} width={"100%"} />
 					<Loader element={<div className="flex">Donated: {IdeasURI.donation} DEV ( {USDPrice * IdeasURI.donation} USD) </div>} width={"100%"} />
-				
+
 					<Loader element={<p>{IdeasURI.Description} </p>} width={"100%"} />
 				</div>
 				<div className={`${styles.tabtitle} flex gap-4 justify-start`}>

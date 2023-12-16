@@ -1,19 +1,15 @@
-import React, { useState, useEffect } from "react";
+import { Button } from "@heathmont/moon-core-tw";
+import { ControlsChevronRight } from "@heathmont/moon-icons-tw";
+import Skeleton from "@mui/material/Skeleton";
+import Head from "next/head";
+import React, { useEffect, useState } from "react";
 import { createRoot } from 'react-dom/client';
-
-
-import Head from "next/head"
-import Image from "next/image"
-import NavLink from "next/link"
-import useContract from "../../../services/useContract"
-import { Header } from "../../../components/layout/Header"
-import isServer from "../../../components/isServer"
-import styles from "../daos.module.css"
-import Card from "../../../components/components/Card/Card"
-import { ControlsPlus, ControlsChevronRight, ControlsChevronLeft } from "@heathmont/moon-icons-tw"
-import { Button } from "@heathmont/moon-core-tw"
-import Skeleton from "@mui/material/Skeleton"
+import Card from "../../../components/components/Card/Card";
 import JoinDAO from "../../../components/components/modal/JoinDAO";
+import isServer from "../../../components/isServer";
+import useContract from "../../../services/useContract";
+import styles from "../daos.module.css";
+
 let running = true
 export default function DAO() {
 	//Variables
@@ -39,15 +35,17 @@ export default function DAO() {
 		calculateTimeLeft()
 	}, 1000)
 
-	if (isServer()) return null
-	const str = decodeURIComponent(window.location.search)
+  if (!isServer()) {
+    const str = decodeURIComponent(window.location.search)
 
-	while ((m = regex.exec(str)) !== null) {
-		if (m.index === regex.lastIndex) {
-			regex.lastIndex++
-		}
-		id = m[1]
-	}
+    while ((m = regex.exec(str)) !== null) {
+      if (m.index === regex.lastIndex) {
+        regex.lastIndex++
+      }
+      id = m[1]
+    }
+  }
+
 	function calculateTimeLeft() {
 		//Calculate time left
 		try {
@@ -82,7 +80,7 @@ export default function DAO() {
 					</div>
 
 					<a href={`/daos/dao/goal?[${listItem.goalId}]`}>
-						<Button iconleft={true}>
+						<Button iconleft="true">
 							<ControlsChevronRight />
 							Go to Goal
 						</Button>
@@ -120,7 +118,7 @@ export default function DAO() {
 							Description: object.properties.Description.description,
 							Budget: object.properties.Budget.description,
 							End_Date: object.properties.End_Date.description,
-							logo: object.properties.logo.description.url,
+							logo: object.properties.logo.description?.url,
 						})
 					}
 				}
@@ -146,7 +144,7 @@ export default function DAO() {
 					document.querySelector(".btn-back").addEventListener('click', () => {
 						window.history.back();
 					});
-					
+
 				}
 				let join_community_block = document.querySelector(".join-community-block");
 				let create_goal_block = document.querySelector(".create-goal-block");
@@ -165,7 +163,7 @@ export default function DAO() {
 
 						join_community_block.style.display = "none";
 					}
-				} 
+				}
 				if (!daoURIShort.isOwner ) {
 					if (create_goal_block != null) {
 						create_goal_block.style.display = "none";
@@ -209,7 +207,6 @@ export default function DAO() {
 	}
 	return (
 		<>
-			<Header></Header>
 			<Head>
 				<title>DAO</title>
 				<meta name="description" content="DAO" />
@@ -250,7 +247,7 @@ export default function DAO() {
 						</NavLink>
 						{DaoURI.isOwner ? (
 							<a href={`/CreateGoal?[${daoId}]`}>
-								<Button style={{ width: "150px", position: "absolute", right: "1rem" }} iconLeft>
+								<Button style={{ width: "150px", position: "absolute", right: "1rem" }} iconLeft="true">
 									<ControlsPlus className="text-moon-24" />
 									<div className="card BidcontainerCard">
 										<div className="card-body bidbuttonText">Create Goal</div>
@@ -262,8 +259,8 @@ export default function DAO() {
 							<div className="card BidcontainerCard">
 								<div className="card-body bidbuttonText">Join Community</div>
 							</div>
-						</Button></>):(<></>) 
-							
+						</Button></>):(<></>)
+
 						)}
 					</div>
 				</div>

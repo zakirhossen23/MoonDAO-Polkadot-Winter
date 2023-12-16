@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from "react";
-import { Header } from "../../components/layout/Header";
-import Head from "next/head";
-import styles from "./Login.module.scss";
 import Button from "@heathmont/moon-core-tw/lib/button/Button";
-import GenericClose from "@heathmont/moon-icons-tw/icons/GenericClose";
 import GenericCheckRounded from "@heathmont/moon-icons-tw/icons/GenericCheckRounded";
+import GenericClose from "@heathmont/moon-icons-tw/icons/GenericClose";
+import Head from "next/head";
+import { useEffect, useState } from "react";
 import isServer from "../../components/isServer";
+import styles from "./Login.module.scss";
 
 let redirecting = "";
 export default function Login() {
   const [ConnectStatus, setConnectStatus] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
   if (!isServer()) {
     const regex = /\[(.*)\]/g;
@@ -25,29 +25,27 @@ export default function Login() {
     }
   }
 
-
-
   const fetchDataStatus = async () => {
     if (window.localStorage.getItem("login-type") == "metamask") {
       setConnectStatus(true);
     } else {
       setConnectStatus(false);
     }
-
   };
+
   useEffect(() => {
-    if (!isServer()) {
-      setInterval(() => {     
-        if ( window.localStorage.getItem("login-type") == "metamask" && window.localStorage.getItem("loggedin") == "true" ) {
+    setInterval(() => {
+      if ( window.localStorage.getItem("login-type") == "metamask" && window.localStorage.getItem("loggedin") == "true" ) {
 
-          window.location.href = redirecting;
-        }
-        fetchDataStatus();
-      }, 1000);
-    }
+        window.location.href = redirecting;
+      }
+      fetchDataStatus();
+    }, 1000);
   }, []);
-  if (isServer()) return null;
 
+  useEffect(() => {
+    setIsMounted(true);
+  }, [])
 
   function MetamaskWallet() {
     if (typeof window.ethereum === "undefined") {
@@ -186,8 +184,6 @@ export default function Login() {
     window.localStorage.setItem('login-type', "");
   }
 
-
-
   return (
     <>
       <Head>
@@ -195,20 +191,17 @@ export default function Login() {
         <meta name="description" content="MoonDAO - Login" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Header></Header>
       <div className={`${styles.container} flex items-center flex-col gap-8`}>
         <div className={`${styles.title}  flex flex-col`}>
           <h1 className="text-moon-32  font-bold">Login to your account</h1>
           <p className="text-trunks mt-4">Please connect to Metamask wallet in order to login.</p>
           <p className="text-trunks">You can use one of these networks:</p>
-
           <p className="text-trunks">Moonbase alpha(Default), Celo Alfajore, BNB, Goerli Test Network</p>
         </div>
         <div className={styles.divider}></div>
         <div className={`${styles.title} flex flex-col items-center gap-8 `}>
-          <MetamaskWallet />
+          { isMounted && <MetamaskWallet /> }
         </div>
-
       </div>
     </>
   );
