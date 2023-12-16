@@ -58,7 +58,7 @@
     "next": "^14.0.4",
     "next-themes": "^0.2.1",
     "nft.storage": "^6.3.0",
-    "notistack": "^2.0.8",
+    "notistack": "^3.0.1",
     "os-browserify": "^0.3.0",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.0",
