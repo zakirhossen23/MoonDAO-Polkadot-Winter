@@ -1,10 +1,8 @@
-import React from "react";
-import Head from "next/head";
 import { Button } from "@heathmont/moon-core-tw";
-import Form from "react-bootstrap/Form";
-import { Header } from "../../components/layout/Header";
-import UseFormInput from "../../components/components/UseFormInput";
+import Head from "next/head";
+import React from "react";
 import useContract from '../../services/useContract';
+
 export default function ResetDataFORM() {
 
   const { contract,sendTransaction, signerAddress } = useContract();
@@ -34,7 +32,6 @@ export default function ResetDataFORM() {
         <meta name="description" content="Add 5 days from now to Event" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Header></Header>
 
       <div className="row" style={{ height: "100vh", paddingTop: 140 }}>
         <div className="createevents col">

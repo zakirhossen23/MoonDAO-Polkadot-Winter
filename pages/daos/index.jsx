@@ -1,15 +1,12 @@
-import React, { useState, useEffect } from "react"
-import Head from "next/head"
-import Image from "next/image"
-import NavLink from "next/link"
-import useContract from "../../services/useContract"
-import { Header } from "../../components/layout/Header"
-import isServer from "../../components/isServer"
-import styles from "./daos.module.css"
-import Card from "../../components/components/Card/Card"
-import { ControlsChevronRight,GenericEdit } from "@heathmont/moon-icons-tw"
 import { Button } from "@heathmont/moon-core-tw"
+import { ControlsChevronRight, GenericEdit } from "@heathmont/moon-icons-tw"
 import Skeleton from "@mui/material/Skeleton"
+import Head from "next/head"
+import NavLink from "next/link"
+import React, { useEffect, useState } from "react"
+import Card from "../../components/components/Card/Card"
+import useContract from "../../services/useContract"
+import styles from "./daos.module.css"
 
 let running = true
 export default function DAOs() {
@@ -24,8 +21,6 @@ export default function DAOs() {
 	setInterval(function () {
 		calculateTimeLeft()
 	}, 1000)
-
-	if (isServer()) return null
 
 	function calculateTimeLeft() {
 		//Calculate time left
@@ -56,7 +51,7 @@ export default function DAOs() {
 							daoId: i,
 							Title: object.properties.Title.description,
 							Start_Date: object.properties.Start_Date.description,
-							logo: object.properties.logo.description.url,
+							logo: object.properties.logo.description?.url,
 							wallet: object.properties.wallet.description,
 							SubsPrice: object.properties?.SubsPrice?.description,
 						})
@@ -90,84 +85,81 @@ export default function DAOs() {
       let allElements = [];
       for (let i=0; i < many; i++){
         allElements.push( <Skeleton variant={type} width={width} height={height} />)
-      }		
-      return allElements;	
+      }
+      return allElements;
 		} else {
       return element;
 		}
 	}
-	return (
-		<>
-			<Header></Header>
-			<Head>
-				<title>DAO</title>
-				<meta name="description" content="DAO" />
-				<link rel="icon" href="/favicon.ico" />
-			</Head>
-			<div className={`${styles.container} flex items-center flex-col gap-8`}>
-				<div className={`${styles.title} gap-8 flex flex-col`}>
-					<h1 className="text-moon-32 font-bold">All DAO</h1>
+	return <>
+        <Head>
+            <title>DAO</title>
+            <meta name="description" content="DAO" />
+            <link rel="icon" href="/favicon.ico" />
+        </Head>
+        <div className={`${styles.container} flex items-center flex-col gap-8`}>
+            <div className={`${styles.title} gap-8 flex flex-col`}>
+                <h1 className="text-moon-32 font-bold">All DAO</h1>
 
-					<div className={`${styles.tabs} flex gap-4`}>
-						<NavLink href="?q=All">
-							<a className="DonationBarLink tab block px-3 py-2 active">All</a>
-						</NavLink>
-						<NavLink href="?q=Today">
-							<a className="DonationBarLink tab block px-3 py-2">Today</a>
-						</NavLink>
-						<NavLink href="?q=This Month">
-							<a className="DonationBarLink tab block px-3 py-2">This Month</a>
-						</NavLink>
-					</div>
-				</div>
+                <div className={`${styles.tabs} flex gap-4`}>
+                    <NavLink href="?q=All" className="DonationBarLink tab block px-3 py-2 active">
+                        All
+                    </NavLink>
+                    <NavLink href="?q=Today" className="DonationBarLink tab block px-3 py-2">
+                        Today
+                    </NavLink>
+                    <NavLink href="?q=This Month" className="DonationBarLink tab block px-3 py-2">
+                        This Month
+                    </NavLink>
+                </div>
+            </div>
 
-				<div className={styles.divider}></div>
-        <div className="flex flex-col gap-8">
-				<Loader
-					element={				
-							list.map((listItem, index) => (
-								<Card height={300} width={640} key={index} className="p-10">
-									<div className="flex flex-col gap-8 w-full">
-										<div className="flex gap-6 w-full">
-											<span className={styles.image}>
-												<img alt="" src={listItem.logo} />
-											</span>
-											<div className="flex flex-col gap-2 overflow-hidden text-left">
-												<div className="font-bold">{listItem.Title}</div>
-												<div className="whitespace-nowrap truncate">
-													Organised by&nbsp;
-													{listItem.wallet != window?.accountId ? listItem.wallet : <>(Me)</>}
-												</div>
-												<div className="whitespace-nowrap truncate">
-													Subscription :
-													${listItem.SubsPrice }/mo
-												</div>
-											</div>
-										</div>
-										<div className="flex align-center flex justify-end align-center gap-2">
-										<a href={`/DesignDao?[${listItem.daoId}]`}>
-												<Button iconleft>
-													<GenericEdit />
-													Customize
-												</Button>
-											</a>
-											<a href={`/daos/dao?[${listItem.daoId}]`}>
-												<Button iconleft>
-													<ControlsChevronRight />
-													Go to Dao
-												</Button>
-											</a>
-										</div>
-									</div>
-								</Card>
-							))					
-					}
-					width={640}
-					height={300}
-          many={3}
-          type='rounded'
-				/>	</div>
-			</div>
-		</>
-	)
+            <div className={styles.divider}></div>
+    <div className="flex flex-col gap-8">
+            <Loader
+                element={
+                        list.map((listItem, index) => (
+                            <Card height={300} width={640} key={index} className="p-10">
+                                <div className="flex flex-col gap-8 w-full">
+                                    <div className="flex gap-6 w-full">
+                                        <span className={styles.image}>
+                                            <img alt="" src={listItem.logo} />
+                                        </span>
+                                        <div className="flex flex-col gap-2 overflow-hidden text-left">
+                                            <div className="font-bold">{listItem.Title}</div>
+                                            <div className="whitespace-nowrap truncate">
+                                                Organised by&nbsp;
+                                                {listItem.wallet != window?.accountId ? listItem.wallet : <>(Me)</>}
+                                            </div>
+                                            <div className="whitespace-nowrap truncate">
+                                                Subscription :
+                                                ${listItem.SubsPrice }/mo
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="flex align-center flex justify-end align-center gap-2">
+                                    <a href={`/DesignDao?[${listItem.daoId}]`}>
+                                            <Button iconleft="true">
+                                                <GenericEdit />
+                                                Customize
+                                            </Button>
+                                        </a>
+                                        <a href={`/daos/dao?[${listItem.daoId}]`}>
+                                            <Button iconleft="true">
+                                                <ControlsChevronRight />
+                                                Go to Dao
+                                            </Button>
+                                        </a>
+                                    </div>
+                                </div>
+                            </Card>
+                        ))
+                }
+                width={640}
+                height={300}
+      many={3}
+      type='rounded'
+            />	</div>
+        </div>
+    </>;
 }

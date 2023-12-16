@@ -1,26 +1,23 @@
-import React, { useState, useEffect } from "react";
-import Dialog, { DialogProps } from "@mui/material/Dialog";
-import { RouterConfig, chainMetadata } from '@hyperlane-xyz/sdk';
+import Dialog from "@mui/material/Dialog";
+import React, { useEffect, useState } from "react";
 
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
-import { styled } from "@mui/material/styles";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
 import Paper from "@mui/material/Paper";
+import { styled } from "@mui/material/styles";
 
-import FormControl, { useFormControl } from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
+import FormControl from "@mui/material/FormControl";
 import Input from "@mui/material/Input";
-import Select from "@mui/material/Select";
+import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
 
 import LoadingButton from "@mui/lab/LoadingButton";
-import Container from "@mui/material/Container";
-import { getChain } from "../../../services/useContract";
 import Alert from "@mui/material/Alert";
-import useContract from "../../../services/useContract";
+import Container from "@mui/material/Container";
 import { useUtilsContext } from '../../../contexts/UtilsContext';
-import { sendTransfer } from "../../../services/wormhole/useSwap";
+import useContract, { getChain } from "../../../services/useContract";
 
 
 export default function VoteConviction({ show, onHide, PollIndex, goal_id, idea_id }) {
@@ -154,7 +151,7 @@ export default function VoteConviction({ show, onHide, PollIndex, goal_id, idea_
 
 
 								<StyledPaper sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between", my: 1, mx: "auto", p: 2 }}>
-									<FormControl variant="standard" fullWidth>
+									<FormControl variant="standard" fullWidth="true">
 										<InputLabel>Amount ({Token})</InputLabel>
 
 										<Input name="amount" defaultValue={Amount} onChange={(e) => setAmount(Number(e.target.value))} />
@@ -165,7 +162,7 @@ export default function VoteConviction({ show, onHide, PollIndex, goal_id, idea_
 
 								</StyledPaper>
 								<StyledPaper sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between", my: 1, mx: "auto", p: 2 }}>
-									<FormControl variant="standard" fullWidth>
+									<FormControl variant="standard" fullWidth="true">
 										<InputLabel>Conviction</InputLabel>
 
 										<Select id="conviction" value={conviction} onChange={(e) => setConviction(Number(e.target.value))}>
@@ -191,7 +188,7 @@ export default function VoteConviction({ show, onHide, PollIndex, goal_id, idea_
 							SelectedType == "split" ? (<>
 
 								<StyledPaper sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between", my: 1, mx: "auto", p: 2 }}>
-									<FormControl variant="standard" fullWidth>
+									<FormControl variant="standard" fullWidth="true">
 										<InputLabel>Aye Vote Value ({Token})</InputLabel>
 
 										<Input name="aye_vote_value" defaultValue={SplitAyeValue} onChange={(e) => setSplitAyeValue(Number(e.target.value))} />
@@ -202,7 +199,7 @@ export default function VoteConviction({ show, onHide, PollIndex, goal_id, idea_
 
 								</StyledPaper>
 								<StyledPaper sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between", my: 1, mx: "auto", p: 2 }}>
-									<FormControl variant="standard" fullWidth>
+									<FormControl variant="standard" fullWidth="true">
 										<InputLabel>Nay Vote Value ({Token})</InputLabel>
 
 										<Input name="nay_vote_value" defaultValue={SplitNayValue} onChange={(e) => setSplitNayValue(Number(e.target.value))} />
@@ -216,7 +213,7 @@ export default function VoteConviction({ show, onHide, PollIndex, goal_id, idea_
 						{
 							SelectedType == "abstain" ? (<>
 								<StyledPaper sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between", my: 1, mx: "auto", p: 2 }}>
-									<FormControl variant="standard" fullWidth>
+									<FormControl variant="standard" fullWidth="true">
 										<InputLabel>Abstain Vote Value ({Token})</InputLabel>
 
 										<Input name="abstain_vote_value" defaultValue={AbstainVoteValue} onChange={(e) => setAbstainVoteValue(Number(e.target.value))} />
@@ -227,7 +224,7 @@ export default function VoteConviction({ show, onHide, PollIndex, goal_id, idea_
 
 								</StyledPaper>
 								<StyledPaper sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between", my: 1, mx: "auto", p: 2 }}>
-									<FormControl variant="standard" fullWidth>
+									<FormControl variant="standard" fullWidth="true">
 										<InputLabel>Aye Vote Value ({Token})</InputLabel>
 
 										<Input name="aye_vote_value" defaultValue={AbstainAyeValue} onChange={(e) => setAbstainAyeValue(Number(e.target.value))} />
@@ -238,7 +235,7 @@ export default function VoteConviction({ show, onHide, PollIndex, goal_id, idea_
 
 								</StyledPaper>
 								<StyledPaper sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between", my: 1, mx: "auto", p: 2 }}>
-									<FormControl variant="standard" fullWidth>
+									<FormControl variant="standard" fullWidth="true">
 										<InputLabel>Nay Vote Value ({Token})</InputLabel>
 
 										<Input name="nay_vote_value" defaultValue={AbstainNayValue} onChange={(e) => setAbstainNayValue(Number(e.target.value))} />

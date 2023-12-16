@@ -11,7 +11,7 @@ body {
   -moz-osx-font-smoothing: grayscale; /* Consistent font display behavior on OSX. */
   margin: 0;
   line-height: inherit;
-  
+
   background:var(--background);
   color: var(--foreground);
 }
@@ -29,14 +29,14 @@ body {
 .btn-secondary {
   background: none;
   box-shadow: inset 0 0 0 1px rgb(var(--trunks)/1);
-  
+
   border-radius: 0.3rem !important;
   border: 1px solid var(--btn-sec-fg);
   color: var(--btn-sec-fg);
 }
 
 .btn-tertiary {
-  color: var( --btn-fg);
+  color: var(--btn-fg);
   background-color: var(--btn-bg);
   border-radius: 0.3rem !important;
   border: 1px solid  #E2107B;

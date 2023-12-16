@@ -1,24 +1,23 @@
-import React, { useState, useEffect } from "react";
-import Dialog, { DialogProps } from "@mui/material/Dialog";
+import Dialog from "@mui/material/Dialog";
+import React, { useEffect, useState } from "react";
 
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import DialogActions from "@mui/material/DialogActions";
-import { styled } from "@mui/material/styles";
-import Paper from "@mui/material/Paper";
-import { ethers } from "ethers";
-import FormControl, { useFormControl } from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-import Input from "@mui/material/Input";
-import vTokenAbi from '../../../services/json/vTokenABI.json';
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
 import LoadingButton from "@mui/lab/LoadingButton";
-import Container from "@mui/material/Container";
-import { getChain } from "../../../services/useContract";
 import Alert from "@mui/material/Alert";
-import useContract from "../../../services/useContract";
+import Container from "@mui/material/Container";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
+import FormControl from "@mui/material/FormControl";
+import Input from "@mui/material/Input";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import Paper from "@mui/material/Paper";
+import Select from "@mui/material/Select";
+import { styled } from "@mui/material/styles";
+import { ethers } from "ethers";
 import { useUtilsContext } from '../../../contexts/UtilsContext';
+import vTokenAbi from '../../../services/json/vTokenABI.json';
+import useContract, { getChain } from "../../../services/useContract";
 import { sendTransfer } from "../../../services/wormhole/useSwap";
 
 
@@ -202,7 +201,7 @@ export default function DonateCoin({ ideasid, show, onHide, address }) {
 							</StyledPaper>
 						</> : <>
 							<StyledPaper sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between", my: 1, mx: "auto", p: 2 }}>
-								<FormControl variant="standard" fullWidth>
+								<FormControl variant="standard" fullWidth="true">
 									<InputLabel>Coin</InputLabel>
 
 									<Select  value={Coin} onChange={(e) => setCoin(e.target.value)}>

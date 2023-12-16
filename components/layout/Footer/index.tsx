@@ -13,7 +13,7 @@ export function Footer(): JSX.Element {
             <div className="container container--large">
                 <div className="footer__wrapper">
                     <div className="footer__left">
-                        <NavLink href="/" className="footer-logo">
+                        <NavLink href="/" className="footer-logo" legacyBehavior>
                             <Logo />
                         </NavLink>
                     </div>
@@ -43,5 +43,5 @@ export function Footer(): JSX.Element {
 
             </div>
         </footer>
-    )
+    );
 }

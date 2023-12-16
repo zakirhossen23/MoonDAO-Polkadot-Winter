@@ -1,25 +1,22 @@
-import React, { useState, useEffect } from "react";
-import Head from "next/head"
-import Image from "next/image"
-import NavLink from "next/link"
 import grapesjs from 'grapesjs';
-import Card from "../../components/components/Card/Card"
-import isServer from "../../components/isServer"
+import Head from "next/head";
+import React, { useEffect, useState } from "react";
 import { gjsPlugin } from '../../components/plugin/gjsPlugin';
 
-import useContract from '../../services/useContract'
+import useContract from '../../services/useContract';
 
-import 'grapesjs/dist/css/grapes.min.css';
-import grapesjs_preset_webpage from 'grapesjs-preset-webpage';
-import grapesjs_plugin_forms from 'grapesjs-plugin-forms';
-import grapesjs_plugin_export from 'grapesjs-plugin-export';
+import gjs_blocks_basic from 'grapesjs-blocks-basic';
 import grapesjs_custom_code from 'grapesjs-custom-code';
 import grapesjs_parser_postcss from 'grapesjs-parser-postcss';
+import grapesjs_plugin_export from 'grapesjs-plugin-export';
+import grapesjs_plugin_forms from 'grapesjs-plugin-forms';
+import grapesjs_preset_webpage from 'grapesjs-preset-webpage';
+import grapesjs_style_bg from 'grapesjs-style-bg';
 import grapesjs_tooltip from 'grapesjs-tooltip';
 import grapesjs_tui_image_editor from 'grapesjs-tui-image-editor';
 import grapesjs_typed from 'grapesjs-typed';
-import grapesjs_style_bg from 'grapesjs-style-bg';
-import gjs_blocks_basic from 'grapesjs-blocks-basic';
+import 'grapesjs/dist/css/grapes.min.css';
+import isServer from '../../components/isServer';
 
 let DaoURI = ({ Title: "", Description: "", SubsPrice: 0, Start_Date: "", End_Date: "", logo: "", wallet: "", typeimg: "", allFiles: [], isOwner: false });
 
@@ -40,14 +37,16 @@ export default function DesignDao() {
   useEffect(() => {
     LoadEditor();
   }, [contract])
-  if (isServer()) return null
-  const str = decodeURIComponent(window.location.search)
 
-  while ((m = regex.exec(str)) !== null) {
-    if (m.index === regex.lastIndex) {
-      regex.lastIndex++
+  if (!isServer()) {
+    const str = decodeURIComponent(window.location.search)
+
+    while ((m = regex.exec(str)) !== null) {
+      if (m.index === regex.lastIndex) {
+        regex.lastIndex++
+      }
+      id = (m[1]);
     }
-    id = (m[1]);
   }
 
   async function LoadEditor() {
@@ -419,7 +418,7 @@ export default function DesignDao() {
               Description: object.properties.Description.description,
               Budget: object.properties.Budget.description,
               End_Date: object.properties.End_Date.description,
-              logo: object.properties.logo.description.url,
+              logo: object.properties.logo.description?.url,
             })
           }
         }
