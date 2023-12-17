@@ -6,6 +6,5 @@
     "jsx-a11y/alt-text":"off",
     "react/no-unknown-property": "off",
     "react/no-unescaped-entities": "off"
-
   }
 }

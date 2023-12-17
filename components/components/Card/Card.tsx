@@ -1,11 +1,6 @@
-import styles from "./Card.module.css";
-
-const Card = ({ children, height, width }: any) => {
+const Card = ({ children, height, width, className }: any) => {
   return (
-    <div
-      className={`theme-moon-light flex flex-col items-center gap-2 py-6 px-8 border rounded-moon-s-lg bg-gohan text-bulma shrink-0 ${styles.card}`}
-      style={{ height, width }}
-    >
+    <div className={`theme-moon-light flex w-full p-6 border-1 border-beerus shadow-moon-lg rounded-moon-s-md bg-gohan text-bulma ${className}`} style={{ height, width }}>
       {children}
     </div>
   );

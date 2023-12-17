@@ -1,11 +1,12 @@
 import Image from "next/image";
 import { Nav } from "../Nav";
 import styles from "./Header.module.scss";
+import Link from "next/link";
 
 export const Header = () => {
   return (
     <header className={`w-full px-8 py-4 gap-4 flex justify-between z-1 ${styles.header}`}>
-      <a href="/" >
+      <Link href="/" >
         <div className={`inline-flex ${styles.logo}`}>
           <Image
             height={48}
@@ -17,7 +18,7 @@ export const Header = () => {
               height: "auto"
             }} />
         </div>
-      </a>
+      </Link>
       <Nav />
     </header>
   );
