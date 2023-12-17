@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import Skeleton from "@mui/material/Skeleton";
 import { formatDistance } from "date-fns";
 import Head from "next/head";
-import isServer from "../../components/isServer";
 import useContract from "../../services/useContract";
 import styles from "../daos/daos.module.css";
 
@@ -30,23 +29,17 @@ export default function Profile() {
 	const [DontatedIdeas, setDontatedIdeas] = useState([])
 	const [RepliesIdeas, setRepliesIdeas] = useState([])
 	const [AllMessages, setAllMessages] = useState([])
-  const [hasMounted, setHasMounted] = useState([]);
+  const [address, setAddress] = useState('');
 
 
 	useEffect(() => {
 		fetchContractData();
 	}, [contract])
 
-  useEffect(() => {
-    setHasMounted(true);
-  }, []);
-
-
-	if (isServer()) return null;
-	let address = window.location.pathname.replace("/Profile/", "");
-
 
 	async function fetchContractData() {
+    setAddress(window.location.pathname.replace("/Profile/", ""));
+
 		if (!contract) return false;
 		running = true;
 		//Fetching data from Smart contract
@@ -64,8 +57,6 @@ export default function Profile() {
 				total_read += 1;
 			}
 		}
-
-
 
 		let founddao = [];
 		for (let i = 0; i < allDaos.length; i++) {
@@ -120,53 +111,6 @@ export default function Profile() {
 
 		let ideasReplied = 0;
 		let MessagesIdeasURIS = [];
-		let _message_ids = await window.contract._message_ids();
-		for (let i = 0; i < _message_ids; i++) {
-			let messageURI = await window.contract.all_messages(i);
-			if (messageURI.sender.toLocaleLowerCase() == address.toLocaleLowerCase()) {
-				ideasReplied += 1;
-				let ideaURI = JSON.parse((await window.contract._ideas_uris(Number(messageURI.ideas_id))).ideas_uri);
-
-				let parsed_message = JSON.parse(messageURI.message);
-				parsed_message.idea = ideaURI;
-
-				allMessages.push(parsed_message);
-
-				let existsIdea = MessagesIdeasURIS.findIndex(e => e.id == Number(messageURI.ideas_id));
-				if (existsIdea != -1) {
-					MessagesIdeasURIS[existsIdea].replied += 1;
-					continue;
-				}
-
-				ideaURI.replied = 1;
-				ideaURI.id = Number(messageURI.ideas_id);
-				MessagesIdeasURIS.push(ideaURI);
-			}
-		}
-
-		let _reply_ids = await contract._reply_ids();
-		for (let i = 0; i < _reply_ids; i++) {
-			let repliesURI = await contract.all_replies(i);
-			if (JSON.parse(repliesURI.message).address.toLocaleLowerCase() == address.toLocaleLowerCase()) {
-				ideasReplied += 1;
-				let ideaURI = JSON.parse((await window.contract._ideas_uris(Number(repliesURI.ideas_id))).ideas_uri);
-
-				let parsed_rplied = JSON.parse(repliesURI.message);
-				parsed_rplied.idea = ideaURI;
-				allMessages.push(parsed_rplied);
-
-				let existsIdea = MessagesIdeasURIS.findIndex(e => e.id == Number(repliesURI.ideas_id));
-				if (existsIdea != -1) {
-					MessagesIdeasURIS[existsIdea].replied += 1;
-					continue;
-				}
-
-				ideaURI.replied = 1;
-				ideaURI.id = Number(repliesURI.ideas_id);
-				MessagesIdeasURIS.push(ideaURI);
-			}
-		}
-
 
 
 		setReplied(ideasReplied);
@@ -212,10 +156,6 @@ export default function Profile() {
 		tabPanels[panelIndex].style.display = "block";
 		tabPanels[panelIndex].style.backgroundColor = "white";
 	}
-
-  if (!hasMounted) {
-    return null;
-  }
 
 	return (
 		<>

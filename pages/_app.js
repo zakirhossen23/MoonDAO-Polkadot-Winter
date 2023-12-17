@@ -1,12 +1,15 @@
 
 import { ThemeProvider } from 'next-themes';
 import { SnackbarProvider } from "notistack";
-import Header from "../components/layout/Header";
 import { UtilsProvider } from "../contexts/UtilsContext";
 import "../public/css/daos.css";
 import "../public/css/ideas.css";
 import "../public/output.css";
 import "../public/theme.css";
+
+import dynamic from 'next/dynamic'
+
+const Header = dynamic(() => import('../components/layout/Header'), { ssr: false})
 
 function MyApp({ Component, pageProps }) {
 	return (

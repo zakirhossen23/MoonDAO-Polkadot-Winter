@@ -17,6 +17,8 @@
     "@biconomy/core-types": "^2.0.2",
     "@biconomy/smart-account": "^2.0.2",
     "@certusone/wormhole-sdk": "^0.9.18",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
     "@heathmont/moon-core-tw": "^10.11.2",
     "@heathmont/moon-icons-tw": "^9.28.6",
     "@heathmont/moon-themes-tw": "^10.11.2",
@@ -72,6 +74,9 @@
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.0",
     "@nomiclabs/hardhat-etherscan": "^3.1.7",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
     "autoprefixer": "^10.4.16",
     "eslint": "8.16.0",
     "eslint-config-next": "^14.0.4",

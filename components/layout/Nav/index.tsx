@@ -1,19 +1,22 @@
-import { Button } from "@heathmont/moon-core-tw";
-import { SoftwareLogOut } from "@heathmont/moon-icons-tw";
+import { Avatar, Button, Dropdown, MenuItem } from "@heathmont/moon-core-tw";
+import { GenericUser, SoftwareLogOut } from "@heathmont/moon-icons-tw";
 import { useEffect, useState } from "react";
 import isServer from "../../../components/isServer";
 import { getChain } from "../../../services/useContract";
-import NavItem from "../NavItem";
+import NavItem from "../../components/NavItem";
+import Link from "next/link";
 
 declare let window: any;
 let running = false;
+
 export function Nav(): JSX.Element {
-    const [acc, setAcc] = useState('');
+  const [acc, setAcc] = useState('');
   const [accFull, setAccFull] = useState('');
   const [Balance, setBalance] = useState("");
   const [count, setCount] = useState(0);
 
   const [isSigned, setSigned] = useState(false);
+
   async function fetchInfo() {
     if (typeof window.ethereum === "undefined") {
       window.document.getElementById("withoutSign").style.display = "none";
@@ -89,7 +92,7 @@ export function Nav(): JSX.Element {
   }, 1000)
 
 
-  async function onClickDisConnect() {
+  function onClickDisConnect() {
     window.localStorage.setItem("loggedin", "");
     window.localStorage.setItem("loggedin2", "");
     window.localStorage.setItem('login-type', "");
@@ -127,22 +130,38 @@ export function Nav(): JSX.Element {
             <div className="wallet" style={{ height: 48, display: "flex", alignItems: "center" }}>
               <div className="wallet__wrapper gap-4 flex items-center">
                 <div className="wallet__info flex flex-col items-end">
-                <a href={"/Profile/"+accFull} rel="noreferrer" className="text-primary">
-                    <div className="font-medium " style={{color: 'var(--title-a-text)'}}>{acc}</div>
+                  <a href={"/Profile/"+accFull} rel="noreferrer" className="text-primary">
+                    <div className="font-medium text-whis">{acc}</div>
                   </a>
-                  <div className="text-goten">{Balance}</div>
+                  <div className="text-goten font-semibold whitespace-nowrap">{Balance}</div>
                 </div>
-                <Button iconOnly onClick={onClickDisConnect}>
-                  <SoftwareLogOut
-                    className="text-moon-24"
-                    transform="rotate(180)"
-                  ></SoftwareLogOut>
-                </Button>
-              </div>
+                <Dropdown value={null} onChange={null} >
+                  <Dropdown.Trigger>
+                    <Avatar size="lg" className="rounded-full border-2 border-piccolo">
+                      <GenericUser className="text-moon-24" />
+                    </Avatar>
+                  </Dropdown.Trigger>
+
+                  <Dropdown.Options className="bg-gohan w-48 min-w-0">
+                    <Dropdown.Option>
+                        <Link href={`/Profile/${accFull}`} passHref>
+                          <MenuItem >
+                            Go to my profile
+                          </MenuItem>
+                        </Link>
+                    </Dropdown.Option>
+                    <Dropdown.Option>
+                      <MenuItem onClick={onClickDisConnect}>
+                        Log out
+                      </MenuItem>
+                    </Dropdown.Option>
+                </Dropdown.Options>
+              </Dropdown>
             </div>
           </div>
-        </li>
-      </ul>
-    </nav>
+        </div>
+      </li>
+    </ul>
+  </nav>
   );
 }
