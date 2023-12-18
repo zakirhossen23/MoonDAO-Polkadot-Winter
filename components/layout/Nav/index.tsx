@@ -6,6 +6,7 @@ import { getChain } from '../../../services/useContract';
 import NavItem from '../../components/NavItem';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import CreateDaoModal from '../../../features/CreateDaoModal';
 
 declare let window: any;
 let running = false;
@@ -16,8 +17,9 @@ export function Nav(): JSX.Element {
   const [Balance, setBalance] = useState('');
   const [count, setCount] = useState(0);
   const [isSigned, setSigned] = useState(false);
+  const [showCreateDaoModal, setShowCreateDaoModal] = useState(false);
 
-  const router = useRouter()
+  const router = useRouter();
 
   async function fetchInfo() {
     if (typeof window.ethereum === 'undefined') {
@@ -95,69 +97,80 @@ export function Nav(): JSX.Element {
     window.location.href = '/';
   }
 
+  function closeModal() {
+    setShowCreateDaoModal(false);
+  }
+  function openModal() {
+    setShowCreateDaoModal(true);
+  }
+
   return (
-    <nav className="main-nav w-full flex justify-between items-center">
-      <ul className="flex justify-between items-center w-full">
-        {isSigned && (
-          <>
-            {/* <NavItem link="/daos" label="Joined communities" /> */}
-            <NavItem highlight={router.pathname.includes('/daos')} link="/daos" label="Communities" />
-            <NavItem highlight={router.pathname.includes('CreateDao')} link="/CreateDao" label="Create Your Community" />
-          </>
-        )}
+    <>
+      <nav className="main-nav w-full flex justify-between items-center">
+        <ul className="flex justify-between items-center w-full">
+          {isSigned && (
+            <>
+              {/* <NavItem link="/daos" label="Joined communities" /> */}
+              <NavItem highlight={router.pathname.includes('/daos')} link="/daos" label="Communities" />
+              <NavItem label="Create Your Community" onClick={openModal} />
+            </>
+          )}
 
-        <li className="Nav walletstatus flex flex-1 justify-end">
-          <div className="py-2 px-4 flex row items-center" id="withoutSign">
-            <a href="/login?[/]">
-              <Button className="bg-dodoria">Log in</Button>
-            </a>
-          </div>
-          <div id="installMetamask" style={{ display: 'none' }} className="wallets">
-            <div className="wallet">
-              <Button
-                className="bg-dodoria"
-                onClick={() => {
-                  window.open('https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn', '_blank');
-                }}
-              >
-                {' '}
-                Metamask
-              </Button>
+          <li className="Nav walletstatus flex flex-1 justify-end">
+            <div className="py-2 px-4 flex row items-center" id="withoutSign">
+              <a href="/login?[/]">
+                <Button className="bg-dodoria">Log in</Button>
+              </a>
             </div>
-          </div>
-
-          <div id="withSign" className="wallets" style={{ display: 'none' }}>
-            <div className="wallet" style={{ height: 48, display: 'flex', alignItems: 'center' }}>
-              <div className="wallet__wrapper gap-4 flex items-center">
-                <div className="wallet__info flex flex-col items-end">
-                  <a href={'/Profile/' + accFull} rel="noreferrer" className="text-primary">
-                    <div className="font-medium text-whis">{acc}</div>
-                  </a>
-                  <div className="text-goten font-semibold whitespace-nowrap">{Balance}</div>
-                </div>
-                <Dropdown value={null} onChange={null}>
-                  <Dropdown.Trigger>
-                    <Avatar size="lg" className="rounded-full border-2 border-piccolo">
-                      <GenericUser className="text-moon-24" />
-                    </Avatar>
-                  </Dropdown.Trigger>
-
-                  <Dropdown.Options className="bg-gohan w-48 min-w-0">
-                    <Dropdown.Option>
-                      <Link href={`/Profile/${accFull}`} passHref>
-                        <MenuItem>Go to my profile</MenuItem>
-                      </Link>
-                    </Dropdown.Option>
-                    <Dropdown.Option>
-                      <MenuItem onClick={onClickDisConnect}>Log out</MenuItem>
-                    </Dropdown.Option>
-                  </Dropdown.Options>
-                </Dropdown>
+            <div id="installMetamask" style={{ display: 'none' }} className="wallets">
+              <div className="wallet">
+                <Button
+                  className="bg-dodoria"
+                  onClick={() => {
+                    window.open('https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn', '_blank');
+                  }}
+                >
+                  {' '}
+                  Metamask
+                </Button>
               </div>
             </div>
-          </div>
-        </li>
-      </ul>
-    </nav>
+
+            <div id="withSign" className="wallets" style={{ display: 'none' }}>
+              <div className="wallet" style={{ height: 48, display: 'flex', alignItems: 'center' }}>
+                <div className="wallet__wrapper gap-4 flex items-center">
+                  <div className="wallet__info flex flex-col items-end">
+                    <a href={'/Profile/' + accFull} rel="noreferrer" className="text-primary">
+                      <div className="font-medium text-whis">{acc}</div>
+                    </a>
+                    <div className="text-goten font-semibold whitespace-nowrap">{Balance}</div>
+                  </div>
+                  <Dropdown value={null} onChange={null}>
+                    <Dropdown.Trigger>
+                      <Avatar size="lg" className="rounded-full border-2 border-piccolo">
+                        <GenericUser className="text-moon-24" />
+                      </Avatar>
+                    </Dropdown.Trigger>
+
+                    <Dropdown.Options className="bg-gohan w-48 min-w-0">
+                      <Dropdown.Option>
+                        <Link href={`/Profile/${accFull}`} passHref>
+                          <MenuItem>Go to my profile</MenuItem>
+                        </Link>
+                      </Dropdown.Option>
+                      <Dropdown.Option>
+                        <MenuItem onClick={onClickDisConnect}>Log out</MenuItem>
+                      </Dropdown.Option>
+                    </Dropdown.Options>
+                  </Dropdown>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </nav>
+
+      <CreateDaoModal open={showCreateDaoModal} onClose={closeModal} />
+    </>
   );
 }

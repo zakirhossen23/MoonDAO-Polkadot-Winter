@@ -1,13 +1,11 @@
-import { Button } from '@heathmont/moon-core-tw';
-import { ControlsChevronLeft, ControlsChevronRight, ControlsPlus } from '@heathmont/moon-icons-tw';
-import Skeleton from '@mui/material/Skeleton';
+import { Button, Tabs } from '@heathmont/moon-core-tw';
+import { ControlsPlus, GenericEdit } from '@heathmont/moon-icons-tw';
 import Head from 'next/head';
-import NavLink from 'next/link';
 import React, { useEffect, useState } from 'react';
-import Card from '../../../../components/components/Card/Card';
-import isServer from '../../../../components/isServer';
+import IdeaCard from '../../../../components/components/IdeaCard';
+import Loader from '../../../../components/components/Loader';
 import useContract from '../../../../services/useContract';
-let running = true;
+import Link from 'next/link';
 
 export default function Goal() {
   //Variables
@@ -26,23 +24,14 @@ export default function Goal() {
   });
   const [goalId, setGoalID] = useState(-1);
   const { contract, signerAddress } = useContract();
+  const [tabIndex, setTabIndex] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   const regex = /\[(.*)\]/g;
   let m;
   let id = ''; //id from url
 
-  const sleep = (milliseconds) => {
-    return new Promise((resolve) => setTimeout(resolve, milliseconds));
-  };
-
   useEffect(() => {
-    fetchContractData();
-  }, [contract]);
-
-  setInterval(function () {
-    calculateTimeLeft();
-  }, 1000);
-  if (!isServer()) {
     const str = decodeURIComponent(window.location.search);
 
     while ((m = regex.exec(str)) !== null) {
@@ -51,23 +40,13 @@ export default function Goal() {
       }
       id = m[1];
     }
-  }
 
-  function calculateTimeLeft() {
-    //Calculate time left
-    try {
-      var allDates = document.getElementsByName('DateCount');
-      for (let i = 0; i < allDates.length; i++) {
-        var date = allDates[i].getAttribute('date');
-        var status = allDates[i].getAttribute('status');
-        allDates[i].innerHTML = LeftDate(date, status);
-      }
-    } catch (error) {}
-  }
+    fetchContractData();
+  }, [contract]);
 
   async function fetchContractData() {
-    //Fetching data from Smart contract
-    running = true;
+    setLoading(true);
+
     try {
       if (contract && id) {
         setGoalID(Number(id));
@@ -105,34 +84,17 @@ export default function Goal() {
           isOwner: goalURI.properties.wallet.description.toString().toLocaleLowerCase() === signerAddress.toString().toLocaleLowerCase() ? true : false
         });
 
+        setLoading(false);
+
         /** TODO: Fix fetch to get completed ones as well */
         if (document.getElementById('Loading')) document.getElementById('Loading').style = 'display:none';
       }
-    } catch (error) {}
-    running = false;
+    } catch (error) {
+      setLoading(false);
+      console.error('Could not load contract');
+    }
   }
 
-  function LeftDate(datetext, status) {
-    //Counting Left date in date format
-    var c = new Date(datetext).getTime();
-    var n = new Date().getTime();
-    var d = c - n;
-    var da = Math.floor(d / (1000 * 60 * 60 * 24));
-    var h = Math.floor((d % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    var m = Math.floor((d % (1000 * 60 * 60)) / (1000 * 60));
-    var s = Math.floor((d % (1000 * 60)) / 1000);
-    if (s.toString().includes('-') && status === 'Finished') {
-      return 'Goal Ended';
-    }
-    return da.toString() + ' Days ' + h.toString() + ' hours ' + m.toString() + ' minutes ' + s.toString() + ' seconds' + ' Left';
-  }
-  function Loader({ element, type = 'rectangular', width = '50', height = '23' }) {
-    if (running) {
-      return <Skeleton variant={type} width={width} height={height} />;
-    } else {
-      return element;
-    }
-  }
   return (
     <>
       <Head>
@@ -140,96 +102,58 @@ export default function Goal() {
         <meta name="description" content="Goal" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className="flex items-center flex-col gap-8 relative">
-        <div className="gap-8 flex flex-col relative">
-          <div>
-            <h1 className="text-moon-32 font-bold" style={{ width: '78%' }}>
-              {GoalURI.Title}
-            </h1>
-            <a
-              style={{ width: '135px', position: 'absolute', right: '1rem', top: '0' }}
-              onClick={() => {
-                window.history.back();
-              }}
-            >
-              <Button iconleft style={{ width: '135px' }}>
-                <ControlsChevronLeft />
-                Back
+      <div className="flex items-center flex-col gap-8">
+        <div className="gap-8 flex flex-col w-full bg-gohan pt-10 border-beerus border">
+          <div className="container flex w-full justify-between">
+            <div className="flex flex-col gap-1 overflow-hidden">
+              <h5 className="font-semibold">Harvard University &gt; Goals</h5>
+              <h1 className="text-moon-32 font-bold">{GoalURI.Title}</h1>
+              <h3 className="flex gap-2 whitespace-nowrap">
+                <div>
+                  <span className="text-hit font-semibold">DEV 5300000</span> of DEV 10000
+                </div>
+                <div>•</div>
+                <div>{list.length} ideas</div>
+                <div>•</div>
+                <div className="flex">
+                  Created by &nbsp;<span className="truncate text-piccolo max-w-[120px]">{GoalURI.wallet}</span>
+                </div>
+              </h3>
+            </div>
+            <div className="flex flex-col gap-2">
+              <Link href={`/CreateIdeas?[${goalId}]`}>
+                <Button iconLeft={<ControlsPlus />} onClick={null}>
+                  Create idea
+                </Button>
+              </Link>
+              <Button iconLeft={<GenericEdit />} variant="secondary">
+                Edit
               </Button>
-            </a>
+            </div>
           </div>
-
-          <div className="flex gap-4">
-            <NavLink href="?q=All" className="DonationBarLink tab block px-3 py-2 active">
-              All
-            </NavLink>
-            <NavLink href="?q=Today" className="DonationBarLink tab block px-3 py-2">
-              Today
-            </NavLink>
-            <NavLink href="?q=This Month" className="DonationBarLink tab block px-3 py-2">
-              This Month
-            </NavLink>
-            {!GoalURI.isOwner ? (
-              <>
-                <a href={`/CreateIdeas?[${goalId}]`}>
-                  <Button style={{ width: '150px', position: 'absolute', right: '1rem' }} iconLeft="true">
-                    <ControlsPlus className="text-moon-24" />
-                    <div className="card BidcontainerCard">
-                      <div className="card-body bidbuttonText">Create Ideas</div>
-                    </div>
-                  </Button>
-                </a>
-              </>
-            ) : (
-              <></>
-            )}
+          <div className="container">
+            <Tabs selectedIndex={tabIndex} onChange={setTabIndex}>
+              <Tabs.List>
+                <Tabs.Tab>Description</Tabs.Tab>
+                <Tabs.Tab>Ideas ({list.length})</Tabs.Tab>
+              </Tabs.List>
+            </Tabs>
           </div>
         </div>
-
-        <Loader
-          element={
-            <div className="flex flex-col gap-8">
-              <img src={GoalURI.logo} />{' '}
-            </div>
-          }
-          width="90%"
-          height={578}
-        />
-        <Loader
-          element={
-            <div className="flex flex-col gap-8">
-              {list.map((listItem, index) => (
-                <Card height={300} width={640} key={index} className="p-10">
-                  <div className="flex flex-col gap-8 w-full">
-                    <div className="flex gap-6 w-full">
-                      <span>
-                        <img alt="" src={listItem.logo} />
-                      </span>
-                      <div className="flex flex-col gap-2 overflow-hidden text-left">
-                        <div className="font-bold">{listItem.Title}</div>
-                        <div>{listItem.Description.substring(0, 120)}</div>
-                      </div>
-                    </div>
-                    <div className="flex justify-between align-center ">
-                      <div name="DateCount" date={GoalURI.End_Date} status={listItem.status} className="flex items-center font-bold">
-                        {LeftDate(GoalURI.End_Date, listItem.status)}
-                      </div>
-
-                      <a href={`/daos/dao/goal/ideas?[${listItem.ideasId}]`}>
-                        <Button iconleft="true">
-                          <ControlsChevronRight />
-                          See more
-                        </Button>
-                      </a>
-                    </div>
-                  </div>
-                </Card>
+        {tabIndex === 0 && <div className="container">{GoalURI.Description}</div>}
+        {tabIndex === 1 && (
+          <div className="flex flex-col gap-8 container items-center">
+            <Loader
+              element={list.map((listItem, index) => (
+                <IdeaCard item={listItem} key={index} />
               ))}
-            </div>
-          }
-          width="90%"
-          height={578}
-        />
+              width={768}
+              height={236}
+              many={3}
+              loading={loading}
+            />{' '}
+          </div>
+        )}
       </div>
     </>
   );

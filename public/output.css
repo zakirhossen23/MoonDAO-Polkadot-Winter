@@ -1190,6 +1190,18 @@ video {
   max-height: 18.75rem;
 }
 
+.max-h-\[90vh\]{
+  max-height: 90vh;
+}
+
+.max-h-\[95vh\]{
+  max-height: 95vh;
+}
+
+.max-h-\[calc\(90vh-162px\)\]{
+  max-height: calc(90vh - 162px);
+}
+
 .min-h-full{
   min-height: 100%;
 }
@@ -1289,6 +1301,10 @@ video {
 
 .min-w-\[8\.5rem\]{
   min-width: 8.5rem;
+}
+
+.max-w-\[120px\]{
+  max-width: 120px;
 }
 
 .max-w-\[48px\]{
@@ -1933,10 +1949,6 @@ video {
   padding: 0.25rem;
 }
 
-.p-10{
-  padding: 2.5rem;
-}
-
 .p-2{
   padding: 0.5rem;
 }
@@ -2116,10 +2128,6 @@ video {
   padding-top: 1.125rem;
 }
 
-.text-left{
-  text-align: left;
-}
-
 .text-center{
   text-align: center;
 }
@@ -2287,6 +2295,10 @@ video {
 .text-white{
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+.text-beerus{
+  color: rgb(var(--beerus));
 }
 
 .underline{
@@ -2643,6 +2655,10 @@ button.black{
   padding: 0;
 }
 
+.MuiSkeleton-rounded {
+  border-radius: 8px;
+}
+
 .read-only\:hover\:input-bbb-clip-path:hover:-moz-read-only{
   clip-path: inset(0 calc(var(--border-i-width) * -1) 0.15rem calc(var(--border-i-width) * -1));
 }
@@ -2902,6 +2918,14 @@ button.black{
 
 .placeholder\:text-trunks::placeholder{
   color: rgb(var(--trunks));
+}
+
+.placeholder\:text-beerus::-moz-placeholder{
+  color: rgb(var(--beerus));
+}
+
+.placeholder\:text-beerus::placeholder{
+  color: rgb(var(--beerus));
 }
 
 .placeholder\:opacity-100::-moz-placeholder{

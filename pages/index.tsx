@@ -1,20 +1,19 @@
 import { Button } from '@heathmont/moon-core-tw';
 import Head from 'next/head';
 import Image from 'next/image';
-import { useRouter } from 'next/router';
 import styles from './Home.module.scss';
+import { useState } from 'react';
+import CreateDaoModal from '../features/CreateDaoModal';
 
-declare let window: any;
 export default function Welcome() {
-  const router = useRouter();
-  function letstartCLICK() {
-    if (typeof window.ethereum === 'undefined') {
-      window.open('https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn', '_blank');
-    } else if (window?.ethereum?.selectedAddress?.toLocaleLowerCase().toString() == null || window.localStorage.getItem('login-type') === 'metamask') {
-      router.push('/login?[/daos]');
-    } else {
-      router.push('/daos');
-    }
+  const [showCreateDaoModal, setShowCreateDaoModal] = useState(false);
+
+  function closeModal() {
+    setShowCreateDaoModal(false);
+  }
+
+  function openModal() {
+    setShowCreateDaoModal(true);
   }
 
   return (
@@ -30,7 +29,7 @@ export default function Welcome() {
             <Image
               width={160}
               height={160}
-              src="/home/logo.png"
+              src="/home/logo-square-black.svg"
               alt=""
               style={{
                 maxWidth: '100%',
@@ -44,7 +43,7 @@ export default function Welcome() {
           <p>PlanetDAO enables communities to govern themselves, make decisions collectively, have a transparency payments process and build trust-based ecosystems. Everything in just a couple clicks.</p>
           <p>Start your DAO today and give everyone in your community a voice!</p>
           <div>
-            <Button onClick={letstartCLICK}>Create a DAO community</Button>
+            <Button onClick={openModal}>Create a DAO community</Button>
           </div>
         </div>
         <div className={styles.image}>
@@ -76,7 +75,7 @@ export default function Welcome() {
             <Image
               width={160}
               height={160}
-              src="/home/logo-inverse.png"
+              src="/home/logo-square-white.svg"
               alt=""
               style={{
                 maxWidth: '100%',
@@ -89,10 +88,12 @@ export default function Welcome() {
           <p>PlanetDAO enables communities to govern themselves, make decisions collectively, have a transparency payments process and build trust-based ecosystems. Everything in just a couple clicks.</p>
           <p>Start your DAO today and give everyone in your community a voice!</p>
           <div>
-            <Button onClick={letstartCLICK}>Create a DAO community</Button>
+            <Button onClick={openModal}>Create a DAO community</Button>
           </div>
         </div>
       </div>
+
+      <CreateDaoModal open={showCreateDaoModal} onClose={closeModal} />
     </>
   );
 }

@@ -157,7 +157,8 @@ export default function CreateDaoModal({ open, onClose }) {
       return;
       // window.location.href = "/login?[/]"; //If found any error then it will let the user to login page
     }
-    router.push('/daos'); //After the success it will redirect the user to /dao page
+
+    onClose();
   }
 
   function FilehandleChange(dao) {
@@ -209,7 +210,7 @@ export default function CreateDaoModal({ open, onClose }) {
   return (
     <Modal open={open} onClose={onClose}>
       <Modal.Backdrop />
-      <Modal.Panel className="bg-gohan w-[90%] max-w-[600px]">
+      <Modal.Panel className="bg-gohan w-[90%] max-w-[600px] max-h-[95vh]">
         <div className="flex items-center justify-center flex-col">
           <div className="flex justify-between items-center w-full border-b border-beerus py-4 px-6">
             <h1 className="text-moon-20 font-semibold">Create community</h1>
@@ -272,7 +273,9 @@ export default function CreateDaoModal({ open, onClose }) {
             </div>
           </div>
           <div className="flex justify-between border-t border-beerus w-full p-6">
-            <Button variant="ghost">Cancel</Button>
+            <Button variant="ghost" onClick={onClose}>
+              Cancel
+            </Button>
             <CreateDaoBTN />
           </div>
         </div>

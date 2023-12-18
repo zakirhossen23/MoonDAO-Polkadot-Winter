@@ -1,11 +1,13 @@
 import { Button, Tabs } from '@heathmont/moon-core-tw';
-import { ControlsPlus, GenericEdit, GenericLogOut } from '@heathmont/moon-icons-tw';
+import { ControlsPlus, FilesDelete, GenericDelete, GenericEdit, GenericLogOut, GenericPlus } from '@heathmont/moon-icons-tw';
 import Head from 'next/head';
 import React, { useEffect, useState } from 'react';
 import JoinDAO from '../../../components/components/modal/JoinDAO';
 import useContract from '../../../services/useContract';
 import GoalCard from '../../../components/components/GoalCard';
 import Loader from '../../../components/components/Loader';
+import Link from 'next/link';
+import CreateGoalModal from '../../../features/CreateGoalModal';
 
 export default function DAO() {
   //Variables
@@ -14,6 +16,7 @@ export default function DAO() {
   const [daoId, setDaoID] = useState(-1);
   const { contract, signerAddress } = useContract();
   const [JoinmodalShow, setJoinmodalShow] = useState(false);
+  const [showCreateGoalModal, setShowCreateGoalModal] = useState(false);
   const [isJoined, setIsJoined] = useState(false);
   const [isOwner, setIsOwner] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -33,18 +36,18 @@ export default function DAO() {
   }
 
   function getDaoID() {
-    const str = decodeURIComponent(window.location.search)
+    const str = decodeURIComponent(window.location.search);
 
     while ((m = regex.exec(str)) !== null) {
       if (m.index === regex.lastIndex) {
-        regex.lastIndex++
+        regex.lastIndex++;
       }
-      setDaoID(Number(m[1]))
+      setDaoID(Number(m[1]));
     }
   }
 
   function deleteDao() {
-    console.log('DELETE DAO')
+    console.log('DELETE DAO');
   }
 
   async function fetchContractData() {
@@ -77,7 +80,7 @@ export default function DAO() {
           }
         }
         setList(arr);
-        setIsOwner(daoURI.properties.wallet.description.toString().toLocaleLowerCase() === signerAddress.toString().toLocaleLowerCase() ? true : false)
+        setIsOwner(daoURI.properties.wallet.description.toString().toLocaleLowerCase() === signerAddress.toString().toLocaleLowerCase() ? true : false);
 
         let daoURIShort = {
           Title: daoURI.properties.Title.description,
@@ -104,6 +107,13 @@ export default function DAO() {
     }
   }
 
+  function closeCreateGoalModal() {
+    setShowCreateGoalModal(false);
+  }
+  function openCreateGoalModal() {
+    setShowCreateGoalModal(true);
+  }
+
   return (
     <>
       <Head>
@@ -114,24 +124,41 @@ export default function DAO() {
 
       <div className={`flex items-center flex-col gap-8`}>
         <div className={`gap-8 flex flex-col w-full bg-gohan pt-10 border-beerus border`}>
-          <div className="container flex w-full justify-between">
+          <div className="container flex w-full justify-between relative">
             <div className="flex flex-col gap-1">
               <h5 className="font-semibold">Community</h5>
               <h1 className="text-moon-32 font-bold">{DaoURI.Title}</h1>
+              <h3 className="flex gap-2 whitespace-nowrap">
+                <div className="flex">
+                  Managed by &nbsp;<span className="truncate text-piccolo max-w-[120px]">{DaoURI.wallet}</span>
+                </div>
+                <div>•</div>
+                <div>
+                  <span className="text-hit font-semibold">DEV 5300000</span> p/month
+                </div>
+              </h3>
             </div>
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2 absolute top-0 right-0">
+              {(isOwner || isJoined) && (
+                <Button iconLeft={<GenericPlus />} onClick={openCreateGoalModal}>
+                  Create goal
+                </Button>
+              )}
+
               {isJoined && (
                 <Button iconLeft={<GenericLogOut />} variant="secondary">
                   Leave
                 </Button>
               )}
               {isOwner && (
-                <Button iconLeft={<GenericEdit />} variant="secondary">
-                  Edit
-                </Button>
+                <Link href={`/DesignDao?[${daoId}]`}>
+                  <Button iconLeft={<GenericEdit />} variant="secondary" className="w-full">
+                    Edit
+                  </Button>
+                </Link>
               )}
               {isOwner && (
-                <Button iconLeft={<GenericEdit />} className='bg-dodoria' onClick={deleteDao}>
+                <Button iconLeft={<GenericDelete />} className="bg-dodoria" onClick={deleteDao}>
                   Delete
                 </Button>
               )}
@@ -147,13 +174,13 @@ export default function DAO() {
               <Tabs.List>
                 <Tabs.Tab>Feed</Tabs.Tab>
                 <Tabs.Tab>About</Tabs.Tab>
-                <Tabs.Tab>Goals (1)</Tabs.Tab>
+                <Tabs.Tab>Goals ({list.length})</Tabs.Tab>
               </Tabs.List>
             </Tabs>
           </div>
         </div>
         {tabIndex === 0 && <p>Feed comes here</p>}
-        {tabIndex === 1 && <div className='container' dangerouslySetInnerHTML={{ __html: aboutTemplate}}></div>}
+        {tabIndex === 1 && <div className="container" dangerouslySetInnerHTML={{ __html: aboutTemplate }}></div>}
         {tabIndex === 2 && (
           <div className="flex flex-col gap-8 container items-center">
             <Loader
@@ -164,11 +191,12 @@ export default function DAO() {
               height={236}
               many={3}
               loading={loading}
-              type="rounded"
             />{' '}
           </div>
         )}
       </div>
+
+      <CreateGoalModal open={showCreateGoalModal} onClose={closeCreateGoalModal} />
 
       <JoinDAO
         SubsPrice={DaoURI.SubsPrice}

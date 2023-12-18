@@ -1,25 +1,19 @@
 import { Button } from '@heathmont/moon-core-tw';
-import { ControlsChevronLeft } from '@heathmont/moon-icons-tw';
-import Skeleton from '@mui/material/Skeleton';
+import { GenericEdit, GenericHeart, ShopCryptoCoin } from '@heathmont/moon-icons-tw';
 import Head from 'next/head';
-import { useSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
-import CommentBox from '../../../../../components/components/Comment';
+import CommentBox from '../../../../../components/components/CommentBox';
 import SlideShow from '../../../../../components/components/Slideshow';
 import UseFormTextArea from '../../../../../components/components/UseFormTextArea';
 import DonateCoin from '../../../../../components/components/modal/DonateCoin';
 import VoteConviction from '../../../../../components/components/modal/VoteConviction';
-import { useUtilsContext } from '../../../../../contexts/UtilsContext';
 import useContract from '../../../../../services/useContract';
+import Link from 'next/link';
+import Image from 'next/image';
+import Loader from '../../../../../components/components/Loader';
 
-let IdeasEnd = '';
-let IdeasWaiting = false;
 let running = true;
 export default function GrantIdeas() {
-  //variables
-  const { enqueueSnackbar } = useSnackbar();
-  const { USDPrice } = useUtilsContext();
-
   const [ideaId, setIdeasId] = useState(-1);
   const [Goal_id, setGoal_id] = useState(-1);
   const [PollIndex, setPollIndex] = useState(-1);
@@ -29,12 +23,13 @@ export default function GrantIdeas() {
   const [VotingShow, setVotingShow] = useState(false);
   const [AccountAddress, setAccountAddress] = useState('');
   const { contract, signerAddress, sendTransaction, saveReadMessage } = useContract();
+
   const [Comment, CommentInput, setComment] = UseFormTextArea({
     defaultValue: '',
-    placeholder: 'Your comment',
+    placeholder: 'Add a comment',
     id: '',
     name: 'comment',
-    rows: 6
+    rows: 1
   });
   const [emptydata, setemptydata] = useState([]);
 
@@ -59,57 +54,6 @@ export default function GrantIdeas() {
   let id = ''; //Ideas id from url
   let Goalid = ''; //Goal id
 
-  function LeftDate(datetext, int = false) {
-    //String date to dd/hh/mm/ss format
-    if (int) datetext = Number(datetext);
-    var c = new Date(datetext).getTime();
-    var n = new Date().getTime();
-    var d = c - n;
-    var da = Math.floor(d / (1000 * 60 * 60 * 24));
-    var h = Math.floor((d % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    var m = Math.floor((d % (1000 * 60 * 60)) / (1000 * 60));
-    var s = Math.floor((d % (1000 * 60)) / 1000);
-    return da.toString() + ' Days ' + h.toString() + ' hours ' + m.toString() + ' minutes ' + s.toString() + ' seconds';
-  }
-  function LeftDateSmall(datetext) {
-    //String date to d/h/m/s format
-
-    var c = new Date(datetext).getTime();
-    var n = new Date().getTime();
-    var d = c - n;
-    var da = Math.floor(d / (1000 * 60 * 60 * 24));
-    var h = Math.floor((d % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    var m = Math.floor((d % (1000 * 60 * 60)) / (1000 * 60));
-    var s = Math.floor((d % (1000 * 60)) / 1000);
-    if (IdeasEnd === 'Finished' && s.toString().includes('-')) {
-      return 'Ideas Ended';
-    } else if (s.toString().includes('-') && IdeasWaiting === true && IdeasEnd !== 'Finished') {
-      return 'Waiting for release';
-    } else {
-      return da.toString() + 'd ' + h.toString() + 'h ' + m.toString() + 'm ' + s.toString() + 's' + ' left';
-    }
-  }
-
-  useEffect(() => {
-    fetchContractData();
-  }, [contract]);
-
-  useEffect(() => {
-    function SetReadSettings() {
-      var messages = document.querySelectorAll('.read-message');
-      for (let i = 0; i < messages.length; i++) {
-        const element = messages[i];
-        observerMessage.observe(element);
-      }
-      var replys = document.querySelectorAll('.read-reply');
-      for (let i = 0; i < replys.length; i++) {
-        const element = replys[i];
-        observerReply.observe(element);
-      }
-    }
-    SetReadSettings();
-  }, [emptydata]);
-
   useEffect(() => {
     const regex = /\[(.*)\]/g;
     const str = decodeURIComponent(window.location.search);
@@ -123,6 +67,25 @@ export default function GrantIdeas() {
       id = m[1];
     }
 
+    fetchContractData();
+  }, [contract]);
+
+  // useEffect(() => {
+  //   function SetReadSettings() {
+  //     var messages = document.querySelectorAll('.read-message');
+  //     for (let i = 0; i < messages.length; i++) {
+  //       const element = messages[i];
+  //       observerMessage.observe(element);
+  //     }
+  //     var replys = document.querySelectorAll('.read-reply');
+  //     for (let i = 0; i < replys.length; i++) {
+  //       const element = replys[i];
+  //       observerReply.observe(element);
+  //     }
+  //   }
+  // }, [emptydata]);
+
+  useEffect(() => {
     DesignSlide();
   });
 
@@ -144,6 +107,7 @@ export default function GrantIdeas() {
           const element = Allvotes[i];
           if (element === signerAddress) isvoted = true;
         }
+
         setAccountAddress(object.properties.wallet.description);
         setPollIndex(object.properties?.Referenda?.description);
         setIdeasURI({
@@ -154,7 +118,7 @@ export default function GrantIdeas() {
           wallet: object.properties.wallet.description,
           logo: object.properties.logo.description?.url,
           End_Date: goalURI.properties.End_Date?.description,
-          voted: Object.keys(Allvotes).length,
+          votesAmount: Object.keys(Allvotes).length,
           donation: Number((await contract._ideas_uris(Number(id))).donation) / 1e18,
           isVoted: isvoted,
           isOwner: object.properties.wallet.description.toString().toLocaleLowerCase() === signerAddress.toString().toLocaleLowerCase() ? true : false,
@@ -165,11 +129,15 @@ export default function GrantIdeas() {
 
         // Comments and Replies
         const totalComments = await contract.getMsgIDs(Number(id)); //Getting total comments (Number) of this idea
-        // const arr = []
-        for (let i = 0; i < Object.keys(totalComments).length; i++) {
+
+        console.log('TOTAL', totalComments);
+
+        totalComments.forEach(async (comment) => {
           //total comments number Iteration
-          const commentId = Number(totalComments[i]);
+          const commentId = Number(comment);
           let commentInfo = await contract.all_messages(commentId);
+
+          console.log('ALL MESSAGES', JSON.parse(commentInfo.message));
           const object = JSON.parse(commentInfo.message);
           let newComment = {
             address: object.address,
@@ -180,8 +148,11 @@ export default function GrantIdeas() {
           };
 
           const totalReplies = await contract.getReplyIDs(Number(commentId)); //Getting total replies (Number) of this comment
-          for (let i = 0; i < Object.keys(totalReplies).length; i++) {
-            const replyId = Number(totalReplies[i]);
+
+          console.log('TOTAL REPLIES', totalReplies);
+
+          totalReplies.forEach(async (reply) => {
+            const replyId = Number(reply);
             let replyInfo = await contract.all_replies(replyId);
             const object = JSON.parse(replyInfo.message);
             let newReply = {
@@ -191,11 +162,12 @@ export default function GrantIdeas() {
               date: object.date
             };
             newComment.replies.push(newReply);
-          }
+            // console.log('LIST', CommentsList);
+          });
+
           CommentsList.push(newComment);
-        }
+        });
         removeElementFromArrayBYID(emptydata, 0, setemptydata);
-        if (document.getElementById('Loading')) document.getElementById('Loading').style = 'display:none';
       }
     } catch (error) {
       console.error(error);
@@ -215,72 +187,44 @@ export default function GrantIdeas() {
     }
   }
 
-  useEffect(() => {
-    const observerMessage = new window.IntersectionObserver(
-      async ([entry]) => {
-        if (entry.isIntersecting) {
-          let elm = entry.target;
-          let id = Number(elm.dataset.id);
-          await saveReadMessage(id, ideaId, 'message');
+  // if (!isServer()) {
+  //   observerMessage = new window.IntersectionObserver(
+  //     async ([entry]) => {
+  //       if (entry.isIntersecting) {
+  //         let elm = entry.target;
+  //         let id = Number(elm.dataset.id);
+  //         await saveReadMessage(id, ideaId, 'message');
 
-          return;
-        }
-        console.log('LEAVE');
-      },
-      {
-        root: null,
-        threshold: 1 // set offset 0.1 means trigger if atleast 10% of element in viewport
-      }
-    );
+  //         return;
+  //       }
+  //       console.log('LEAVE');
+  //     },
+  //     {
+  //       root: null,
+  //       threshold: 1 // set offset 0.1 means trigger if atleast 10% of element in viewport
+  //     }
+  //   );
 
-    const observerReply = new window.IntersectionObserver(
-      async ([entry]) => {
-        if (entry.isIntersecting) {
-          let elm = entry.target;
-          let id = Number(elm.dataset.id);
+  //   observerReply = new window.IntersectionObserver(
+  //     async ([entry]) => {
+  //       if (entry.isIntersecting) {
+  //         let elm = entry.target;
+  //         let id = Number(elm.dataset.id);
 
-          await saveReadMessage(id, ideaId, 'reply');
+  //         await saveReadMessage(id, ideaId, 'reply');
 
-          return;
-        }
-        console.log('LEAVE');
-      },
-      {
-        root: null,
-        threshold: 1 // set offset 0.1 means trigger if atleast 10% of element in viewport
-      }
-    );
-  });
+  //         return;
+  //       }
+  //       console.log('LEAVE');
+  //     },
+  //     {
+  //       root: null,
+  //       threshold: 1 // set offset 0.1 means trigger if atleast 10% of element in viewport
+  //     }
+  //   );
+  // }
 
-  setInterval(function () {
-    calculateTimeLeft();
-  }, 1000);
-
-  function calculateTimeLeft() {
-    //Calculating time left
-    try {
-      var allDates = document.getElementsByName('dateleft');
-      for (let i = 0; i < allDates.length; i++) {
-        var date = allDates[i].getAttribute('date');
-        var inttype = allDates[i].getAttribute('inttype');
-        if (inttype != undefined) {
-          inttype = true;
-        } else {
-          inttype = false;
-        }
-        allDates[i].innerHTML = LeftDate(date, inttype);
-      }
-      var allDates = document.getElementsByName('date');
-      for (let i = 0; i < allDates.length; i++) {
-        var date = allDates[i].getAttribute('date');
-        if (date !== undefined && date !== '') {
-          allDates[i].innerHTML = LeftDateSmall(date);
-        }
-      }
-    } catch (error) {}
-  }
-
-  async function VoteIdees() {
+  async function VoteIdea() {
     if (IdeasURI.Referenda != 0) {
       setVotingShow(true);
       return;
@@ -297,13 +241,7 @@ export default function GrantIdeas() {
   async function DonateToAddress() {
     setDonatemodalShow(true);
   }
-  function Loader({ element, type = 'rectangular', width = '50', height = '23' }) {
-    if (running) {
-      return <Skeleton variant={type} width={width} height={height} />;
-    } else {
-      return element;
-    }
-  }
+
   async function removeElementFromArrayBYID(all, specificid, seting) {
     seting([]);
     var storing = [];
@@ -317,6 +255,7 @@ export default function GrantIdeas() {
 
     seting(storing);
   }
+
   async function PostComment(e) {
     e.preventDefault();
 
@@ -333,11 +272,13 @@ export default function GrantIdeas() {
     setComment('');
     removeElementFromArrayBYID(emptydata, 0, setemptydata);
   }
+
   async function saveMessage(newComment) {
     await sendTransaction(await window.contract.populateTransaction.sendMsg(Number(ideaId), JSON.stringify(newComment), window?.ethereum?.selectedAddress?.toLocaleLowerCase()));
     removeElementFromArrayBYID(emptydata, 0, setemptydata);
     console.log('Saved Messages');
   }
+
   async function sendReply(replyText, MessageId, MessageIndex) {
     let replyLatestId = Number(await contract._reply_ids());
     let newReply = {
@@ -359,103 +300,50 @@ export default function GrantIdeas() {
         <meta name="description" content={IdeasURI.Title} />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className="flex flex-col items-center gap-8">
-        <div className="flex flex-col gap-2">
-          <div style={{ position: 'relative' }}>
-            <Loader
-              element={
-                <h1 className="text-moon-32 font-bold pb-2" style={{ width: '78%' }}>
-                  {IdeasURI.Title}
-                </h1>
-              }
-              width={'80%'}
-            />
-            <a
-              style={{ width: '135px', position: 'absolute', right: '0rem', top: '0' }}
-              onClick={() => {
-                window.history.back();
-              }}
-            >
-              <Button iconleft style={{ width: '135px' }}>
-                <ControlsChevronLeft />
-                Back
-              </Button>
-            </a>
-          </div>
-          <div>
-            <Loader
-              element={
-                <a className="font-medium text-[#0000ff]" href={`/Profile/${IdeasURI.wallet}`} style={{ color: 'var(--title-a-text)' }} rel="noreferrer" target="_blank">
-                  {IdeasURI.wallet}
-                </a>
-              }
-              width={'80%'}
-            />
-          </div>
-          <Loader
-            element={
-              <a className="text-piccolo" name="dateleft" date={IdeasURI.End_Date}>
-                {LeftDate(IdeasURI.End_Date)}
-              </a>
-            }
-            width={'80%'}
-          />
-
-          <Loader element={<div className="flex">Voted: {IdeasURI.voted} </div>} width={'100%'} />
-          <Loader
-            element={
-              <div className="flex">
-                Donated: {IdeasURI.donation} DEV ( {USDPrice * IdeasURI.donation} USD){' '}
-              </div>
-            }
-            width={'100%'}
-          />
-
-          <Loader element={<p>{IdeasURI.Description} </p>} width={'100%'} />
-        </div>
-        <div className="flex gap-4 justify-start">
-          <a className={`tab block cursor-pointer py-2 text-3xl text-[#0000ff]`} style={{ color: 'var(--title-a-text)' }}>
-            Ideas
-          </a>
-          {!IdeasURI.isOwner ? (
-            <>
-              <div className="flex justify-end w-full gap-4">
-                {!IdeasURI.isVoted ? (
-                  <>
-                    <Button
-                      data-element-id="btn_vote"
-                      style={{ width: '135px' }}
-                      data-analytic-event-listener="true"
-                      onClick={() => {
-                        VoteIdees();
-                      }}
-                    >
-                      Vote
-                    </Button>
-                  </>
-                ) : (
-                  <></>
-                )}
-
-                <Button
-                  data-element-id="btn_donate"
-                  style={{ width: '135px' }}
-                  data-analytic-event-listener="true"
-                  onClick={() => {
-                    DonateToAddress();
-                  }}
-                >
+      <div className="flex items-center flex-col gap-8">
+        <div className={`gap-8 flex flex-col w-full bg-gohan pt-10 pb-6 border-beerus border`}>
+          <div className="container flex w-full justify-between relative">
+            <div className="flex flex-col gap-1">
+              <h5 className="font-semibold">Harvard University &gt; Goals &gt; Ideas</h5>
+              <h1 className="text-moon-32 font-bold">{IdeasURI.Title}</h1>
+              <h3 className="flex gap-2 whitespace-nowrap">
+                <div>
+                  Donated <span className="text-hit font-semibold">DEV 5300000</span>
+                </div>
+                <div>•</div>
+                <div>
+                  <span className="text-hit font-semibold">{IdeasURI.votesAmount}</span> votes
+                </div>
+                <div>•</div>
+                <div className="flex">
+                  Created by &nbsp;<span className="truncate text-piccolo max-w-[120px]">{IdeasURI.wallet}</span>
+                </div>
+              </h3>
+            </div>
+            <div className="flex flex-col gap-2">
+              {(IdeasURI.isOwner || isJoined) && (
+                <Button iconLeft={<ShopCryptoCoin />} onClick={DonateToAddress}>
                   Donate
                 </Button>
-              </div>
-            </>
-          ) : (
-            <></>
-          )}
+              )}
+
+              <Button iconLeft={IdeasURI.isVoted ? <GenericHeart fill="red" color="red" /> : <GenericHeart />} variant="secondary" onClick={VoteIdea}>
+                Vote
+              </Button>
+              {IdeasURI.isOwner && (
+                <Link href={`#`}>
+                  <Button iconLeft={<GenericEdit />} variant="secondary" className="w-full">
+                    Edit
+                  </Button>
+                </Link>
+              )}
+            </div>
+          </div>
         </div>
-        <div className={`flex gap-8`}>
+
+        <div className="container flex flex-col gap-6">
+          <p>{IdeasURI.Description}</p>
           <Loader
-            type="rounded"
             element={
               imageList.length > 1 ? (
                 <>
@@ -464,29 +352,26 @@ export default function GrantIdeas() {
               ) : (
                 <>
                   <div className="flex-1 rounded-xl overflow-hidden flex" style={{ height: '500px' }}>
-                    <img type={imageList[0]?.type} src={imageList[0]?.url} alt="" />
+                    <Image type={imageList[0]?.type} src={imageList[0]?.url} alt="" />
                   </div>
                 </>
               )
             }
             width={750}
             height={500}
-          />
-        </div>
-      </div>
-      <div style={{ padding: '4% 10%', display: 'flex', justifyContent: 'center' }}>
-        <form onSubmit={PostComment} style={{ width: '60rem', display: 'flex', flexDirection: 'column', rowGap: '1rem' }}>
-          {CommentInput}
-          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <Button data-element-id="btn_donate" style={{ width: '135px' }} data-analytic-event-listener="true" type="submit">
-              Post Comment
-            </Button>
+          />{' '}
+          <div className="full-w">
+            <form onSubmit={PostComment} className="full-w flex flex-col gap-2">
+              {CommentInput}
+              <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <Button data-element-id="btn_donate" style={{ width: '135px' }} data-analytic-event-listener="true" type="submit">
+                  Post Comment
+                </Button>
+              </div>
+            </form>
           </div>
-        </form>
-      </div>
-
-      <div style={{ padding: '0 10%', display: 'flex', justifyContent: 'center' }}>
-        <div style={{ width: '60rem', height: '100%' }}>{CommentsList.map((listItem, index) => (listItem.address !== '' ? <CommentBox address={listItem.address} MessageID={listItem.id} MessageIndex={index} date={listItem.date} sendReply={sendReply} message={listItem.message} replies={listItem.replies} id={listItem.id} key={listItem.id} /> : <></>))}</div>
+          {/* <div>{CommentsList.map((listItem, index) => (listItem.address !== '' ? <CommentBox address={listItem.address} MessageID={listItem.id} MessageIndex={index} date={listItem.date} sendReply={sendReply} message={listItem.message} replies={listItem.replies} id={listItem.id} key={listItem.id} /> : <></>))}</div> */}
+        </div>
       </div>
 
       <DonateCoin

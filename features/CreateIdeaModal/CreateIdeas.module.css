@@ -31,3 +31,14 @@
   border-radius: 8px;
   object-fit: cover;
 }
+.video{
+  height: 80px;
+  width: 160px;
+  border: 1px solid #999ca0;
+  border-radius: 8px;
+  object-fit: cover;
+  color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

@@ -91,3 +91,7 @@ button.black{
 .dao-container {
   padding: 0;
 }
+
+.MuiSkeleton-rounded {
+  border-radius: 8px;
+}
