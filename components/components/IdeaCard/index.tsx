@@ -1,11 +1,11 @@
 import Image from 'next/image';
 import { Idea } from '../../../data-model/idea';
-import Card from '../Card/Card';
+import Card from '../Card';
 import Link from 'next/link';
 import { Button } from '@heathmont/moon-core-tw';
 import { ArrowsRightShort, GenericHeart, ShopCryptoCoin } from '@heathmont/moon-icons-tw';
 
-const IdeaCard = ({ item, onClickVote, onClickDonate }: { item: Idea; onClickVote; onClickDonate }) => {
+const IdeaCard = ({ item, onClickVote, onClickDonate, hideDonate, hideVote }: { item: Idea; onClickVote?; onClickDonate?; hideVote?: boolean; hideDonate?: boolean }) => {
   return (
     <Card className="max-w-[720px]">
       <div className="flex w-full">
@@ -23,12 +23,17 @@ const IdeaCard = ({ item, onClickVote, onClickDonate }: { item: Idea; onClickVot
             <p>Votes</p>
           </div>
           <div className="absolute bottom-0 right-0 flex gap-2">
-            <Button variant="secondary" iconLeft={<GenericHeart />} onClick={onClickVote}>
-              Vote
-            </Button>
-            <Button variant="secondary" iconLeft={<ShopCryptoCoin />} onClick={onClickDonate}>
-              Donate
-            </Button>
+            {!hideVote && (
+              <Button variant="secondary" iconLeft={<GenericHeart />} onClick={onClickVote}>
+                Vote
+              </Button>
+            )}
+
+            {!hideDonate && (
+              <Button variant="secondary" iconLeft={<ShopCryptoCoin />} onClick={onClickDonate}>
+                Donate
+              </Button>
+            )}
             <Link href={`/daos/dao/goal/ideas?[${item.ideasId}]`}>
               <Button iconLeft={<ArrowsRightShort />}>Go to idea</Button>
             </Link>

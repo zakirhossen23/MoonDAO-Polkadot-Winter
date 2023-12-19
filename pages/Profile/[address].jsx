@@ -7,7 +7,7 @@ import { Avatar, Button, Tabs } from '@heathmont/moon-core-tw';
 import { GenericUser, SoftwareLogOut } from '@heathmont/moon-icons-tw';
 import Loader from '../../components/components/Loader';
 import Link from 'next/link';
-import Card from '../../components/components/Card/Card';
+import Card from '../../components/components/Card';
 
 export default function Profile() {
   //Variables

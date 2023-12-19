@@ -1351,6 +1351,10 @@ video {
   max-width: 20rem;
 }
 
+.max-w-\[540px\]{
+  max-width: 540px;
+}
+
 .flex-1{
   flex: 1 1 0%;
 }
@@ -1939,6 +1943,10 @@ video {
 
 .bg-zeno{
   background-color: rgb(var(--zeno));
+}
+
+.bg-dodoria-60{
+  background-color: rgb(var(--dodoria-60));
 }
 
 .bg-cover{

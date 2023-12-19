@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import Card from '../Card/Card';
+import Card from '../Card';
 import { Dao } from '../../../data-model/dao';
 import { Button } from '@heathmont/moon-core-tw';
 import { ArrowsRightShort } from '@heathmont/moon-icons-tw';

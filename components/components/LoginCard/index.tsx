@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import Card from '../Card/Card';
+import Card from '../Card';
 import { Button } from '@heathmont/moon-core-tw';
 import { GenericCheckRounded, GenericClose, SoftwareLogOut, SoftwareLogin } from '@heathmont/moon-icons-tw';
 import { MouseEventHandler } from 'react';
