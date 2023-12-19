@@ -50,7 +50,7 @@ export default function Welcome() {
           <Image
             src={'/home/section-1-img.jpg'}
             alt=""
-            fill
+            layout='fill'
             sizes="100vw"
             style={{
               objectFit: 'cover'
@@ -63,7 +63,7 @@ export default function Welcome() {
           <Image
             src={'/home/section-2-img.jpg'}
             alt=""
-            fill
+            layout='fill'
             sizes="100vw"
             style={{
               objectFit: 'cover'
