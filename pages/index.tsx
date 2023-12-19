@@ -48,7 +48,7 @@ export default function Welcome() {
         </div>
         <div className={styles.image}>
           <Image
-            src={'/home/section-1-img.png'}
+            src={'/home/section-1-img.jpg'}
             alt=""
             fill
             sizes="100vw"
@@ -61,7 +61,7 @@ export default function Welcome() {
       <div className={`${styles.section} ${styles['section-dark']}`}>
         <div className={styles.image}>
           <Image
-            src={'/home/section-2-img.png'}
+            src={'/home/section-2-img.jpg'}
             alt=""
             fill
             sizes="100vw"

@@ -164,6 +164,7 @@ button.VoteType.active {
     font-size: 1.17em;
     font-weight: 700;
     font-family: Ubuntu, Arial, sans-serif;
+    padding-bottom: 8px;;
 }
 .stats-section ul {
     margin: 10px 0;
@@ -199,7 +200,7 @@ button.VoteType.active {
 }.top-sub-section ul {
     max-width: 95%;
 }.top-sub-section li {
-    border-left: #e8e8e8 solid 2px;
+    border-left: rgb(var(--beerus)) solid 2px;
     padding: 5px 8px;
     margin: 10px 0;
 }.replies-section li, .topics-section li, .links-section li {
@@ -209,7 +210,7 @@ button.VoteType.active {
 }
 
 .ember-view a {
-    color: var(--title-a-text);
+    color: rgb(var(--hit));
 }
 .pull-left {
     float: left;
@@ -238,8 +239,9 @@ button.VoteType.active {
     margin-bottom: 1.5em;
 }
 .badge-card {
-    background-color: #f8f8f8;
-    border: 1px solid #e8e8e8;
+    background-color: rgb(var(--goku));
+    border: 1px solid rgb(var(--beerus));
+    border-radius: 8px;
     position: relative;
     /* width: 20rem; */
 }.badge-card .badge-contents {
@@ -282,5 +284,5 @@ button.VoteType.active {
     color: #aeafaf;
 }
 .ember-view a.granted svg {
-    color: var(--title-a-text);
+    color: rgb(var(--hit));
 }
