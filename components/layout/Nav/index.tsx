@@ -117,10 +117,15 @@ export function Nav(): JSX.Element {
           )}
 
           <li className="Nav walletstatus flex flex-1 justify-end">
-            <div className="py-2 px-4 flex row items-center" id="withoutSign">
-              <a href="/login">
+            <div className="py-2 px-4 flex gap-2 items-center" id="withoutSign">
+              <Link href="/register">
+                <Button variant="ghost" className="!text-white w-32">
+                  Register
+                </Button>
+              </Link>
+              <Link href="/login">
                 <Button className="bg-dodoria w-32">Log in</Button>
-              </a>
+              </Link>
             </div>
             <div id="installMetamask" style={{ display: 'none' }} className="wallets">
               <div className="wallet">

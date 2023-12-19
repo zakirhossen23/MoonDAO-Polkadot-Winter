@@ -1323,6 +1323,10 @@ video {
   max-width: 120px;
 }
 
+.max-w-\[480px\]{
+  max-width: 480px;
+}
+
 .max-w-\[48px\]{
   max-width: 48px;
 }
@@ -1349,10 +1353,6 @@ video {
 
 .max-w-xs{
   max-width: 20rem;
-}
-
-.max-w-\[540px\]{
-  max-width: 540px;
 }
 
 .flex-1{
@@ -1896,6 +1896,10 @@ video {
   background-color: rgb(var(--dodoria));
 }
 
+.bg-dodoria-60{
+  background-color: rgb(var(--dodoria-60));
+}
+
 .bg-gohan{
   background-color: rgb(var(--gohan));
 }
@@ -1943,10 +1947,6 @@ video {
 
 .bg-zeno{
   background-color: rgb(var(--zeno));
-}
-
-.bg-dodoria-60{
-  background-color: rgb(var(--dodoria-60));
 }
 
 .bg-cover{
@@ -2282,6 +2282,11 @@ video {
   line-height: 3rem;
 }
 
+.\!text-white{
+  --tw-text-opacity: 1 !important;
+  color: rgb(255 255 255 / var(--tw-text-opacity)) !important;
+}
+
 .text-\[\#0000ff\]{
   --tw-text-opacity: 1;
   color: rgb(0 0 255 / var(--tw-text-opacity));
@@ -2297,6 +2302,10 @@ video {
 
 .text-dodoria{
   color: rgb(var(--dodoria));
+}
+
+.text-gohan{
+  color: rgb(var(--gohan));
 }
 
 .text-goku{
@@ -2694,27 +2703,21 @@ button.black{
 /* Upload Image */
 
 .upload{
-  width: 150px;
   position: relative;
   margin: auto;
 }
 
 .upload img{
   border-radius: 50%;
-  border: 6px solid #eaeaea;
 }
 
 .upload .round{
   position: absolute;
   bottom: 0.5rem;
   right: 0.5rem;
-  background: #00B4FF;
-  width: 32px;
   cursor: pointer;
-  height: 32px;
-  line-height: 33px;
   text-align: center;
-  border-radius: 50%;
+  border-radius: 8px;
   overflow: hidden;
 }
 
