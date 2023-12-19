@@ -3,8 +3,23 @@ import Card from '../Card';
 import { Button } from '@heathmont/moon-core-tw';
 import { GenericCheckRounded, GenericClose, SoftwareLogOut, SoftwareLogin } from '@heathmont/moon-icons-tw';
 import { MouseEventHandler } from 'react';
+import UseFormInput from '../UseFormInput';
 
-const LoginCard = ({ isConnected, hasMetamask, onConnect, onDisconnect, onInstall }: { isConnected: boolean; hasMetamask: boolean; onConnect: MouseEventHandler<HTMLButtonElement>; onDisconnect: MouseEventHandler<HTMLButtonElement>; onInstall: MouseEventHandler<HTMLButtonElement> }) => {
+const LoginCard = ({ step, onConnect, onConnectMetamask, onConnectPolkadot }: { step: number; onConnect: MouseEventHandler<HTMLButtonElement>; onConnectMetamask: MouseEventHandler<HTMLButtonElement>; onConnectPolkadot: MouseEventHandler<HTMLButtonElement> }) => {
+  const [Email, EmailInput] = UseFormInput({
+    defaultValue: '',
+    type: 'email',
+    placeholder: 'Email',
+    id: ''
+  });
+
+  const [Password, PasswordInput] = UseFormInput({
+    defaultValue: '',
+    type: 'password',
+    placeholder: 'Password',
+    id: ''
+  });
+
   const LoginButton = () => (
     <>
       <div className="flex flex-col">
@@ -20,45 +35,71 @@ const LoginCard = ({ isConnected, hasMetamask, onConnect, onDisconnect, onInstal
     </>
   );
 
-  const LogoutButton = () => (
-    <>
-      <div className="flex flex-col">
-        <p className="font-semibold">Metamask</p>
-        <div className="flex text-hit items-center">
-          <GenericCheckRounded fontSize={32} />
-          Connected
+  const LoginForm = () => (
+    <Card className="max-w-[480px]">
+      <div className="flex w-full flex-col gap-10">
+        <div className="flex flex-1 justify-between items-center relative text-moon-16">
+          <div className="flex flex-col gap-6 w-full">
+            <div className="flex flex-col gap-2">
+              <h6>Email</h6>
+              {EmailInput}
+            </div>
+            <div className="flex flex-col gap-2">
+              <h6>Password</h6>
+              {PasswordInput}
+            </div>
+          </div>
+        </div>
+        <div className="flex w-full justify-end">
+          <Button onClick={onConnect}>Next</Button>
         </div>
       </div>
-      <Button iconLeft={<SoftwareLogOut />} onClick={onDisconnect}>
-        Disconnect
-      </Button>
-    </>
+    </Card>
   );
 
-  const InstallMetamaskButton = () => (
-    <>
-      <div className="flex flex-col">
-        <p className="font-semibold">Metamask</p>
-        <div className="flex text-dodoria items-center">
-          <GenericClose fontSize={32} />
-          Disconnected
+  const ConnectMetamaskButton = () => (
+    <Card className="max-w-[480px]">
+      <div className="flex w-full flex-col gap-10">
+        <div className="flex items-center">
+          <div className="rounded-moon-s-md border border-beerus p-2 mr-6">
+            <Image height={64} width={64} src="https://metamask.io/images/metamask-logo.png" alt="" />
+          </div>
+          <p className="font-bold text-moon-20 flex-1">Metamask</p>
+          <Button iconLeft={<SoftwareLogin />} onClick={onConnectMetamask}>
+            Connect
+          </Button>
         </div>
       </div>
-      <Button iconLeft={<SoftwareLogin />} onClick={onInstall}>
-        Install
-      </Button>{' '}
-    </>
+    </Card>
+  );
+
+  const ConnectPolkadotButton = () => (
+    <Card className="max-w-[480px] w-full">
+      <div className="flex w-full flex-col gap-10">
+        <div className="flex items-center">
+          <div className="rounded-moon-s-md border border-beerus p-2 mr-6">
+            <Image height={64} width={64} src="/images/polkadot.svg" alt="" />
+          </div>
+          <p className="font-bold text-moon-20 flex-1">Polkadot JS</p>
+          <Button iconLeft={<SoftwareLogin />} onClick={onConnectPolkadot}>
+            Connect
+          </Button>
+        </div>
+      </div>
+    </Card>
   );
 
   return (
-    <Card className="max-w-[720px]">
-      <div className="flex w-full">
-        <div className="rounded-moon-s-md border border-beerus p-4">
-          <Image height={64} width={64} src="https://metamask.io/images/metamask-logo.png" alt="" />
+    <>
+      {step === 1 && LoginForm()}
+      {step === 2 && (
+        <div className="flex flex-col gap-4 w-full items-center">
+          {ConnectMetamaskButton()}
+          <div>Or</div>
+          {ConnectPolkadotButton()}
         </div>
-        <div className="flex flex-1 justify-between items-center relative px-5 text-moon-16">{!hasMetamask ? InstallMetamaskButton() : isConnected ? LogoutButton() : LoginButton()}</div>
-      </div>
-    </Card>
+      )}
+    </>
   );
 };
 

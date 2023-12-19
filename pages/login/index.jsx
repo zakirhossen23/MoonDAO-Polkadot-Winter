@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 export default function Login() {
   const [isConnected, setIsConnected] = useState(false);
   const [hasMetamask, setHasMetamask] = useState(false);
+  const [step, setStep] = useState(1);
 
   const router = useRouter();
 
@@ -32,6 +33,9 @@ export default function Login() {
   }, [hasMetamask, isConnected, router]); // Dependency array
 
   async function onClickConnect() {
+    setStep(2);
+    return;
+
     if (!hasMetamask) {
       window.open('https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn', '_blank');
       return;
@@ -97,10 +101,10 @@ export default function Login() {
       <div className={`gap-8 flex w-full bg-gohan pt-10 pb-6 border-beerus border`}>
         <div className="container flex flex-col gap-2 w-full justify-between">
           <h1 className="text-moon-32 font-bold">Login to your account</h1>
-          <p>Please connect to your Metamask wallet in order to login</p>
+          <p>Step {step} of 2</p>
         </div>
       </div>
-      <div className="container flex flex-col items-center pt-10 gap-10">{<LoginCard isConnected={isConnected} hasMetamask={hasMetamask} onInstall={onClickConnect} onConnect={onClickConnect} onDisconnect={onClickDisConnect} />}</div>
+      <div className="container flex flex-col items-center pt-10 gap-10">{<LoginCard step={step} onConnect={onClickConnect} onDisconnect={onClickDisConnect} />}</div>
     </>
   );
 }

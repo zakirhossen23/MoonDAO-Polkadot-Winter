@@ -1,8 +1,8 @@
 import Head from 'next/head';
 import UseFormInput from '../../components/components/UseFormInput';
-import { FilesGeneric } from '@heathmont/moon-icons-tw';
+import { FilesGeneric, GenericUser } from '@heathmont/moon-icons-tw';
 import Card from '../../components/components/Card';
-import { Button, IconButton } from '@heathmont/moon-core-tw';
+import { Avatar, Button, IconButton } from '@heathmont/moon-core-tw';
 
 export default function Register() {
   //Input fields
@@ -15,7 +15,7 @@ export default function Register() {
 
   const [Email, EmailInput] = UseFormInput({
     defaultValue: '',
-    type: 'text',
+    type: 'email',
     placeholder: 'Email',
     id: ''
   });
@@ -47,7 +47,9 @@ export default function Register() {
           <div className="flex items-center justify-center flex-col w-full gap-6">
             <div className="flex flex-col gap-6 w-full p-6">
               <div className="upload">
-                <img src="/images/noprofil.jpg" width={120} height={120} alt="" />
+                <Avatar className="rounded-full border border-beerus bg-gohan text-moon-120 h-32 w-32">
+                  <GenericUser className="h-24 w-24 text-trunks" />
+                </Avatar>
                 <div className="flex items-center justify-center round">
                   <input type="file" />
                   <IconButton size="xs" icon={<FilesGeneric className="text-gohan" color="#ffff" />}></IconButton>

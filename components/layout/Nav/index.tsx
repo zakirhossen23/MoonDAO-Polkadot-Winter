@@ -119,7 +119,7 @@ export function Nav(): JSX.Element {
           <li className="Nav walletstatus flex flex-1 justify-end">
             <div className="py-2 px-4 flex gap-2 items-center" id="withoutSign">
               <Link href="/register">
-                <Button variant="ghost" className="!text-white w-32">
+                <Button variant="ghost" className="!text-white !bg-transparent w-32">
                   Register
                 </Button>
               </Link>
