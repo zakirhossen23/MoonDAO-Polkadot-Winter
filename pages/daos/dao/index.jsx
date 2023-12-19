@@ -2,13 +2,13 @@ import { Button, Tabs } from '@heathmont/moon-core-tw';
 import { ControlsPlus, GenericDelete, GenericEdit, GenericLogOut, GenericPlus } from '@heathmont/moon-icons-tw';
 import Head from 'next/head';
 import React, { useEffect, useState } from 'react';
-import JoinDAO from '../../../components/components/modal/JoinDAO';
 import useContract from '../../../services/useContract';
 import GoalCard from '../../../components/components/GoalCard';
 import Loader from '../../../components/components/Loader';
 import Link from 'next/link';
 import CreateGoalModal from '../../../features/CreateGoalModal';
 import CommunityFeed from '../../../features/CommunityFeed';
+import JoinCommunityModal from '../../../features/JoinCommunityModal';
 
 export default function DAO() {
   //Variables
@@ -199,7 +199,7 @@ export default function DAO() {
 
       <CreateGoalModal open={showCreateGoalModal} onClose={closeCreateGoalModal} />
 
-      <JoinDAO
+      <JoinCommunityModal
         SubsPrice={DaoURI.SubsPrice}
         show={JoinmodalShow}
         onHide={() => {

@@ -5,9 +5,9 @@ import Link from 'next/link';
 import { Button } from '@heathmont/moon-core-tw';
 import { ArrowsRightShort, GenericHeart, ShopCryptoCoin } from '@heathmont/moon-icons-tw';
 
-const IdeaCard = ({ item, onClickVote, onClickDonate, hideDonate, hideVote }: { item: Idea; onClickVote?; onClickDonate?; hideVote?: boolean; hideDonate?: boolean }) => {
+const IdeaCard = ({ item, onClickVote, onClickDonate, preview }: { item: Idea; onClickVote?; onClickDonate?; preview?: boolean }) => {
   return (
-    <Card className="max-w-[720px]">
+    <Card className={`max-w-[720px] ${preview && '!bg-goku'}`}>
       <div className="flex w-full">
         <div className="rounded-moon-s-md overflow-hidden" style={{ position: 'relative', width: '188px', minWidth: '188px', height: '188px' }}>
           <Image layout="fill" objectFit="cover" src="/placeholders/idea.png" alt="" />
@@ -23,13 +23,13 @@ const IdeaCard = ({ item, onClickVote, onClickDonate, hideDonate, hideVote }: { 
             <p>Votes</p>
           </div>
           <div className="absolute bottom-0 right-0 flex gap-2">
-            {!hideVote && (
+            {!preview && (
               <Button variant="secondary" iconLeft={<GenericHeart />} onClick={onClickVote}>
                 Vote
               </Button>
             )}
 
-            {!hideDonate && (
+            {!preview && (
               <Button variant="secondary" iconLeft={<ShopCryptoCoin />} onClick={onClickDonate}>
                 Donate
               </Button>

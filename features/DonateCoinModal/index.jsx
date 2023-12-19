@@ -17,6 +17,7 @@ import useContract, { getChain } from '../../services/useContract';
 import { sendTransfer } from '../../services/wormhole/useSwap';
 import { Button, IconButton, Modal } from '@heathmont/moon-core-tw';
 import { ControlsClose, ControlsPlus, ShopCryptoCoin } from '@heathmont/moon-icons-tw';
+import UseFormInput from '../../components/components/UseFormInput';
 
 export default function DonateCoin({ ideasid, show, onHide, address }) {
   const [Balance, setBalance] = useState('');
@@ -37,8 +38,14 @@ export default function DonateCoin({ ideasid, show, onHide, address }) {
 
   const { BatchDonate } = useUtilsContext();
 
+  const [Amount, AmountInput] = UseFormInput({
+    defaultValue: '',
+    type: 'number',
+    placeholder: '0.00',
+    id: 'amount'
+  });
+
   function ShowAlert(type = 'default', message) {
-    console.log(alertBox);
     const pendingAlert = alertBox.children['pendingAlert'];
     const successAlert = alertBox.children['successAlert'];
     const errorAlert = alertBox.children['errorAlert'];
@@ -132,13 +139,13 @@ export default function DonateCoin({ ideasid, show, onHide, address }) {
   return (
     <Modal open={show} onClose={onHide}>
       <Modal.Backdrop />
-      <Modal.Panel>
+      <Modal.Panel className="min-w-[480px] bg-gohan">
         <div className="flex items-center justify-center flex-col">
           <div className="flex justify-between items-center w-full border-b border-beerus py-4 px-6">
-            <h1 className="text-moon-20 font-semibold">Donate coin</h1>
+            <h1 className="text-moon-20 font-semibold">Donate to idea</h1>
             <IconButton className="text-trunks" variant="ghost" icon={<ControlsClose />} onClick={onHide} />
           </div>
-          <div className="flex flex-col gap-6 w-full p-6 max-h-[calc(90vh-162px)] overflow-auto">
+          <div className="flex flex-col gap-6 w-full max-h-[calc(90vh-162px)] overflow-auto">
             <form id="doanteForm" onSubmit={DonateCoinSubmission} autoComplete="off">
               <div name="alertbox" hidden>
                 <Alert variant="filled" sx={{ my: 1 }} name="pendingAlert" severity="info">
@@ -151,7 +158,13 @@ export default function DonateCoin({ ideasid, show, onHide, address }) {
                   Error....
                 </Alert>
               </div>
-              {isSent ? (
+              <div className="flex flex-col gap-2 p-6">
+                <h6>Amount</h6>
+                {AmountInput}
+                <p className="text-moon-12">Your balance is {Balance} DEV</p>
+              </div>
+
+              {/* {isSent ? (
                 <>
                   {showSwap ? (
                     <>
@@ -243,13 +256,12 @@ export default function DonateCoin({ ideasid, show, onHide, address }) {
                   <InputLabel>Balance</InputLabel>
                   <p>{Balance}</p>
                 </div>
-              </StyledPaper>
+              </StyledPaper> */}
               <div className="flex justify-between border-t border-beerus w-full p-6">
                 <Button variant="ghost" onClick={onHide}>
                   Cancel
                 </Button>
                 <Button type="submit" id="CreateGoalBTN">
-                  <ShopCryptoCoin className="text-moon-24" />
                   Donate
                 </Button>
               </div>

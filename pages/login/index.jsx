@@ -34,7 +34,6 @@ export default function Login() {
 
   async function onClickConnect() {
     setStep(2);
-    return;
 
     if (!hasMetamask) {
       window.open('https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn', '_blank');

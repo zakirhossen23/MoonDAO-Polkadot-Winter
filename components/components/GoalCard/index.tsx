@@ -5,9 +5,9 @@ import Link from 'next/link';
 import { ArrowsRightShort } from '@heathmont/moon-icons-tw';
 import { Goal } from '../../../data-model/goal';
 
-const GoalCard = ({ item }: { item: Goal }) => {
+const GoalCard = ({ item, preview }: { item: Goal; preview?: boolean }) => {
   return (
-    <Card className="max-w-[720px]">
+    <Card className={`max-w-[720px] ${preview && '!bg-goku'}`}>
       <div className="flex w-full">
         <div className="rounded-moon-s-md overflow-hidden" style={{ position: 'relative', width: '188px', minWidth: '188px', height: '188px' }}>
           <Image layout="fill" objectFit="cover" src="/placeholders/goal.png" alt="" />

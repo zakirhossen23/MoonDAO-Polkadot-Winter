@@ -20,21 +20,6 @@ const LoginCard = ({ step, onConnect, onConnectMetamask, onConnectPolkadot }: { 
     id: ''
   });
 
-  const LoginButton = () => (
-    <>
-      <div className="flex flex-col">
-        <p className="font-semibold">Metamask</p>
-        <div className="flex text-dodoria items-center">
-          <GenericClose fontSize={32} />
-          Disconnected
-        </div>
-      </div>
-      <Button iconLeft={<SoftwareLogin />} onClick={onConnect}>
-        Connect
-      </Button>
-    </>
-  );
-
   const LoginForm = () => (
     <Card className="max-w-[480px]">
       <div className="flex w-full flex-col gap-10">
