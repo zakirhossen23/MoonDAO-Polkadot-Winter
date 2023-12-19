@@ -1287,6 +1287,10 @@ video {
   width: 100%;
 }
 
+.w-32{
+  width: 8rem;
+}
+
 .min-w-0{
   min-width: 0px;
 }
@@ -1607,6 +1611,10 @@ video {
 
 .gap-8{
   gap: 2rem;
+}
+
+.gap-10{
+  gap: 2.5rem;
 }
 
 .gap-x-2{
@@ -2144,6 +2152,11 @@ video {
   vertical-align: middle;
 }
 
+.text-3xl{
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+}
+
 .text-\[1rem\]{
   font-size: 1rem;
 }
@@ -2290,6 +2303,14 @@ video {
 .text-white{
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+.text-beerus{
+  color: rgb(var(--beerus));
+}
+
+.text-dodoria{
+  color: rgb(var(--dodoria));
 }
 
 .underline{
@@ -2903,20 +2924,20 @@ button.black{
           clip-path: inset(calc(var(--border-i-width) * -1) 0 calc(var(--border-i-width) * -1) 0.15rem);
 }
 
-.placeholder\:text-beerus::-moz-placeholder{
-  color: rgb(var(--beerus));
-}
-
-.placeholder\:text-beerus::placeholder{
-  color: rgb(var(--beerus));
-}
-
 .placeholder\:text-trunks::-moz-placeholder{
   color: rgb(var(--trunks));
 }
 
 .placeholder\:text-trunks::placeholder{
   color: rgb(var(--trunks));
+}
+
+.placeholder\:text-beerus::-moz-placeholder{
+  color: rgb(var(--beerus));
+}
+
+.placeholder\:text-beerus::placeholder{
+  color: rgb(var(--beerus));
 }
 
 .placeholder\:opacity-100::-moz-placeholder{

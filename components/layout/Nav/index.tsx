@@ -118,8 +118,8 @@ export function Nav(): JSX.Element {
 
           <li className="Nav walletstatus flex flex-1 justify-end">
             <div className="py-2 px-4 flex row items-center" id="withoutSign">
-              <a href="/login?[/]">
-                <Button className="bg-dodoria">Log in</Button>
+              <a href="/login">
+                <Button className="bg-dodoria w-32">Log in</Button>
               </a>
             </div>
             <div id="installMetamask" style={{ display: 'none' }} className="wallets">

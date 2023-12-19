@@ -1,5 +1,5 @@
 import { Button, Tabs } from '@heathmont/moon-core-tw';
-import { ControlsPlus, FilesDelete, GenericDelete, GenericEdit, GenericLogOut, GenericPlus } from '@heathmont/moon-icons-tw';
+import { ControlsPlus, GenericDelete, GenericEdit, GenericLogOut, GenericPlus } from '@heathmont/moon-icons-tw';
 import Head from 'next/head';
 import React, { useEffect, useState } from 'react';
 import JoinDAO from '../../../components/components/modal/JoinDAO';
@@ -8,6 +8,7 @@ import GoalCard from '../../../components/components/GoalCard';
 import Loader from '../../../components/components/Loader';
 import Link from 'next/link';
 import CreateGoalModal from '../../../features/CreateGoalModal';
+import CommunityFeed from '../../../features/CommunityFeed';
 
 export default function DAO() {
   //Variables
@@ -179,7 +180,7 @@ export default function DAO() {
             </Tabs>
           </div>
         </div>
-        {tabIndex === 0 && <p>Feed comes here</p>}
+        {tabIndex === 0 && <CommunityFeed />}
         {tabIndex === 1 && <div className="container" dangerouslySetInnerHTML={{ __html: aboutTemplate }}></div>}
         {tabIndex === 2 && (
           <div className="flex flex-col gap-8 container items-center">
