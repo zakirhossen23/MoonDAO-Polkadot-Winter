@@ -1,7 +1,5 @@
 import { Button, IconButton, Modal } from '@heathmont/moon-core-tw';
 import { ControlsClose, ControlsPlus, GenericPicture } from '@heathmont/moon-icons-tw';
-import Head from 'next/head';
-import NavLink from 'next/link';
 import { NFTStorage } from 'nft.storage';
 import { useState } from 'react';
 import UseFormInput from '../../components/components/UseFormInput';
@@ -11,7 +9,7 @@ import useContract from '../../services/useContract';
 
 export default function CreateGoalModal({ open, onClose }) {
   const [GoalImage, setGoalImage] = useState([]);
-  const { contract, signerAddress, sendTransaction } = useContract();
+  const { signerAddress, sendTransaction } = useContract();
 
   //Storage API for images and videos
   const NFT_STORAGE_TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDJDMDBFOGEzZEEwNzA5ZkI5MUQ1MDVmNDVGNUUwY0Q4YUYyRTMwN0MiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY1NDQ3MTgxOTY2NSwibmFtZSI6IlplbmNvbiJ9.6znEiSkiLKZX-a9q-CKvr4x7HS675EDdaXP622VmYs8';
@@ -72,8 +70,6 @@ export default function CreateGoalModal({ open, onClose }) {
 
   //Function after clicking Create Goal Button
   async function createGoal() {
-    var CreateGoalBTN = document.getElementById('CreateGoalBTN');
-    CreateGoalBTN.disabled = true;
     let allFiles = [];
     for (let index = 0; index < GoalImage.length; index++) {
       //Gathering all files link
@@ -132,18 +128,6 @@ export default function CreateGoalModal({ open, onClose }) {
     window.location.href = `/daos/dao?[${id}]`; //After the success it will redirect the user to dao page
   }
 
-  function CreateGoalBTN() {
-    return (
-      <>
-        <div className="flex gap-4 justify-end">
-          <Button id="CreateGoalBTN justify-end" onClick={createGoal}>
-            <ControlsPlus className="text-moon-24" />
-            Create goal
-          </Button>
-        </div>
-      </>
-    );
-  }
   function FilehandleChange(goal) {
     // If user uploaded images/videos
     var allNames = [];

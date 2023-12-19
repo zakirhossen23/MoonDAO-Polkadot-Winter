@@ -1061,6 +1061,18 @@ video {
   margin-top: -0.75rem;
 }
 
+.ml-\[40px\]{
+  margin-left: 40px;
+}
+
+.ml-\[32px\]{
+  margin-left: 32px;
+}
+
+.ml-\[36px\]{
+  margin-left: 36px;
+}
+
 .box-border{
   box-sizing: border-box;
 }
@@ -2134,6 +2146,10 @@ video {
 
 .pt-\[1\.125rem\]{
   padding-top: 1.125rem;
+}
+
+.pb-8{
+  padding-bottom: 2rem;
 }
 
 .text-center{

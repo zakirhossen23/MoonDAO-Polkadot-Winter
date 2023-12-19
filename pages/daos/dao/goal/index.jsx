@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import IdeaCard from '../../../../components/components/IdeaCard';
 import Loader from '../../../../components/components/Loader';
 import useContract from '../../../../services/useContract';
-import Link from 'next/link';
+import CreateIdeaModal from '../../../../features/CreateideaModal';
 
 export default function Goal() {
   //Variables
@@ -26,6 +26,7 @@ export default function Goal() {
   const { contract, signerAddress } = useContract();
   const [tabIndex, setTabIndex] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [showCreateIdeaModal, setShowCreateIdeaModal] = useState(false);
 
   const regex = /\[(.*)\]/g;
   let m;
@@ -95,6 +96,13 @@ export default function Goal() {
     }
   }
 
+  function closeCreateIdeaModal() {
+    setShowCreateIdeaModal(false);
+  }
+  function openCreateIdeaModal() {
+    setShowCreateIdeaModal(true);
+  }
+
   return (
     <>
       <Head>
@@ -121,11 +129,9 @@ export default function Goal() {
               </h3>
             </div>
             <div className="flex flex-col gap-2">
-              <Link href={`/CreateIdeas?[${goalId}]`}>
-                <Button iconLeft={<ControlsPlus />} onClick={null}>
-                  Create idea
-                </Button>
-              </Link>
+              <Button iconLeft={<ControlsPlus />} onClick={openCreateIdeaModal}>
+                Create idea
+              </Button>
               <Button iconLeft={<GenericEdit />} variant="secondary">
                 Edit
               </Button>
@@ -155,6 +161,7 @@ export default function Goal() {
           </div>
         )}
       </div>
+      <CreateIdeaModal show={showCreateIdeaModal} onClose={closeCreateIdeaModal} />
     </>
   );
 }

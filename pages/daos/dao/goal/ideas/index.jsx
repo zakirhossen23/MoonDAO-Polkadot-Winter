@@ -5,14 +5,13 @@ import { useEffect, useState } from 'react';
 import CommentBox from '../../../../../components/components/CommentBox';
 import SlideShow from '../../../../../components/components/Slideshow';
 import UseFormTextArea from '../../../../../components/components/UseFormTextArea';
-import DonateCoin from '../../../../../components/components/modal/DonateCoin';
+import DonateCoinModal from '../../../../../features/DonateCoinModal';
 import VoteConviction from '../../../../../components/components/modal/VoteConviction';
 import useContract from '../../../../../services/useContract';
 import Link from 'next/link';
 import Image from 'next/image';
 import Loader from '../../../../../components/components/Loader';
 
-let running = true;
 export default function GrantIdeas() {
   const [ideaId, setIdeasId] = useState(-1);
   const [Goal_id, setGoal_id] = useState(-1);
@@ -29,7 +28,8 @@ export default function GrantIdeas() {
     placeholder: 'Add a comment',
     id: '',
     name: 'comment',
-    rows: 1
+    rows: 1,
+    minHeight: 54
   });
   const [emptydata, setemptydata] = useState([]);
 
@@ -90,7 +90,6 @@ export default function GrantIdeas() {
   });
 
   async function fetchContractData() {
-    running = true;
     try {
       if (contract && id) {
         setIdeasId(id); //setting Ideas id
@@ -130,14 +129,11 @@ export default function GrantIdeas() {
         // Comments and Replies
         const totalComments = await contract.getMsgIDs(Number(id)); //Getting total comments (Number) of this idea
 
-        console.log('TOTAL', totalComments);
-
         totalComments.forEach(async (comment) => {
           //total comments number Iteration
           const commentId = Number(comment);
           let commentInfo = await contract.all_messages(commentId);
 
-          console.log('ALL MESSAGES', JSON.parse(commentInfo.message));
           const object = JSON.parse(commentInfo.message);
           let newComment = {
             address: object.address,
@@ -148,8 +144,6 @@ export default function GrantIdeas() {
           };
 
           const totalReplies = await contract.getReplyIDs(Number(commentId)); //Getting total replies (Number) of this comment
-
-          console.log('TOTAL REPLIES', totalReplies);
 
           totalReplies.forEach(async (reply) => {
             const replyId = Number(reply);
@@ -166,16 +160,16 @@ export default function GrantIdeas() {
           });
 
           CommentsList.push(newComment);
+          console.log(CommentsList);
         });
         removeElementFromArrayBYID(emptydata, 0, setemptydata);
       }
     } catch (error) {
       console.error(error);
     }
-    running = false;
   }
 
-  async function DesignSlide() {
+  function DesignSlide() {
     if (document.querySelector('[data-type="prev"]') !== null) {
       document.querySelector('[data-type="prev"]').innerHTML =
         '<div className="undefined nav " data-type="prev" aria-label="Previous Slide" style="width: 45px;margin-right: -50px;cursor: pointer;"><div className="undefined nav " data-type="prev" aria-label="Previous Slide" style="color: black;cursor: pointer;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 79 79"><svg xmlns="http://www.w3.org/2000/svg" width="79" height="79" fill="none"><g filter="url(#filter0_b_48_4254)"><circle cx="39.5" cy="39.5" r="39.5" fill="white"></circle><circle cx="39.5" cy="39.5" r="39.25" stroke="#C4C4C4" stroke-width="0.5"></circle></g><path d="M29.0556 39.9087L42.3821 26.6582C42.8187 26.2244 43.5256 26.2251 43.9615 26.6605C44.3971 27.0958 44.3959 27.801 43.9592 28.2353L31.426 40.6971L43.9597 53.1588C44.3963 53.5931 44.3974 54.2979 43.9619 54.7333C43.7434 54.9515 43.4572 55.0606 43.1709 55.0606C42.8854 55.0606 42.6002 54.9522 42.3821 54.7355L29.0556 41.4854C28.8453 41.2768 28.7273 40.9929 28.7273 40.6971C28.7273 40.4013 28.8456 40.1177 29.0556 39.9087Z" fill="black"></path><defs><filter id="filter0_b_48_4254" x="-4" y="-4" width="87" height="87" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood><feGaussianBlur in="BackgroundImageFix" stdDeviation="2"></feGaussianBlur><feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur_48_4254"></feComposite><feBlend mode="normal" in="SourceGraphic" in2="effect1_backgroundBlur_48_4254" result="shape"></feBlend></filter></defs></svg></svg></div></div>';
@@ -186,43 +180,6 @@ export default function GrantIdeas() {
       document.querySelector('.react-slideshow-container').style.height = '500px';
     }
   }
-
-  // if (!isServer()) {
-  //   observerMessage = new window.IntersectionObserver(
-  //     async ([entry]) => {
-  //       if (entry.isIntersecting) {
-  //         let elm = entry.target;
-  //         let id = Number(elm.dataset.id);
-  //         await saveReadMessage(id, ideaId, 'message');
-
-  //         return;
-  //       }
-  //       console.log('LEAVE');
-  //     },
-  //     {
-  //       root: null,
-  //       threshold: 1 // set offset 0.1 means trigger if atleast 10% of element in viewport
-  //     }
-  //   );
-
-  //   observerReply = new window.IntersectionObserver(
-  //     async ([entry]) => {
-  //       if (entry.isIntersecting) {
-  //         let elm = entry.target;
-  //         let id = Number(elm.dataset.id);
-
-  //         await saveReadMessage(id, ideaId, 'reply');
-
-  //         return;
-  //       }
-  //       console.log('LEAVE');
-  //     },
-  //     {
-  //       root: null,
-  //       threshold: 1 // set offset 0.1 means trigger if atleast 10% of element in viewport
-  //     }
-  //   );
-  // }
 
   async function VoteIdea() {
     if (IdeasURI.Referenda != 0) {
@@ -293,6 +250,8 @@ export default function GrantIdeas() {
     console.log('Saved Reply');
   }
 
+  const uniqueAndSort = (comments) => Array.from(new Map(comments.map((item) => [item.id, item])).values()).sort((a, b) => new Date(b.date) - new Date(a.date));
+
   return (
     <>
       <Head>
@@ -308,7 +267,7 @@ export default function GrantIdeas() {
               <h1 className="text-moon-32 font-bold">{IdeasURI.Title}</h1>
               <h3 className="flex gap-2 whitespace-nowrap">
                 <div>
-                  Donated <span className="text-hit font-semibold">DEV 5300000</span>
+                  Donated <span className="text-hit font-semibold">DEV {IdeasURI.donation}</span>
                 </div>
                 <div>•</div>
                 <div>
@@ -331,11 +290,9 @@ export default function GrantIdeas() {
                 Vote
               </Button>
               {IdeasURI.isOwner && (
-                <Link href={`#`}>
-                  <Button iconLeft={<GenericEdit />} variant="secondary" className="w-full">
-                    Edit
-                  </Button>
-                </Link>
+                <Button iconLeft={<GenericEdit />} variant="secondary" className="w-full">
+                  Edit
+                </Button>
               )}
             </div>
           </div>
@@ -357,7 +314,7 @@ export default function GrantIdeas() {
                 </>
               )
             }
-            width={750}
+            width={800}
             height={500}
           />{' '}
           <div className="full-w">
@@ -370,11 +327,11 @@ export default function GrantIdeas() {
               </div>
             </form>
           </div>
-          {/* <div>{CommentsList.map((listItem, index) => (listItem.address !== '' ? <CommentBox address={listItem.address} MessageID={listItem.id} MessageIndex={index} date={listItem.date} sendReply={sendReply} message={listItem.message} replies={listItem.replies} id={listItem.id} key={listItem.id} /> : <></>))}</div> */}
+          <div className="flex flex-col gap-6 pb-8">{uniqueAndSort(CommentsList).map((listItem, index) => (listItem.address !== '' ? <CommentBox address={listItem.address} MessageID={listItem.id} MessageIndex={index} date={listItem.date} sendReply={sendReply} message={listItem.message} replies={listItem.replies} id={listItem.id} key={listItem.id} /> : <></>))}</div>
         </div>
       </div>
 
-      <DonateCoin
+      <DonateCoinModal
         ideasid={ideaId}
         show={DonatemodalShow}
         onHide={() => {

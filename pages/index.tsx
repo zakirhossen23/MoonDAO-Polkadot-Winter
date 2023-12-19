@@ -19,8 +19,8 @@ export default function Welcome() {
   return (
     <>
       <Head>
-        <title>MoonDAO</title>
-        <meta name="description" content="MoonDAO" />
+        <title>PlanetDAO</title>
+        <meta name="description" content="PlanetDAO" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className={styles.section}>

@@ -1,15 +1,13 @@
-import { Button } from '@heathmont/moon-core-tw';
-import { ControlsPlus, GenericPicture } from '@heathmont/moon-icons-tw';
-import Head from 'next/head';
+import { Button, IconButton, Modal } from '@heathmont/moon-core-tw';
+import { ControlsClose, ControlsPlus, GenericPicture } from '@heathmont/moon-icons-tw';
 import { NFTStorage } from 'nft.storage';
 import React, { useState } from 'react';
 import UseFormInput from '../../components/components/UseFormInput';
 import UseFormTextArea from '../../components/components/UseFormTextArea';
 import isServer from '../../components/isServer';
 import useContract from '../../services/useContract';
-import styles from './CreateIdeas.module.css';
 
-export default function CreateIdeasModal() {
+export default function CreateIdeaModal({ show, onClose }) {
   const [IdeasImage, setIdeasImage] = useState([]);
   const { contract, signerAddress, sendTransaction } = useContract();
   if (isServer()) return null;
@@ -135,7 +133,8 @@ export default function CreateIdeasModal() {
       console.error(error);
       return;
     }
-    window.location.href = `daos/dao/goal?[${id}]`; //After the success it will redirect the user to goal page
+
+    onClose();
   }
 
   function CreateIdeasBTN() {
@@ -207,85 +206,83 @@ export default function CreateIdeasModal() {
   }
 
   return (
-    <>
-      <Head>
-        <title>Create Ideas</title>
-        <meta name="description" content="Create Ideas" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <div className={`${styles.container} flex items-center justify-center flex-col gap-8`}>
-        <div className={`${styles.title} gap-8 flex flex-col`}>
-          <h1 className="text-moon-32 font-bold">Create ideas</h1>
-        </div>
-        <div className={styles.divider}></div>
-        <div className={`${styles.form} flex flex-col gap-8`}>
-          <div>
-            <h6>Ideas name</h6>
-            {IdeasTitleInput}
+    <Modal open={show} onClose={onClose}>
+      <Modal.Backdrop />
+      <Modal.Panel className="bg-gohan w-[90%] max-w-[600px] max-h-[90vh]">
+        <div className="flex items-center justify-center flex-col gap-8">
+          <div className="flex justify-between items-center w-full border-b border-beerus py-4 px-6">
+            <h1 className="text-moon-20 font-semibold">Create goal</h1>
+            <IconButton className="text-trunks" variant="ghost" icon={<ControlsClose />} onClick={onClose} />
           </div>
+          <div className="flex flex-col gap-6 w-full p-6 max-h-[calc(90vh-162px)] overflow-auto">
+            <div className="flex flex-col gap-2">
+              <h6>Ideas name</h6>
+              {IdeasTitleInput}
+            </div>
 
-          <div>
-            <h6>Description</h6>
-            {IdeasDescriptionInput}
-          </div>
-          <div>
-            <h6>Referenda (Optional)</h6>
-            {ReferendaInput}
-          </div>
+            <div className="flex flex-col gap-2">
+              <h6>Description</h6>
+              {IdeasDescriptionInput}
+            </div>
+            <div className="flex flex-col gap-2">
+              <h6>Referenda (Optional)</h6>
+              {ReferendaInput}
+            </div>
 
-          <div className="flex flex-col gap-2 h-56">
-            <h6>Content</h6>
-            <div style={{ borderColor: '#6578F2' }} className="border-4 border-dashed content-start flex flex-row flex-wrap gap-4 h-full inset-0 justify-start m-auto overflow-auto p-1 relative text-center text-white w-full z-20">
-              <input className="file-input" hidden onChange={FilehandleChange} id="IdeasImage" name="IdeasImage" type="file" multiple="multiple" />
-              <div className="flex gap-4">
-                {IdeasImage.map((item, i) => {
-                  return (
-                    <>
-                      <div key={i} className="flex gap-4">
-                        <button onClick={DeleteSelectedImages} name="deleteBTN" id={i}>
-                          {item.type.includes('image') ? (
-                            <img className={styles.image} src={URL.createObjectURL(item)} />
-                          ) : (
-                            <>
-                              <div className={styles.video}>
-                                <span className="Ideas-Uploaded-File-name">{item.name.substring(0, 10)}...</span>
-                              </div>
-                            </>
-                          )}
-                        </button>
-                      </div>
-                    </>
-                  );
-                })}
-                <div className="Ideas-ImageAdd">
-                  <Button id="Add-Image" onClick={AddBTNClick} variant="secondary" style={{ height: 80, padding: '1.5rem' }} iconLeft="true" size="lg">
-                    <GenericPicture className="text-moon-24" />
-                    Add Content
-                  </Button>
+            <div className="flex flex-col gap-2 h-56">
+              <h6>Content</h6>
+              <div style={{ borderColor: '#6578F2' }} className="border-4 border-dashed content-start flex flex-row flex-wrap gap-4 h-full inset-0 justify-start m-auto overflow-auto p-1 relative text-center text-white w-full z-20">
+                <input className="file-input" hidden onChange={FilehandleChange} id="IdeasImage" name="IdeasImage" type="file" multiple="multiple" />
+                <div className="flex gap-4">
+                  {IdeasImage.map((item, i) => {
+                    return (
+                      <>
+                        <div key={i} className="flex gap-4">
+                          <button onClick={DeleteSelectedImages} name="deleteBTN" id={i}>
+                            {item.type.includes('image') ? (
+                              <img src={URL.createObjectURL(item)} />
+                            ) : (
+                              <>
+                                <div>
+                                  <span className="Ideas-Uploaded-File-name">{item.name.substring(0, 10)}...</span>
+                                </div>
+                              </>
+                            )}
+                          </button>
+                        </div>
+                      </>
+                    );
+                  })}
+                  <div className="Ideas-ImageAdd">
+                    <Button id="Add-Image" onClick={AddBTNClick} variant="secondary" style={{ height: 80, padding: '1.5rem' }} iconLeft="true" size="lg">
+                      <GenericPicture className="text-moon-24" />
+                      Add Content
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <div className="flex flex-col gap-2">
-            <h6>Rules</h6>
+            <div className="flex flex-col gap-2">
+              <h6>Rules</h6>
 
-            <div className="content-start gap-8 flex flex-row flex-wrap h-full justify-start ">
-              <div className="flex gap-8 w-full">
-                <div className="flex-1">{Qoutation1Input}</div>
-                <div className="flex-1">{Qoutation2Input}</div>
+              <div className="content-start gap-8 flex flex-row flex-wrap h-full justify-start ">
+                <div className="flex gap-8 w-full">
+                  <div className="flex-1">{Qoutation1Input}</div>
+                  <div className="flex-1">{Qoutation2Input}</div>
+                </div>
+
+                <Button>
+                  <ControlsPlus className="text-moon-24" />
+                  Add smart contract
+                </Button>
               </div>
-
-              <Button>
-                <ControlsPlus className="text-moon-24" />
-                Add smart contract
-              </Button>
             </div>
-          </div>
 
-          <CreateIdeasBTN />
+            <CreateIdeasBTN />
+          </div>
         </div>
-      </div>
-    </>
+      </Modal.Panel>
+    </Modal>
   );
 }
