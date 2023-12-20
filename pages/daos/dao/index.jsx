@@ -1,5 +1,5 @@
 import { Button, Tabs } from '@heathmont/moon-core-tw';
-import { ControlsPlus, GenericDelete, GenericEdit, GenericLogOut, GenericPlus } from '@heathmont/moon-icons-tw';
+import { ControlsPlus, GenericDelete, GenericEdit, GenericLogOut, GenericPlus, SportDarts } from '@heathmont/moon-icons-tw';
 import Head from 'next/head';
 import React, { useEffect, useState } from 'react';
 import useContract from '../../../services/useContract';
@@ -9,6 +9,7 @@ import Link from 'next/link';
 import CreateGoalModal from '../../../features/CreateGoalModal';
 import CommunityFeed from '../../../features/CommunityFeed';
 import JoinCommunityModal from '../../../features/JoinCommunityModal';
+import EmptyState from '../../../components/components/EmptyState';
 
 export default function DAO() {
   //Variables
@@ -184,15 +185,7 @@ export default function DAO() {
         {tabIndex === 1 && <div className="container" dangerouslySetInnerHTML={{ __html: aboutTemplate }}></div>}
         {tabIndex === 2 && (
           <div className="flex flex-col gap-8 container items-center pb-10">
-            <Loader
-              element={list.map((listItem, index) => (
-                <GoalCard item={listItem} key={index} />
-              ))}
-              width={768}
-              height={236}
-              many={3}
-              loading={loading}
-            />{' '}
+            <Loader element={list.length > 0 ? list.map((listItem, index) => <GoalCard item={listItem} key={index} />) : <EmptyState icon={<SportDarts className="text-moon-48" />} label="This community doesn’t have any goals yet." />} width={768} height={236} many={3} loading={loading} />{' '}
           </div>
         )}
       </div>

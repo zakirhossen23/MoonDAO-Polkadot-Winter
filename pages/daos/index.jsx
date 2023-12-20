@@ -2,9 +2,10 @@ import Head from 'next/head';
 import React, { useEffect, useState } from 'react';
 import DAOCard from '../../components/components/DaoCard';
 import Loader from '../../components/components/Loader';
+import EmptyState from '../../components/components/EmptyState';
 import useContract from '../../services/useContract';
 import { Button, Modal } from '@heathmont/moon-core-tw';
-import { ControlsPlus } from '@heathmont/moon-icons-tw';
+import { ControlsPlus, GenericUsers } from '@heathmont/moon-icons-tw';
 import CreateDaoModal from '../../features/CreateDaoModal';
 
 export default function DAOs() {
@@ -75,16 +76,7 @@ export default function DAOs() {
         </div>
 
         <div className="flex flex-col gap-8 container items-center pb-10">
-          <Loader
-            element={list.map((listItem, index) => (
-              <DAOCard item={listItem} key={index} />
-            ))}
-            loading={loading}
-            width={768}
-            height={236}
-            many={3}
-            type="rounded"
-          />{' '}
+          <Loader element={list.length > 0 ? list.map((listItem, index) => <DAOCard item={listItem} key={index} />) : <EmptyState icon={<GenericUsers className="text-moon-48" />} label="There are no communities created yet" />} loading={loading} width={768} height={236} many={3} type="rounded" />{' '}
         </div>
       </div>
 

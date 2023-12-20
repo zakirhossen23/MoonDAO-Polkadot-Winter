@@ -1,5 +1,5 @@
 import { Avatar, Button, Dropdown, MenuItem } from '@heathmont/moon-core-tw';
-import { GenericUser, SoftwareLogOut } from '@heathmont/moon-icons-tw';
+import { GenericUser } from '@heathmont/moon-icons-tw';
 import { useEffect, useState } from 'react';
 import isServer from '../../../components/isServer';
 import { getChain } from '../../../services/useContract';
@@ -21,6 +21,7 @@ export function Nav(): JSX.Element {
   const [count, setCount] = useState(0);
   const [isSigned, setSigned] = useState(false);
   const [showCreateDaoModal, setShowCreateDaoModal] = useState(false);
+  const [hasJoinedCommunities, setHasJoinedCommunities] = useState(true);
 
   const router = useRouter();
 
@@ -135,8 +136,8 @@ export function Nav(): JSX.Element {
         <ul className="flex justify-between items-center w-full">
           {isSigned && (
             <>
-              {/* <NavItem link="/daos" label="Joined communities" /> */}
-              <NavItem highlight={router.pathname.includes('/daos')} link="/daos" label="Communities" />
+              {hasJoinedCommunities && <NavItem highlight={router.pathname.includes('/daos?joined=true')} link="/daos?joined=true" label="Joined communities" />}
+              <NavItem highlight={router.pathname === '/daos'} link="/daos" label="Communities" />
               <NavItem label="Create Your Community" onClick={openModal} />
             </>
           )}

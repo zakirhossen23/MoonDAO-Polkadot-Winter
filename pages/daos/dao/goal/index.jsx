@@ -1,11 +1,12 @@
 import { Button, Tabs } from '@heathmont/moon-core-tw';
-import { ControlsPlus, GenericEdit } from '@heathmont/moon-icons-tw';
+import { ControlsPlus, GenericEdit, GenericIdea } from '@heathmont/moon-icons-tw';
 import Head from 'next/head';
 import React, { useEffect, useState } from 'react';
 import IdeaCard from '../../../../components/components/IdeaCard';
 import Loader from '../../../../components/components/Loader';
 import useContract from '../../../../services/useContract';
 import CreateIdeaModal from '../../../../features/CreateIdeaModal';
+import EmptyState from '../../../../components/components/EmptyState';
 
 export default function Goal() {
   //Variables
@@ -149,15 +150,7 @@ export default function Goal() {
         {tabIndex === 0 && <div className="container">{GoalURI.Description}</div>}
         {tabIndex === 1 && (
           <div className="flex flex-col gap-8 container items-center">
-            <Loader
-              element={list.map((listItem, index) => (
-                <IdeaCard item={listItem} key={index} />
-              ))}
-              width={768}
-              height={236}
-              many={3}
-              loading={loading}
-            />{' '}
+            <Loader element={list.length > 0 ? list.map((listItem, index) => <IdeaCard item={listItem} key={index} />) : <EmptyState icon={<GenericIdea className="text-moon-48" />} label="This goal doesn’t have any ideas yet." />} width={768} height={236} many={3} loading={loading} />{' '}
           </div>
         )}
       </div>

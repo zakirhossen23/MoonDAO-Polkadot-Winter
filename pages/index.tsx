@@ -39,10 +39,9 @@ export default function Welcome() {
             />
           </div>
           <h1 className="text-moon-32 font-bold pt-2">Empower Your Community with Trust</h1>
-          <p>PlanetDAO is Software-as-a-Service (SaaS) platform designed to empower communities with trust through the utilization of a decentralized autonomous organization (DAO) framework.</p>
-          <p>PlanetDAO is built on the Polkadot infrastructure with the principles of transparency, collaboration, and fairness.</p>
+          <p>Create your fair, transparent, and collaborative community by using PlanetDAO, a decentralized autonomous organization (DAO) platform.</p>
           <p>PlanetDAO enables communities to govern themselves, make decisions collectively, have a transparency payments process and build trust-based ecosystems. Everything in just a couple clicks.</p>
-          <p>Start your DAO today and give everyone in your community a voice!</p>
+          <p>Start your DAO today and give everyone in your community a voice!.</p>
           <div>
             <Button onClick={openModal}>Create a DAO community</Button>
           </div>
@@ -100,10 +99,10 @@ export default function Welcome() {
               }}
             />
           </div>
-          <p>PlanetDAO is Software-as-a-Service (SaaS) platform designed to empower communities with trust through the utilization of a decentralized autonomous organization (DAO) framework.</p>
-          <p>PlanetDAO is built on the Polkadot infrastructure with the principles of transparency, collaboration, and fairness.</p>
+          <h1 className="text-moon-32 font-bold pt-2">Empower Your Community with Trust</h1>
+          <p>Create your fair, transparent, and collaborative community by using PlanetDAO, a decentralized autonomous organization (DAO) platform.</p>
           <p>PlanetDAO enables communities to govern themselves, make decisions collectively, have a transparency payments process and build trust-based ecosystems. Everything in just a couple clicks.</p>
-          <p>Start your DAO today and give everyone in your community a voice!</p>
+          <p>Start your DAO today and give everyone in your community a voice!.</p>
           <div>
             <Button onClick={openModal}>Create a DAO community</Button>
           </div>
