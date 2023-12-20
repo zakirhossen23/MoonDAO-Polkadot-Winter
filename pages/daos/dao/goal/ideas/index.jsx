@@ -280,11 +280,9 @@ export default function GrantIdeas() {
               </h3>
             </div>
             <div className="flex flex-col gap-2">
-              {(IdeasURI.isOwner || isJoined) && (
-                <Button iconLeft={<ShopCryptoCoin />} onClick={DonateToAddress}>
-                  Donate
-                </Button>
-              )}
+              <Button iconLeft={<ShopCryptoCoin />} onClick={DonateToAddress}>
+                Donate
+              </Button>
 
               <Button iconLeft={IdeasURI.isVoted ? <GenericHeart fill="red" color="red" /> : <GenericHeart />} variant="secondary" onClick={VoteIdea}>
                 Vote

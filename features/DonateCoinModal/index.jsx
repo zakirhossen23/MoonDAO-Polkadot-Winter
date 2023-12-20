@@ -1,22 +1,16 @@
 import React, { useEffect, useState } from 'react';
 
-import LoadingButton from '@mui/lab/LoadingButton';
 import Alert from '@mui/material/Alert';
-import DialogActions from '@mui/material/DialogActions';
-import FormControl from '@mui/material/FormControl';
-import Input from '@mui/material/Input';
-import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Paper from '@mui/material/Paper';
-import Select from '@mui/material/Select';
 import { styled } from '@mui/material/styles';
 import { ethers } from 'ethers';
 import { useUtilsContext } from '../../contexts/UtilsContext';
 import vTokenAbi from '../../services/json/vTokenABI.json';
 import useContract, { getChain } from '../../services/useContract';
 import { sendTransfer } from '../../services/wormhole/useSwap';
-import { Button, IconButton, Modal } from '@heathmont/moon-core-tw';
-import { ControlsClose, ControlsPlus, ShopCryptoCoin } from '@heathmont/moon-icons-tw';
+import { Button, Dropdown, IconButton, Modal } from '@heathmont/moon-core-tw';
+import { ControlsClose } from '@heathmont/moon-icons-tw';
 import UseFormInput from '../../components/components/UseFormInput';
 
 export default function DonateCoin({ ideasid, show, onHide, address }) {
@@ -77,6 +71,10 @@ export default function DonateCoin({ ideasid, show, onHide, address }) {
     const { amount } = e.target;
     alertBox = e.target.querySelector('[name=alertbox]');
     setisLoading(true);
+
+    console.log('COIN', Coin);
+    return;
+
     if (Number(window.ethereum.networkVersion) === 1287) {
       //If it is sending from Moonbase so it will use batch precompiles
       ShowAlert('pending', 'Sending Batch Transaction....');
@@ -158,105 +156,29 @@ export default function DonateCoin({ ideasid, show, onHide, address }) {
                   Error....
                 </Alert>
               </div>
-              <div className="flex flex-col gap-2 p-6">
+
+              <div className="flex flex-col gap-2 p-6 pb-3">
+                <Dropdown value={Coin} onChange={setCoin}>
+                  <Dropdown.Select label="Coin" placeholder="Choose an option">
+                    {Coin}
+                  </Dropdown.Select>
+                  <Dropdown.Options className="bg-gohan w-48 min-w-0 w-full">
+                    <Dropdown.Option value="DEV">
+                      <MenuItem>DEV</MenuItem>
+                    </Dropdown.Option>
+                    <Dropdown.Option value="xcvGLMR">
+                      <MenuItem>xcvGLMR</MenuItem>
+                    </Dropdown.Option>
+                  </Dropdown.Options>{' '}
+                </Dropdown>
+              </div>
+
+              <div className="flex flex-col gap-2 p-6 pt-3">
                 <h6>Amount</h6>
                 {AmountInput}
                 <p className="text-moon-12">Your balance is {Balance} DEV</p>
               </div>
 
-              {/* {isSent ? (
-                <>
-                  {showSwap ? (
-                    <>
-                      <StyledPaper sx={{ my: 1, mx: 'auto', p: 2 }}>
-                        <div variant="standard">
-                          <InputLabel sx={{ color: 'black' }}>Wrapped Token Address</InputLabel>
-                          <a className="text-[#0000ff]">{transaction.token}</a>
-                          <p>
-                            Swap your token at{' '}
-                            <a className="text-[#0000ff]" href="https://moonbeam-swap.netlify.app/#/swap" rel="noreferrer" target="_blank">
-                              https://moonbeam-swap.netlify.app/#/swap
-                            </a>
-                          </p>
-                        </div>
-                      </StyledPaper>
-                    </>
-                  ) : (
-                    <></>
-                  )}
-
-                  <StyledPaper sx={{ my: 1, mx: 'auto', p: 2 }}>
-                    <div variant="standard" className="overflow-hidden">
-                      <InputLabel sx={{ color: 'black' }}>Transaction</InputLabel>
-                      <a href={transaction.link} className="text-[#0000ff]" rel="noreferrer" target="_blank">
-                        {transaction.link}
-                      </a>
-                    </div>
-                  </StyledPaper>
-                </>
-              ) : (
-                <></>
-              )}
-              {CurrentChainNetwork !== 1287 ? (
-                <>
-                  <StyledPaper sx={{ my: 1, mx: 'auto', p: 2 }}>
-                    <div variant="standard">
-                      <InputLabel>Target Chain</InputLabel>
-                      <span>Moonbase Alpha</span>
-                    </div>
-                  </StyledPaper>
-                </>
-              ) : (
-                <></>
-              )}
-
-              <StyledPaper sx={{ my: 1, mx: 'auto', p: 2 }}>
-                <div variant="standard">
-                  <InputLabel>Target Address</InputLabel>
-                  <span>{address}</span>
-                </div>
-              </StyledPaper>
-              {CurrentChainNetwork !== 1287 ? (
-                <>
-                  <StyledPaper sx={{ my: 1, mx: 'auto', p: 2 }}>
-                    <div variant="standard">
-                      <InputLabel>From Chain</InputLabel>
-                      <span>{CurrentChain}</span>
-                    </div>
-                  </StyledPaper>
-                </>
-              ) : (
-                <>
-                  <StyledPaper sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', my: 1, mx: 'auto', p: 2 }}>
-                    <FormControl variant="standard" fullWidth>
-                      <InputLabel>Coin</InputLabel>
-
-                      <Select value={Coin} onChange={(e) => setCoin(e.target.value)}>
-                        <MenuItem value="DEV" selected>
-                          DEV
-                        </MenuItem>
-                        <MenuItem value="xcvGLMR">xcvGLMR</MenuItem>
-                      </Select>
-                    </FormControl>
-                  </StyledPaper>
-                </>
-              )}
-              <StyledPaper sx={{ my: 1, mx: 'auto', p: 2 }}>
-                <div variant="standard">
-                  <InputLabel>From Address</InputLabel>
-                  <span>{CurrentAddress} (Your)</span>
-                </div>
-              </StyledPaper>
-              <StyledPaper sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', my: 1, mx: 'auto', p: 2 }}>
-                <FormControl variant="standard">
-                  <InputLabel>Amount</InputLabel>
-                  <Input name="amount" />
-                </FormControl>
-                <div>
-                  <InputLabel>Balance</InputLabel>
-                  <p>{Balance}</p>
-                </div>
-              </StyledPaper> */}
               <div className="flex justify-between border-t border-beerus w-full p-6">
                 <Button variant="ghost" onClick={onHide}>
                   Cancel
