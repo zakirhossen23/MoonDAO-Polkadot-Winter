@@ -50,8 +50,12 @@ export default function DAOs() {
     setLoading(false);
   }
 
-  function closeModal() { setShowCreateDaoModal(false)};
-  function openModal() { setShowCreateDaoModal(true)};
+  function closeModal() {
+    setShowCreateDaoModal(false);
+  }
+  function openModal() {
+    setShowCreateDaoModal(true);
+  }
 
   return (
     <>
@@ -64,11 +68,13 @@ export default function DAOs() {
         <div className={`gap-8 flex w-full bg-gohan pt-10 pb-6 border-beerus border`}>
           <div className="container flex w-full justify-between">
             <h1 className="text-moon-32 font-bold">All communities</h1>
-            <Button iconLeft={<ControlsPlus />} onClick={openModal}>Create community</Button>
+            <Button iconLeft={<ControlsPlus />} onClick={openModal}>
+              Create community
+            </Button>
           </div>
         </div>
 
-        <div className="flex flex-col gap-8 container items-center">
+        <div className="flex flex-col gap-8 container items-center pb-10">
           <Loader
             element={list.map((listItem, index) => (
               <DAOCard item={listItem} key={index} />

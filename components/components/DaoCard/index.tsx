@@ -25,7 +25,7 @@ const DAOCard = ({ item }: { item: Dao }) => {
     <Card className="max-w-[720px]">
       <div className="flex w-full">
         <div className="rounded-moon-s-md overflow-hidden" style={{ position: 'relative', width: '188px', minWidth: '188px', height: '188px' }}>
-          <Image layout="fill" objectFit="cover" src={item.logo} alt="" />
+          <Image layout="fill" objectFit="cover" src={item.logo} onError={() => (item.logo = '/placeholders/community.png')} alt="" />
         </div>
         <div className="flex flex-1 flex-col gap-2 relative px-5 text-moon-16">
           <p className="font-semibold text-moon-18">{item.Title}</p>

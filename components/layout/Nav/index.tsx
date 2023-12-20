@@ -13,7 +13,7 @@ declare let window: any;
 let running = false;
 
 export function Nav(): JSX.Element {
-  const {api,userInfo } = usePolkadotContext();
+  const { api, userInfo } = usePolkadotContext();
   const [acc, setAcc] = useState('');
   const [logo, setLogo] = useState('');
   const [accFull, setAccFull] = useState('');
@@ -25,7 +25,7 @@ export function Nav(): JSX.Element {
   const router = useRouter();
 
   async function fetchInfo() {
-    if (typeof window.ethereum === 'undefined' || typeof window.injectedWeb3 === 'undefined') {
+    if (typeof window.ethereum === 'undefined' && typeof window.injectedWeb3 === 'undefined') {
       running = false;
       return;
     }
@@ -62,37 +62,34 @@ export function Nav(): JSX.Element {
       }
     } else if (window.localStorage.getItem('login-type') === 'polkadot') {
       const { web3Accounts } = require('@polkadot/extension-dapp');
-     try{
-      let wallet = (await web3Accounts())[0];
-      if (wallet && api) {
-        const { nonce, data: balance } = await api.query.system.account(wallet.address);
-        setBalance(Number((balance.free).toString()) / 1e12 + " MUNIT");
-        if (!isSigned) setSigned(true);
-        let subbing = 10;
+      try {
+        let wallet = (await web3Accounts())[0];
+        if (wallet && api) {
+          const { nonce, data: balance } = await api.query.system.account(wallet.address);
+          setBalance(Number(balance.free.toString()) / 1e12 + ' MUNIT');
+          if (!isSigned) setSigned(true);
+          let subbing = 10;
 
-        if (window.innerWidth > 500) {
-          subbing = 20;
+          if (window.innerWidth > 500) {
+            subbing = 20;
+          }
+
+          setAcc(userInfo.fullName.toString());
+          setLogo(userInfo.imgIpfs.toString());
+          setAccFull(wallet.address?.toLocaleUpperCase());
+
+          window.document.getElementById('withoutSign').style.display = 'none';
+          window.document.getElementById('withSign').style.display = '';
+          running = false;
+          return;
+        } else {
+          running = false;
+          return;
         }
-
-        setAcc(userInfo.fullName.toString());
-        setLogo(userInfo.imgIpfs.toString());
-        setAccFull(wallet.address?.toLocaleUpperCase());
-       
-
-        window.document.getElementById('withoutSign').style.display = 'none';
-        window.document.getElementById('withSign').style.display = '';
-        running = false;
-        return;
-      } else {
+      } catch (e) {
         running = false;
         return;
       }
-     }catch(e){
-      running = false;
-      return;
-     }
-      
-
     } else {
       setSigned(false);
       window.document.getElementById('withoutSign').style.display = '';
@@ -156,7 +153,6 @@ export function Nav(): JSX.Element {
               </Link>
             </div>
 
-
             <div id="withSign" className="wallets" style={{ display: 'none' }}>
               <div className="wallet" style={{ height: 48, display: 'flex', alignItems: 'center' }}>
                 <div className="wallet__wrapper gap-4 flex items-center">
@@ -168,10 +164,13 @@ export function Nav(): JSX.Element {
                   </div>
                   <Dropdown value={null} onChange={null}>
                     <Dropdown.Trigger>
-                     {logo !== ''? <img src={'https://' + logo + '.ipfs.nftstorage.link'} alt='' className="rounded-full border-2 w-12 h-12 border-piccolo" />:
-                      <Avatar size="lg" className="rounded-full border-2 border-piccolo">
-                        <GenericUser className="text-moon-24" />
-                      </Avatar>}
+                      {logo !== '' ? (
+                        <img src={'https://' + logo + '.ipfs.nftstorage.link'} alt="" className="rounded-full border-2 w-12 h-12 border-piccolo" />
+                      ) : (
+                        <Avatar size="lg" className="rounded-full border-2 border-piccolo">
+                          <GenericUser className="text-moon-24" />
+                        </Avatar>
+                      )}
                     </Dropdown.Trigger>
 
                     <Dropdown.Options className="bg-gohan w-48 min-w-0">

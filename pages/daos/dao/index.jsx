@@ -183,7 +183,7 @@ export default function DAO() {
         {tabIndex === 0 && <CommunityFeed />}
         {tabIndex === 1 && <div className="container" dangerouslySetInnerHTML={{ __html: aboutTemplate }}></div>}
         {tabIndex === 2 && (
-          <div className="flex flex-col gap-8 container items-center">
+          <div className="flex flex-col gap-8 container items-center pb-10">
             <Loader
               element={list.map((listItem, index) => (
                 <GoalCard item={listItem} key={index} />

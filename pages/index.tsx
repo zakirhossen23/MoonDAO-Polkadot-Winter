@@ -67,7 +67,8 @@ export default function Welcome() {
               idea: {
                 Title: 'Idea: Install solar panels on the clubhouse',
                 votes: 57,
-                donations: 3950
+                donations: 3950,
+                logo: '/home/feed-example.png'
               }
             }}
           />
