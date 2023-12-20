@@ -8,7 +8,6 @@ import UseFormTextArea from '../../../../../components/components/UseFormTextAre
 import DonateCoinModal from '../../../../../features/DonateCoinModal';
 import VoteConviction from '../../../../../components/components/modal/VoteConviction';
 import useContract from '../../../../../services/useContract';
-import Link from 'next/link';
 import Image from 'next/image';
 import Loader from '../../../../../components/components/Loader';
 

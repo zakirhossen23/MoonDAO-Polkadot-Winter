@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import IdeaCard from '../../../../components/components/IdeaCard';
 import Loader from '../../../../components/components/Loader';
 import useContract from '../../../../services/useContract';
-import CreateIdeaModal from '../../../../features/CreateideaModal';
+import CreateIdeaModal from '../../../../features/CreateIdeaModal';
 
 export default function Goal() {
   //Variables
