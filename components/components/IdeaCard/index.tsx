@@ -15,11 +15,11 @@ const IdeaCard = ({ item, onClickVote, onClickDonate, preview }: { item: Idea; o
         <div className="flex flex-1 flex-col gap-2 relative px-5 text-moon-16">
           <p className="font-semibold text-moon-18">{item.Title}</p>
           <div>
-            <p className="font-semibold text-moon-20 text-hit">DEV 200</p>
+            <p className="font-semibold text-moon-20 text-hit">DEV {item.donation || 200}</p>
             <p>in donations</p>
           </div>
           <div>
-            <p className="font-semibold text-moon-20 text-hit">4</p>
+            <p className="font-semibold text-moon-20 text-hit">{item.votes || 4}</p>
             <p>Votes</p>
           </div>
           <div className="absolute bottom-0 right-0 flex gap-2">

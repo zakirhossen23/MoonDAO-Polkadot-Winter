@@ -6,6 +6,7 @@ import UseFormInput from '../../components/components/UseFormInput';
 import UseFormTextArea from '../../components/components/UseFormTextArea';
 import isServer from '../../components/isServer';
 import useContract from '../../services/useContract';
+import AddImageInput from '../../components/components/AddImageInput';
 
 export default function CreateGoalModal({ open, onClose }) {
   const [GoalImage, setGoalImage] = useState([]);
@@ -229,10 +230,7 @@ export default function CreateGoalModal({ open, onClose }) {
                     );
                   })}
                   <div className="Goal-ImageAdd">
-                    <Button id="Add-Image" onClick={AddBTNClick} variant="secondary" style={{ height: 80, padding: '1.5rem' }} iconLeft="true" size="lg">
-                      <GenericPicture className="text-moon-24" />
-                      Add image
-                    </Button>
+                    <AddImageInput onClick={AddBTNClick} />
                   </div>
                 </div>
               </div>

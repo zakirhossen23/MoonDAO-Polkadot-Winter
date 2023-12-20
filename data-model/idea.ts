@@ -8,4 +8,6 @@ export interface Idea {
   wallet: string;
   logo?: string;
   allfiles: unknown;
+  donation: number;
+  votes: number;
 }

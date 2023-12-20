@@ -6,6 +6,7 @@ import UseFormInput from '../../components/components/UseFormInput';
 import UseFormTextArea from '../../components/components/UseFormTextArea';
 import isServer from '../../components/isServer';
 import useContract from '../../services/useContract';
+import AddImageInput from '../../components/components/AddImageInput';
 
 export default function CreateIdeaModal({ show, onClose }) {
   const [IdeasImage, setIdeasImage] = useState([]);
@@ -254,10 +255,7 @@ export default function CreateIdeaModal({ show, onClose }) {
                     );
                   })}
                   <div className="Ideas-ImageAdd">
-                    <Button id="Add-Image" onClick={AddBTNClick} variant="secondary" style={{ height: 80, padding: '1.5rem' }} iconLeft="true" size="lg">
-                      <GenericPicture className="text-moon-24" />
-                      Add Content
-                    </Button>
+                    <AddImageInput onClick={AddBTNClick} />
                   </div>
                 </div>
               </div>

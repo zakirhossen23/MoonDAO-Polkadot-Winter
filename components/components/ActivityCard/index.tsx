@@ -84,14 +84,14 @@ const IdeaActivity = ({ data }) => (
   </div>
 );
 
-const ActivityCard = ({ date, type, data }: Activity) => {
+const ActivityCard = ({ date, type, data, className }: Activity & { className?: string }) => {
   const duration = intervalToDuration({ start: new Date(), end: date });
 
   // Format the duration
   const formattedDuration = formatDuration(duration, { format: ['days'], zero: false });
 
   return (
-    <Card className="max-w-[540px] flex flex-col !p-4">
+    <Card className={`max-w-[540px] flex flex-col !p-4 relative ${className}`}>
       <div className="w-full text-trunks flex justify-between">
         <p className="text-moon-14">{formattedDuration} ago</p>
         <IconButton variant="ghost" icon={<GenericPending className="text-moon-32 text-trunks" />}></IconButton>

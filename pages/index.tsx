@@ -4,6 +4,7 @@ import Image from 'next/image';
 import styles from './Home.module.scss';
 import { useState } from 'react';
 import CreateDaoModal from '../features/CreateDaoModal';
+import ActivityCard from '../components/components/ActivityCard';
 
 export default function Welcome() {
   const [showCreateDaoModal, setShowCreateDaoModal] = useState(false);
@@ -50,10 +51,24 @@ export default function Welcome() {
           <Image
             src={'/home/section-1-img.jpg'}
             alt=""
-            layout='fill'
+            layout="fill"
             sizes="100vw"
             style={{
               objectFit: 'cover'
+            }}
+          />
+          <ActivityCard
+            className="pointer-events-none"
+            type="idea"
+            date={new Date('2023-12-17T18:29:14+0000')}
+            data={{
+              name: '@stevethijssen',
+              goalTitle: 'Making the clubhouse more sustainable with natural materials',
+              idea: {
+                Title: 'Idea: Install solar panels on the clubhouse',
+                votes: 57,
+                donations: 3950
+              }
             }}
           />
         </div>
@@ -63,7 +78,7 @@ export default function Welcome() {
           <Image
             src={'/home/section-2-img.jpg'}
             alt=""
-            layout='fill'
+            layout="fill"
             sizes="100vw"
             style={{
               objectFit: 'cover'

@@ -8,6 +8,7 @@ import UseFormTextArea from '../../components/components/UseFormTextArea';
 import useContract from '../../services/useContract';
 
 import isServer from '../../components/isServer';
+import AddImageInput from '../../components/components/AddImageInput';
 
 export default function CreateDaoModal({ open, onClose }) {
   const [DaoImage, setDaoImage] = useState([]);
@@ -259,10 +260,7 @@ export default function CreateDaoModal({ open, onClose }) {
                     );
                   })}
                   <div className="Dao-ImageAdd">
-                    <Button id="Add-Image" onClick={AddBTNClick} variant="secondary" style={{ height: 80, padding: '1.5rem' }} iconLeft="true" size="lg">
-                      <GenericPicture className="text-moon-24" />
-                      Add image
-                    </Button>
+                    <AddImageInput onClick={AddBTNClick} />
                   </div>
                 </div>
               </div>
