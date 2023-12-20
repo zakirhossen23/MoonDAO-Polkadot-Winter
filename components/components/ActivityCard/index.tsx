@@ -70,7 +70,7 @@ const DonationActivity = ({ data }) => (
   </div>
 );
 
-const IdeaActivity = ({ data }) => (
+const IdeaActivity = ({ data, hideGoToButton }) => (
   <div className="flex flex-col gap-3">
     <div className="flex gap-4 w-full items-center">
       <Avatar size="lg" className="rounded-full bg-krillin-60 text-bulma shrink-0">
@@ -80,11 +80,11 @@ const IdeaActivity = ({ data }) => (
         <span className="text-piccolo">{data.name}</span> just created an idea for the goal <span className="font-bold">{data.goalTitle}</span>
       </p>
     </div>
-    <IdeaCard item={data.idea} preview />
+    <IdeaCard item={data.idea} hideGoToButton={hideGoToButton} preview />
   </div>
 );
 
-const ActivityCard = ({ date, type, data, className }: Activity & { className?: string }) => {
+const ActivityCard = ({ date, type, data, className, hideGoToButton }: Activity & { className?: string; hideGoToButton?: boolean }) => {
   const duration = intervalToDuration({ start: new Date(), end: date });
 
   // Format the duration
@@ -101,7 +101,7 @@ const ActivityCard = ({ date, type, data, className }: Activity & { className?: 
       {type === 'vote' && <VoteActivity data={data} />}
       {type === 'goal' && <GoalActivity data={data} />}
       {type === 'donation' && <DonationActivity data={data} />}
-      {type === 'idea' && <IdeaActivity data={data} />}
+      {type === 'idea' && <IdeaActivity data={data} hideGoToButton={hideGoToButton} />}
     </Card>
   );
 };

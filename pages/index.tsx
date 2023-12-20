@@ -59,6 +59,7 @@ export default function Welcome() {
           />
           <ActivityCard
             className="pointer-events-none"
+            hideGoToButton
             type="idea"
             date={new Date('2023-12-17T18:29:14+0000')}
             data={{

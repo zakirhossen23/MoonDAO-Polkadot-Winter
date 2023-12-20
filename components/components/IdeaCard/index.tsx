@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { Button } from '@heathmont/moon-core-tw';
 import { ArrowsRightShort, GenericHeart, ShopCryptoCoin } from '@heathmont/moon-icons-tw';
 
-const IdeaCard = ({ item, onClickVote, onClickDonate, preview }: { item: Idea; onClickVote?; onClickDonate?; preview?: boolean }) => {
+const IdeaCard = ({ item, onClickVote, onClickDonate, preview, hideGoToButton }: { item: Idea; onClickVote?; onClickDonate?; preview?: boolean; hideGoToButton?: boolean }) => {
   return (
     <Card className={`max-w-[720px] ${preview && '!bg-goku'}`}>
       <div className="flex w-full">
@@ -34,9 +34,11 @@ const IdeaCard = ({ item, onClickVote, onClickDonate, preview }: { item: Idea; o
                 Donate
               </Button>
             )}
-            <Link href={`/daos/dao/goal/ideas?[${item.ideasId}]`}>
-              <Button iconLeft={<ArrowsRightShort />}>Go to idea</Button>
-            </Link>
+            {!hideGoToButton && (
+              <Link href={`/daos/dao/goal/ideas?[${item.ideasId}]`}>
+                <Button iconLeft={<ArrowsRightShort />}>Go to idea</Button>
+              </Link>
+            )}
           </div>
         </div>
       </div>
