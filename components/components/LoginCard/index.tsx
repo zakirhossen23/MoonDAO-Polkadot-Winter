@@ -2,10 +2,18 @@ import Image from 'next/image';
 import Card from '../Card';
 import { Button } from '@heathmont/moon-core-tw';
 import { GenericCheckRounded, GenericClose, SoftwareLogOut, SoftwareLogin } from '@heathmont/moon-icons-tw';
-import { MouseEventHandler } from 'react';
+import { Dispatch, MouseEventHandler, SetStateAction, useState } from 'react';
 import UseFormInput from '../UseFormInput';
+import { usePolkadotContext } from '../../../contexts/PolkadotContext';
+import { toast } from 'react-toastify';
 
-const LoginCard = ({ step, onConnect, onConnectMetamask, onConnectPolkadot }: { step: number; onConnect: MouseEventHandler<HTMLButtonElement>; onConnectMetamask: MouseEventHandler<HTMLButtonElement>; onConnectPolkadot: MouseEventHandler<HTMLButtonElement> }) => {
+
+const LoginCard = ({ step, onConnectMetamask, onConnectPolkadot, setStep }: { step: number; onConnect: MouseEventHandler<HTMLButtonElement>; onConnectMetamask: MouseEventHandler<HTMLButtonElement>; onConnectPolkadot: MouseEventHandler<HTMLButtonElement>; setStep:Dispatch<SetStateAction<number>> }) => {
+
+
+  const { api, deriveAcc, showToast } = usePolkadotContext();
+
+
   const [Email, EmailInput] = UseFormInput({
     defaultValue: '',
     type: 'email',
@@ -19,6 +27,32 @@ const LoginCard = ({ step, onConnect, onConnectMetamask, onConnectPolkadot }: { 
     placeholder: 'Password',
     id: ''
   });
+
+  async function OnClickLoginStep1() {
+    const id = toast.loading("Logging in  ...")
+
+    const doAfter = (events) => {
+      let user_data = [];
+      events.forEach(({ event: { data, method, section }, phase }) => {
+        if (method == "LoggedIn") {
+          user_data = JSON.parse(data.toString())
+        }
+      });
+      if (user_data.length > 0){
+        localStorage.setItem("user_id", (user_data[0]).toString());
+        if (user_data[1] == true) {
+          toast.update(id, { render: "Logged in Successfully!", type: "success", isLoading: false });
+          setStep(2); return;
+        }
+      }else{
+        toast.update(id, { render: "Incorrect email or password!", type: "error", isLoading: false });
+      }
+    
+    }
+    await api._extrinsics.users.loginUser(Email, Password).signAndSend(deriveAcc, ({ status, events }) => { showToast(status, id, "Logged in Successfully!", doAfter, false, events); });
+
+  }
+
 
   const LoginForm = () => (
     <Card className="max-w-[480px]">
@@ -36,7 +70,7 @@ const LoginCard = ({ step, onConnect, onConnectMetamask, onConnectPolkadot }: { 
           </div>
         </div>
         <div className="flex w-full justify-end">
-          <Button onClick={onConnect}>Next</Button>
+          <Button onClick={OnClickLoginStep1}>Next</Button>
         </div>
       </div>
     </Card>
@@ -76,8 +110,8 @@ const LoginCard = ({ step, onConnect, onConnectMetamask, onConnectPolkadot }: { 
 
   return (
     <>
-      {step === 1 && LoginForm()}
-      {step === 2 && (
+      {step == 1 && LoginForm()}
+      {step == 2 && (
         <div className="flex flex-col gap-4 w-full items-center">
           {ConnectMetamaskButton()}
           <div>Or</div>

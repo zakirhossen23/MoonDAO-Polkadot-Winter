@@ -2,7 +2,6 @@ import Head from 'next/head';
 import { useEffect, useState } from 'react';
 import LoginCard from '../../components/components/LoginCard';
 import { useRouter } from 'next/router';
-
 export default function Login() {
   const [isConnected, setIsConnected] = useState(false);
   const [hasMetamask, setHasMetamask] = useState(false);
@@ -32,9 +31,8 @@ export default function Login() {
     }
   }, [hasMetamask, isConnected, router]); // Dependency array
 
-  async function onClickConnect() {
-    setStep(2);
-
+  async function onConnectMetamask() {
+ 
     if (!hasMetamask) {
       window.open('https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn', '_blank');
       return;
@@ -90,6 +88,8 @@ export default function Login() {
     setHasMetamask(false);
   }
 
+
+
   return (
     <>
       <Head>
@@ -103,7 +103,7 @@ export default function Login() {
           <p>Step {step} of 2</p>
         </div>
       </div>
-      <div className="container flex flex-col items-center pt-10 gap-10">{<LoginCard step={step} onConnect={onClickConnect} onDisconnect={onClickDisConnect} />}</div>
+      <div className="container flex flex-col items-center pt-10 gap-10">{<LoginCard setStep={setStep} step={step} onConnectMetamask={onConnectMetamask} onDisconnect={onClickDisConnect} />}</div>
     </>
   );
 }

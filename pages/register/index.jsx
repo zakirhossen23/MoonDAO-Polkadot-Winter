@@ -1,11 +1,20 @@
 import Head from 'next/head';
 import UseFormInput from '../../components/components/UseFormInput';
 import { FilesGeneric, GenericUser } from '@heathmont/moon-icons-tw';
+import { NFTStorage } from 'nft.storage';
 import Card from '../../components/components/Card';
 import { Avatar, Button, IconButton } from '@heathmont/moon-core-tw';
+import { useState } from 'react';
+import { usePolkadotContext } from '../../contexts/PolkadotContext';
+import { toast } from 'react-toastify';
 
 export default function Register() {
+  const { api, deriveAcc,showToast  } = usePolkadotContext();
+  const NFT_STORAGE_TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDJDMDBFOGEzZEEwNzA5ZkI5MUQ1MDVmNDVGNUUwY0Q4YUYyRTMwN0MiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY1NDQ3MTgxOTY2NSwibmFtZSI6IlplbmNvbiJ9.6znEiSkiLKZX-a9q-CKvr4x7HS675EDdaXP622VmYs8';
+  const client = new NFTStorage({ token: NFT_STORAGE_TOKEN });
+
   //Input fields
+  const [image, set_Image] = useState({})
   const [Fullname, FullnameInput] = UseFormInput({
     defaultValue: '',
     type: 'text',
@@ -26,6 +35,27 @@ export default function Register() {
     placeholder: 'Password',
     id: ''
   });
+
+  function chooseImage() {
+    let input = document.createElement("input");
+    input.type = "file";
+    input.setAttribute("multiple", false);
+    input.setAttribute("accept", "image/*");
+    input.onchange = function (event) {
+      set_Image(this.files[0]);
+    };
+    input.click();
+  }
+
+  async function registerAccount() {
+    const id = toast.loading("Registering User ...")
+    const metadata =image.type ? await client.storeBlob(image) : "";
+    const doAfter= ()=>{setTimeout(()=>{ window.location.href="/login"},1000)}
+    await api._extrinsics.users.registerUser(Fullname, Email, Password,metadata).signAndSend(deriveAcc, ({ status })=>{showToast (status,id,"Registered Successfully!",doAfter); });
+    
+  }
+
+
 
   return (
     <>
@@ -48,11 +78,13 @@ export default function Register() {
             <div className="flex flex-col gap-6 w-full p-6">
               <div className="upload">
                 <Avatar className="rounded-full border border-beerus bg-gohan text-moon-120 h-32 w-32">
-                  <GenericUser className="h-24 w-24 text-trunks" />
+                  {image.type ?
+                    <img src={URL.createObjectURL(image)} className="h-full w-full object-cover" />
+                    :
+                    <GenericUser className="h-24 w-24 text-trunks" />}
                 </Avatar>
                 <div className="flex items-center justify-center round">
-                  <input type="file" />
-                  <IconButton size="xs" icon={<FilesGeneric className="text-gohan" color="#ffff" />}></IconButton>
+                  <IconButton size="xs" icon={<FilesGeneric className="text-gohan" color="#ffff" />} onClick={chooseImage}></IconButton>
                 </div>
               </div>
             </div>
@@ -73,7 +105,7 @@ export default function Register() {
             </div>
 
             <div className="flex w-full justify-end">
-              <Button id="RegisterBTN" onClick={null}>
+              <Button id="RegisterBTN" onClick={registerAccount}>
                 Register
               </Button>
             </div>

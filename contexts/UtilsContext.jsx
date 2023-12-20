@@ -250,10 +250,8 @@ export function UtilsProvider({ children }) {
   }
 
   useEffect(() => {
-    setInterval(() => {
-      loadPrice();
-    }, 30000);
     setTimeout(() => {
+      loadPrice();
       LoadSmartAccount();
     }, 1000);
   }, []);

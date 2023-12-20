@@ -1,7 +1,10 @@
 
 import { ThemeProvider } from 'next-themes';
-import { SnackbarProvider } from "notistack";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import { UtilsProvider } from "../contexts/UtilsContext";
+import { PolkadotProvider } from "../contexts/PolkadotContext";
 import "../public/css/daos.css";
 import "../public/css/ideas.css";
 import "../public/output.css";
@@ -9,18 +12,31 @@ import "../public/theme.css";
 
 import dynamic from 'next/dynamic'
 
-const Header = dynamic(() => import('../components/layout/Header'), { ssr: false})
+const Header = dynamic(() => import('../components/layout/Header'), { ssr: false })
 
 function MyApp({ Component, pageProps }) {
 	return (
-		<SnackbarProvider anchorOrigin={{ vertical: "top", horizontal: "right" }} maxSnack={5} autoHideDuration={3000} >
-			<UtilsProvider>
+		<UtilsProvider>
+			<PolkadotProvider>
 				<ThemeProvider defaultTheme={"dark"} enableColorScheme={false} attribute="class" enableSystem={false}>
-          <Header />
+					<Header />
 					<Component {...pageProps} />
+					<ToastContainer
+						hideProgressBar={false}
+						position="top-right"
+						autoClose={3000}
+						newestOnTop={false}
+						closeOnClick
+						rtl={false}
+						draggable
+						pauseOnHover
+						theme="light"
+						
+					/>
 				</ThemeProvider>
-			</UtilsProvider>
-		</SnackbarProvider>
+			</PolkadotProvider>
+
+		</UtilsProvider>
 	);
 }
 
