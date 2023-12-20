@@ -7,12 +7,15 @@ import NavItem from '../../components/NavItem';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import CreateDaoModal from '../../../features/CreateDaoModal';
+import { usePolkadotContext } from '../../../contexts/PolkadotContext';
 
 declare let window: any;
 let running = false;
 
 export function Nav(): JSX.Element {
+  const {api,userInfo } = usePolkadotContext();
   const [acc, setAcc] = useState('');
+  const [logo, setLogo] = useState('');
   const [accFull, setAccFull] = useState('');
   const [Balance, setBalance] = useState('');
   const [count, setCount] = useState(0);
@@ -22,16 +25,9 @@ export function Nav(): JSX.Element {
   const router = useRouter();
 
   async function fetchInfo() {
-    if (typeof window.ethereum === 'undefined') {
-      window.document.getElementById('withoutSign').style.display = 'none';
-      window.document.getElementById('withSign').style.display = 'none';
-      window.document.getElementById('installMetamask').style.display = '';
+    if (typeof window.ethereum === 'undefined' || typeof window.injectedWeb3 === 'undefined') {
       running = false;
       return;
-    } else {
-      window.document.getElementById('withoutSign').style.display = '';
-      window.document.getElementById('withSign').style.display = 'none';
-      window.document.getElementById('installMetamask').style.display = 'none';
     }
     if (window.localStorage.getItem('login-type') === 'metamask') {
       if (window?.ethereum?.selectedAddress?.toLocaleLowerCase() != null) {
@@ -64,6 +60,39 @@ export function Nav(): JSX.Element {
         running = false;
         return;
       }
+    } else if (window.localStorage.getItem('login-type') === 'polkadot') {
+      const { web3Accounts } = require('@polkadot/extension-dapp');
+     try{
+      let wallet = (await web3Accounts())[0];
+      if (wallet && api) {
+        const { nonce, data: balance } = await api.query.system.account(wallet.address);
+        setBalance(Number((balance.free).toString()) / 1e12 + " MUNIT");
+        if (!isSigned) setSigned(true);
+        let subbing = 10;
+
+        if (window.innerWidth > 500) {
+          subbing = 20;
+        }
+
+        setAcc(userInfo.fullName.toString());
+        setLogo(userInfo.imgIpfs.toString());
+        setAccFull(wallet.address?.toLocaleUpperCase());
+       
+
+        window.document.getElementById('withoutSign').style.display = 'none';
+        window.document.getElementById('withSign').style.display = '';
+        running = false;
+        return;
+      } else {
+        running = false;
+        return;
+      }
+     }catch(e){
+      running = false;
+      return;
+     }
+      
+
     } else {
       setSigned(false);
       window.document.getElementById('withoutSign').style.display = '';
@@ -92,7 +121,6 @@ export function Nav(): JSX.Element {
 
   function onClickDisConnect() {
     window.localStorage.setItem('loggedin', '');
-    window.localStorage.setItem('loggedin2', '');
     window.localStorage.setItem('login-type', '');
     window.location.href = '/';
   }
@@ -127,19 +155,7 @@ export function Nav(): JSX.Element {
                 <Button className="bg-dodoria w-32">Log in</Button>
               </Link>
             </div>
-            <div id="installMetamask" style={{ display: 'none' }} className="wallets">
-              <div className="wallet">
-                <Button
-                  className="bg-dodoria"
-                  onClick={() => {
-                    window.open('https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn', '_blank');
-                  }}
-                >
-                  {' '}
-                  Metamask
-                </Button>
-              </div>
-            </div>
+
 
             <div id="withSign" className="wallets" style={{ display: 'none' }}>
               <div className="wallet" style={{ height: 48, display: 'flex', alignItems: 'center' }}>
@@ -152,9 +168,10 @@ export function Nav(): JSX.Element {
                   </div>
                   <Dropdown value={null} onChange={null}>
                     <Dropdown.Trigger>
+                     {logo !== ''? <img src={'https://' + logo + '.ipfs.nftstorage.link'} alt='' className="rounded-full border-2 w-12 h-12 border-piccolo" />:
                       <Avatar size="lg" className="rounded-full border-2 border-piccolo">
                         <GenericUser className="text-moon-24" />
-                      </Avatar>
+                      </Avatar>}
                     </Dropdown.Trigger>
 
                     <Dropdown.Options className="bg-gohan w-48 min-w-0">

@@ -28,7 +28,7 @@
     "@nomiclabs/hardhat-waffle": "^2.0.3",
     "@openzeppelin/contracts": "^4.8.0",
     "@polkadot/api": "^10.9.1",
-    "@polkadot/extension-dapp": "^0.46.5",
+    "@polkadot/extension-dapp": "^0.46.6",
     "@truffle/hdwallet-provider": "^2.1.13",
     "@types/sinon-chai": "^3.2.3",
     "assert": "^2.0.0",

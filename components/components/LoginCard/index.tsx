@@ -41,7 +41,12 @@ const LoginCard = ({ step, onConnectMetamask, onConnectPolkadot, setStep }: { st
       if (user_data.length > 0){
         localStorage.setItem("user_id", (user_data[0]).toString());
         if (user_data[1] == true) {
-          toast.update(id, { render: "Logged in Successfully!", type: "success", isLoading: false });
+          toast.update(id, { 
+            render: "Logged in Successfully!", type: "success", isLoading: false ,  
+           autoClose: 1000,
+          closeButton: true,
+          closeOnClick: true,
+          draggable: true});
           setStep(2); return;
         }
       }else{

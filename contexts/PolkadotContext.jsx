@@ -8,12 +8,14 @@ import { toast } from 'react-toastify';
 const AppContext = createContext({
   api: null,
   deriveAcc:null,
-  showToast:(status,id,FinalizedText,doAfter,callToastSuccess= true, events)=>{}
+  showToast:(status,id,FinalizedText,doAfter,callToastSuccess= true, events)=>{},
+  userInfo:{}
 });
 
 export function PolkadotProvider({ children }) {
   const [api, setApi] = useState();
   const [deriveAcc, setDeriveAcc] = useState(null)
+  const [userInfo, setUserInfo] = useState({})
 
   async function showToast(status,id,FinalizedText,doAfter,callToastSuccess= true, events){
  
@@ -30,21 +32,36 @@ export function PolkadotProvider({ children }) {
 
   useEffect(() => {
     (async function () {
-      const wsProvider = new WsProvider(polkadotConfig.chain_rpc);
-      const api = await ApiPromise.create({ provider: wsProvider });
-      await api.isReady;
+      try{
+        const wsProvider = new WsProvider(polkadotConfig.chain_rpc);
+        const _api = await ApiPromise.create({ provider: wsProvider });
+        await _api.isReady;
+  
+        setApi(_api);
+  
+        const keyring = new Keyring({ type: 'sr25519' });
+        const newPair = keyring.addFromUri(polkadotConfig.derive_acc);
+        setDeriveAcc(newPair)
+  
+  
+  
+        const {web3Enable} = require('@polkadot/extension-dapp');
+      
+        if (window.localStorage.getItem('loggedin') == "true" && window.localStorage.getItem('login-type') == "polkadot" ){
+          await web3Enable('PlanetDAO');
+          let userid = window.localStorage.getItem('user_id');
+          const userInformation = await _api.query.users.userById(userid);
+          setUserInfo(userInformation);
+        }
+      }catch(e){
 
-      setApi(api);
-
-      const keyring = new Keyring({ type: 'sr25519' });
-      const newPair = keyring.addFromUri(polkadotConfig.derive_acc);
-      setDeriveAcc(newPair)
-
+      }
+     
     })();
   },[])
 
 
-  return <AppContext.Provider value={{api:api,deriveAcc:deriveAcc,showToast:showToast}}>{children}</AppContext.Provider>;
+  return <AppContext.Provider value={{api:api,deriveAcc:deriveAcc,showToast:showToast, userInfo:userInfo}}>{children}</AppContext.Provider>;
 }
 
 export const usePolkadotContext = () => useContext(AppContext);
