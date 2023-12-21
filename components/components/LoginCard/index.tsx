@@ -1,8 +1,8 @@
 import Image from 'next/image';
 import Card from '../Card';
 import { Button } from '@heathmont/moon-core-tw';
-import { GenericCheckRounded, GenericClose, SoftwareLogOut, SoftwareLogin } from '@heathmont/moon-icons-tw';
-import { Dispatch, MouseEventHandler, SetStateAction, useState } from 'react';
+import { SoftwareLogin } from '@heathmont/moon-icons-tw';
+import { Dispatch, MouseEventHandler, SetStateAction } from 'react';
 import UseFormInput from '../UseFormInput';
 import { usePolkadotContext } from '../../../contexts/PolkadotContext';
 import { toast } from 'react-toastify';

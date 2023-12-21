@@ -7,6 +7,8 @@ import UseFormTextArea from '../../components/components/UseFormTextArea';
 import isServer from '../../components/isServer';
 import useContract from '../../services/useContract';
 import AddImageInput from '../../components/components/AddImageInput';
+import ImageListDisplay from '../../components/components/ImageListDisplay';
+import Image from 'next/image';
 
 export default function CreateGoalModal({ open, onClose }) {
   const [GoalImage, setGoalImage] = useState([]);
@@ -20,13 +22,13 @@ export default function CreateGoalModal({ open, onClose }) {
   const [GoalTitle, GoalTitleInput] = UseFormInput({
     defaultValue: '',
     type: 'text',
-    placeholder: 'Goal name',
+    placeholder: 'Add name',
     id: ''
   });
 
   const [GoalDescription, GoalDescriptionInput] = UseFormTextArea({
     defaultValue: '',
-    placeholder: 'Goal Description',
+    placeholder: 'Add Description',
     id: '',
     rows: 4
   });
@@ -138,6 +140,7 @@ export default function CreateGoalModal({ open, onClose }) {
     }
     for (let index2 = 0; index2 < goal.target.files.length; index2++) {
       setGoalImage((pre) => [...pre, goal.target.files[index2]]);
+      console.log('SET');
     }
   }
   if (!isServer()) {
@@ -159,14 +162,12 @@ export default function CreateGoalModal({ open, onClose }) {
     GoalImagePic.click();
   }
 
-  function DeleteSelectedImages(goal) {
+  function DeleteSelectedImages(imageId) {
     //Deleting the selected image
-    var DeleteBTN = goal.currentTarget;
-    var idImage = Number(DeleteBTN.getAttribute('id'));
     var newImages = [];
     var allUploadedImages = document.getElementsByName('deleteBTN');
     for (let index = 0; index < GoalImage.length; index++) {
-      if (index != idImage) {
+      if (index != imageId) {
         const elementDeleteBTN = allUploadedImages[index];
         elementDeleteBTN.setAttribute('id', newImages.length.toString());
         const element = GoalImage[index];
@@ -208,30 +209,13 @@ export default function CreateGoalModal({ open, onClose }) {
               </div>
             </div>
             <div className="flex flex-col gap-2">
-              <h6>Content</h6>
-              <div style={{ borderColor: '#6578F2' }} className="border-4 border-dashed content-start flex flex-row flex-wrap gap-4 h-full inset-0 justify-start m-auto overflow-auto p-1 relative text-center text-white w-full z-20">
+              <h6>Images</h6>
+              <div className="content-start flex flex-row flex-wrap gap-4 justify-start overflow-auto relative text-center text-white w-full">
                 <input className="file-input" hidden onChange={FilehandleChange} id="GoalImage" name="GoalImage" type="file" multiple="multiple" />
-                <div className="flex gap-4">
-                  {GoalImage.map((item, i) => {
-                    return (
-                      <div key={i} className="flex gap-4">
-                        <button onClick={DeleteSelectedImages} name="deleteBTN" id={i}>
-                          {item.type.includes('image') ? (
-                            <img src={URL.createObjectURL(item)} />
-                          ) : (
-                            <>
-                              <div className="Goal-Uploaded-File-Container">
-                                <span className="Goal-Uploaded-File-name">{item.name.substring(0, 10)}...</span>
-                              </div>
-                            </>
-                          )}
-                        </button>
-                      </div>
-                    );
-                  })}
-                  <div className="Goal-ImageAdd">
-                    <AddImageInput onClick={AddBTNClick} />
-                  </div>
+
+                <div className="flex flex-col gap-4">
+                  <AddImageInput onClick={AddBTNClick} />
+                  <ImageListDisplay images={GoalImage} onDeleteImage={DeleteSelectedImages} />
                 </div>
               </div>
             </div>

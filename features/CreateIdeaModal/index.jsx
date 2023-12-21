@@ -7,6 +7,7 @@ import UseFormTextArea from '../../components/components/UseFormTextArea';
 import isServer from '../../components/isServer';
 import useContract from '../../services/useContract';
 import AddImageInput from '../../components/components/AddImageInput';
+import ImageListDisplay from '../../components/components/ImageListDisplay';
 
 export default function CreateIdeaModal({ show, onClose }) {
   const [IdeasImage, setIdeasImage] = useState([]);
@@ -144,7 +145,7 @@ export default function CreateIdeaModal({ show, onClose }) {
         <div className="flex gap-4 justify-end">
           <Button id="CreateIdeasBTN" onClick={createIdeas}>
             <ControlsPlus className="text-moon-24" />
-            Create ideas
+            Create idea
           </Button>
         </div>
       </>
@@ -189,10 +190,7 @@ export default function CreateIdeaModal({ show, onClose }) {
     IdeasImagePic.click();
   }
 
-  function DeleteSelectedImages(ideas) {
-    //Deleting the selected image
-    var DeleteBTN = ideas.currentTarget;
-    var idImage = Number(DeleteBTN.getAttribute('id'));
+  function DeleteSelectedImages(idImage) {
     var newImages = [];
     var allUploadedImages = document.getElementsByName('deleteBTN');
     for (let index = 0; index < IdeasImage.length; index++) {
@@ -210,9 +208,9 @@ export default function CreateIdeaModal({ show, onClose }) {
     <Modal open={show} onClose={onClose}>
       <Modal.Backdrop />
       <Modal.Panel className="bg-gohan w-[90%] max-w-[600px] max-h-[90vh]">
-        <div className="flex items-center justify-center flex-col gap-8">
+        <div className="flex items-center justify-center flex-col">
           <div className="flex justify-between items-center w-full border-b border-beerus py-4 px-6">
-            <h1 className="text-moon-20 font-semibold">Create goal</h1>
+            <h1 className="text-moon-20 font-semibold">Create idea</h1>
             <IconButton className="text-trunks" variant="ghost" icon={<ControlsClose />} onClick={onClose} />
           </div>
           <div className="flex flex-col gap-6 w-full p-6 max-h-[calc(90vh-162px)] overflow-auto">
@@ -225,43 +223,23 @@ export default function CreateIdeaModal({ show, onClose }) {
               <h6>Description</h6>
               {IdeasDescriptionInput}
             </div>
-            <div className="flex flex-col gap-2">
+            {/* <div className="flex flex-col gap-2">
               <h6>Referenda (Optional)</h6>
               {ReferendaInput}
-            </div>
+            </div> */}
 
-            <div className="flex flex-col gap-2 h-56">
-              <h6>Content</h6>
-              <div style={{ borderColor: '#6578F2' }} className="border-4 border-dashed content-start flex flex-row flex-wrap gap-4 h-full inset-0 justify-start m-auto overflow-auto p-1 relative text-center text-white w-full z-20">
+            <div className="flex flex-col gap-2">
+              <h6>Images</h6>
+              <div className="content-start flex flex-row flex-wrap gap-4 justify-start overflow-auto p-1 relative text-center text-white w-full">
                 <input className="file-input" hidden onChange={FilehandleChange} id="IdeasImage" name="IdeasImage" type="file" multiple="multiple" />
-                <div className="flex gap-4">
-                  {IdeasImage.map((item, i) => {
-                    return (
-                      <>
-                        <div key={i} className="flex gap-4">
-                          <button onClick={DeleteSelectedImages} name="deleteBTN" id={i}>
-                            {item.type.includes('image') ? (
-                              <img src={URL.createObjectURL(item)} />
-                            ) : (
-                              <>
-                                <div>
-                                  <span className="Ideas-Uploaded-File-name">{item.name.substring(0, 10)}...</span>
-                                </div>
-                              </>
-                            )}
-                          </button>
-                        </div>
-                      </>
-                    );
-                  })}
-                  <div className="Ideas-ImageAdd">
-                    <AddImageInput onClick={AddBTNClick} />
-                  </div>
+                <div className="flex flex-col gap-4">
+                  <AddImageInput onClick={AddBTNClick} />
+                  <ImageListDisplay images={IdeasImage} onDeleteImage={DeleteSelectedImages} />
                 </div>
               </div>
             </div>
 
-            <div className="flex flex-col gap-2">
+            {/* <div className="flex flex-col gap-2">
               <h6>Rules</h6>
 
               <div className="content-start gap-8 flex flex-row flex-wrap h-full justify-start ">
@@ -275,10 +253,14 @@ export default function CreateIdeaModal({ show, onClose }) {
                   Add smart contract
                 </Button>
               </div>
-            </div>
-
-            <CreateIdeasBTN />
+            </div> */}
           </div>
+        </div>
+        <div className="flex justify-between border-t border-beerus w-full p-6">
+          <Button variant="ghost" onClick={onClose}>
+            Cancel
+          </Button>
+          <CreateIdeasBTN />
         </div>
       </Modal.Panel>
     </Modal>

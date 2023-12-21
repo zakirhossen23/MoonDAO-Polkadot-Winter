@@ -9,6 +9,7 @@ import useContract from '../../services/useContract';
 
 import isServer from '../../components/isServer';
 import AddImageInput from '../../components/components/AddImageInput';
+import ImageListDisplay from '../../components/components/ImageListDisplay';
 
 export default function CreateDaoModal({ open, onClose }) {
   const [DaoImage, setDaoImage] = useState([]);
@@ -43,7 +44,7 @@ export default function CreateDaoModal({ open, onClose }) {
   const [SubsPrice, SubsPriceInput] = UseFormInput({
     defaultValue: '',
     type: 'text',
-    placeholder: 'Price($) Per Month',
+    placeholder: 'Subscription per month (in DEV)',
     id: 'subs_price'
   });
 
@@ -191,10 +192,7 @@ export default function CreateDaoModal({ open, onClose }) {
     );
   }
 
-  function DeleteSelectedImages(dao) {
-    //Deleting the selected image
-    var DeleteBTN = dao.currentTarget;
-    var idImage = Number(DeleteBTN.getAttribute('id'));
+  function DeleteSelectedImages(idImage) {
     var newImages = [];
     var allUploadedImages = document.getElementsByName('deleteBTN');
     for (let index = 0; index < DaoImage.length; index++) {
@@ -217,7 +215,7 @@ export default function CreateDaoModal({ open, onClose }) {
             <h1 className="text-moon-20 font-semibold">Create community</h1>
             <IconButton className="text-trunks" variant="ghost" icon={<ControlsClose />} onClick={onClose} />
           </div>
-          <div className="flex flex-col gap-6 w-full p-6">
+          <div className="flex flex-col gap-6 w-full p-6 max-h-[calc(90vh-162px)] overflow-auto">
             <div className="flex flex-col gap-2">
               <h6>Community name</h6>
               {DaoTitleInput}
@@ -241,33 +239,11 @@ export default function CreateDaoModal({ open, onClose }) {
               <h6>Images</h6>
               <div className="flex gap-4">
                 <input className="file-input" hidden onChange={FilehandleChange} id="DaoImage" name="DaoImage" type="file" multiple="multiple" />
-                <div className="flex flex-wrap gap-4">
-                  {DaoImage.map((item, i) => {
-                    return (
-                      <div key={i} className="flex gap-4">
-                        <button onClick={DeleteSelectedImages} name="deleteBTN" id={i}>
-                          {item.type.includes('image') ? (
-                            <img className='h-[128px] w-[170px] object-cover rounded' src={URL.createObjectURL(item)} />
-                          ) : (
-                            <>
-                              <div className="Dao-Uploaded-File-Container">
-                                <span className="Dao-Uploaded-File-name">{item.name.substring(0, 10)}...</span>
-                              </div>
-                            </>
-                          )}
-                        </button>
-                      </div>
-                    );
-                  })}
-                  <div className="Dao-ImageAdd">
-                    <AddImageInput onClick={AddBTNClick} />
-                  </div>
+                <div className="flex flex-col gap-4">
+                  <AddImageInput onClick={AddBTNClick} />
+                  <ImageListDisplay images={DaoImage} onDeleteImage={DeleteSelectedImages} />
                 </div>
               </div>
-            </div>
-
-            <div>
-              <Checkbox label="Generate Plugin" id="plugin" />
             </div>
           </div>
           <div className="flex justify-between border-t border-beerus w-full p-6">
