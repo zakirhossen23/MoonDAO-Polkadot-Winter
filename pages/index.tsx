@@ -5,16 +5,22 @@ import styles from './Home.module.scss';
 import { useState } from 'react';
 import CreateDaoModal from '../features/CreateDaoModal';
 import ActivityCard from '../components/components/ActivityCard';
+import { useRouter } from 'next/router';
 
 export default function Welcome() {
   const [showCreateDaoModal, setShowCreateDaoModal] = useState(false);
+  const router = useRouter();
 
   function closeModal() {
     setShowCreateDaoModal(false);
   }
 
   function openModal() {
-    setShowCreateDaoModal(true);
+    if (window.localStorage.getItem('loggedin') === 'true') {
+      setShowCreateDaoModal(true);
+    } else {
+      router.push('/login');
+    }
   }
 
   return (
