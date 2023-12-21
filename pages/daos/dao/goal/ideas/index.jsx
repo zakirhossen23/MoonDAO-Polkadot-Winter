@@ -20,6 +20,7 @@ export default function GrantIdeas() {
   const [DonatemodalShow, setDonatemodalShow] = useState(false);
   const [VotingShow, setVotingShow] = useState(false);
   const [AccountAddress, setAccountAddress] = useState('');
+  const [loading, setLoading] = useState(false);
   const { contract, signerAddress, sendTransaction, saveReadMessage } = useContract();
 
   const [Comment, CommentInput, setComment] = UseFormTextArea({
@@ -89,6 +90,8 @@ export default function GrantIdeas() {
   });
 
   async function fetchContractData() {
+    setLoading(true);
+
     try {
       if (contract && id) {
         setIdeasId(id); //setting Ideas id
@@ -124,6 +127,8 @@ export default function GrantIdeas() {
         });
 
         setimageList(object.properties.allFiles);
+        console.log(object.properties.allFiles);
+        setLoading(false);
 
         // Comments and Replies
         const totalComments = await contract.getMsgIDs(Number(id)); //Getting total comments (Number) of this idea
@@ -155,11 +160,10 @@ export default function GrantIdeas() {
               date: object.date
             };
             newComment.replies.push(newReply);
-            // console.log('LIST', CommentsList);
           });
 
           CommentsList.push(newComment);
-          console.log(CommentsList);
+          setCommentsList(CommentsList);
         });
         removeElementFromArrayBYID(emptydata, 0, setemptydata);
       }
@@ -224,7 +228,7 @@ export default function GrantIdeas() {
     };
     await saveMessage(newComment);
     newComment.replies = [];
-    CommentsList.push(newComment);
+    setCommentsList([...CommentsList, newComment]);
     setComment('');
     removeElementFromArrayBYID(emptydata, 0, setemptydata);
   }
@@ -249,7 +253,13 @@ export default function GrantIdeas() {
     console.log('Saved Reply');
   }
 
-  const uniqueAndSort = (comments) => Array.from(new Map(comments.map((item) => [item.id, item])).values()).sort((a, b) => new Date(b.date) - new Date(a.date));
+  const uniqueAndSort = (comments) => {
+    console.log('comments', comments);
+    const ebat = comments.sort((a, b) => new Date(b.date) - new Date(a.date));
+    console.log(ebat);
+
+    return ebat;
+  };
 
   return (
     <>
@@ -299,18 +309,26 @@ export default function GrantIdeas() {
           <p>{IdeasURI.Description}</p>
           <Loader
             element={
-              imageList.length > 1 ? (
-                <>
-                  <SlideShow images={imageList} />
-                </>
-              ) : (
-                <>
-                  <div className="flex-1 rounded-xl overflow-hidden flex" style={{ height: '500px' }}>
-                    <Image type={imageList[0]?.type} src={imageList[0]?.url} alt="" />
-                  </div>
-                </>
+              imageList[0] && (
+                <div className="relative w-auto max-[w-720px] h-[480px] object-contain">
+                  <Image src={imageList[0].url} alt="" fill className="object-contain" />
+                </div>
               )
+              // imageList.length > 1 ? (
+              //   <>
+              //     <SlideShow images={imageList} />
+              //   </>
+              // ) : (
+              //   <>
+              //     {imageList[0] && (
+              //       <div className="relative w-auto max-[w-720px] h-[480px] object-contain">
+              //         <Image src={imageList[0].url} fill className="object-contain" />
+              //       </div>
+              //     )}
+              //   </>
+              // )
             }
+            loading={loading}
             width={800}
             height={500}
           />{' '}

@@ -7,6 +7,7 @@ import Loader from '../../../../components/components/Loader';
 import useContract from '../../../../services/useContract';
 import CreateIdeaModal from '../../../../features/CreateIdeaModal';
 import EmptyState from '../../../../components/components/EmptyState';
+import Image from 'next/image';
 
 export default function Goal() {
   //Variables
@@ -147,7 +148,16 @@ export default function Goal() {
             </Tabs>
           </div>
         </div>
-        {tabIndex === 0 && <div className="container">{GoalURI.Description}</div>}
+        {tabIndex === 0 && (
+          <div className="container flex flex-col gap-6">
+            <p>{GoalURI.Description}</p>
+            {GoalURI.logo && (
+              <div className="relative w-auto max-[w-720px] h-[480px] object-contain">
+                <Image src={GoalURI.logo} alt="" fill className="object-contain" />
+              </div>
+            )}
+          </div>
+        )}
         {tabIndex === 1 && (
           <div className="flex flex-col gap-8 container items-center">
             <Loader element={list.length > 0 ? list.map((listItem, index) => <IdeaCard item={listItem} key={index} />) : <EmptyState icon={<GenericIdea className="text-moon-48" />} label="This goal doesn’t have any ideas yet." />} width={768} height={236} many={3} loading={loading} />{' '}

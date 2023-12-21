@@ -131,13 +131,6 @@ export default function CreateDaoModal({ open, onClose }) {
     };
     console.log('======================>Creating Dao');
     try {
-      const valueAll = await contract.get_all_daos(); //Getting dao URI from smart contract
-
-      // //Getting the dao id of new one
-      let daoid = valueAll.length;
-      if (document.getElementById('plugin').checked) {
-        await CreatePlugin(`http://${window.location.host}/daos/dao?[${daoid}]`);
-      }
       var template = await (await fetch(`/template/template.html`)).text();
 
       let changings = [
@@ -238,7 +231,7 @@ export default function CreateDaoModal({ open, onClose }) {
             <div className="flex flex-col gap-2">
               <h6>Images</h6>
               <div className="flex gap-4">
-                <input className="file-input" hidden onChange={FilehandleChange} id="DaoImage" name="DaoImage" type="file" multiple="multiple" />
+                <input className="file-input" hidden onChange={FilehandleChange} accept="image/*" id="DaoImage" name="DaoImage" type="file" multiple="multiple" />
                 <div className="flex flex-col gap-4">
                   <AddImageInput onClick={AddBTNClick} />
                   <ImageListDisplay images={DaoImage} onDeleteImage={DeleteSelectedImages} />

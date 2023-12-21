@@ -211,7 +211,7 @@ export default function CreateGoalModal({ open, onClose }) {
             <div className="flex flex-col gap-2">
               <h6>Images</h6>
               <div className="content-start flex flex-row flex-wrap gap-4 justify-start overflow-auto relative text-center text-white w-full">
-                <input className="file-input" hidden onChange={FilehandleChange} id="GoalImage" name="GoalImage" type="file" multiple="multiple" />
+                <input className="file-input" hidden onChange={FilehandleChange} accept="image/*" id="GoalImage" name="GoalImage" type="file" multiple="multiple" />
 
                 <div className="flex flex-col gap-4">
                   <AddImageInput onClick={AddBTNClick} />
