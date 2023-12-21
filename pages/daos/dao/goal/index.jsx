@@ -116,7 +116,7 @@ export default function Goal() {
         <div className="gap-8 flex flex-col w-full bg-gohan pt-10 border-beerus border">
           <div className="container flex w-full justify-between">
             <div className="flex flex-col gap-1 overflow-hidden">
-              <h5 className="font-semibold">Harvard University &gt; Goals</h5>
+              <h5 className="font-semibold">Community &gt; Goals</h5>
               <h1 className="text-moon-32 font-bold">{GoalURI.Title}</h1>
               <h3 className="flex gap-2 whitespace-nowrap">
                 <div>
@@ -134,9 +134,9 @@ export default function Goal() {
               <Button iconLeft={<ControlsPlus />} onClick={openCreateIdeaModal}>
                 Create idea
               </Button>
-              <Button iconLeft={<GenericEdit />} variant="secondary">
+              {/* <Button iconLeft={<GenericEdit />} variant="secondary">
                 Edit
-              </Button>
+              </Button> */}
             </div>
           </div>
           <div className="container">

@@ -136,8 +136,8 @@ export function Nav(): JSX.Element {
         <ul className="flex justify-between items-center w-full">
           {isSigned && (
             <>
-              {hasJoinedCommunities && <NavItem highlight={router.pathname.includes('/daos?joined=true')} link="/daos?joined=true" label="Joined communities" />}
-              <NavItem highlight={router.pathname === '/daos'} link="/daos" label="Communities" />
+              {hasJoinedCommunities && <NavItem highlight={router.pathname.includes('/joined')} link="/joined" label="Joined communities" />}
+              <NavItem highlight={router.pathname.includes('/daos')} link="/daos" label="Communities" />
               <NavItem label="Create Your Community" onClick={openModal} />
             </>
           )}

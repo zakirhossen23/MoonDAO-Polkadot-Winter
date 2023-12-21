@@ -15,8 +15,8 @@ import { toast } from 'react-toastify';
 
 export default function CreateDaoModal({ open, onClose }) {
   const [DaoImage, setDaoImage] = useState([]);
-  const { api,  showToast , userWalletPolkadot,userSigner,PolkadotLoggedIn} = usePolkadotContext();
-  const { contract,  sendTransaction, formatTemplate } = useContract();
+  const { api, showToast, userWalletPolkadot, userSigner, PolkadotLoggedIn } = usePolkadotContext();
+  const { contract, sendTransaction, formatTemplate } = useContract();
   const router = useRouter();
   //Storage API for images and videos
   const NFT_STORAGE_TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDJDMDBFOGEzZEEwNzA5ZkI5MUQ1MDVmNDVGNUUwY0Q4YUYyRTMwN0MiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY1NDQ3MTgxOTY2NSwibmFtZSI6IlplbmNvbiJ9.6znEiSkiLKZX-a9q-CKvr4x7HS675EDdaXP622VmYs8';
@@ -73,7 +73,7 @@ export default function CreateDaoModal({ open, onClose }) {
   //Function after clicking Create Dao Button
   async function createDao() {
     const id = toast.loading('Uploading IPFS ...');
- 
+
     var CreateDAOBTN = document.getElementById('CreateDAOBTN');
     CreateDAOBTN.disabled = true;
     let allFiles = [];
@@ -111,7 +111,7 @@ export default function CreateDaoModal({ open, onClose }) {
         },
         wallet: {
           type: 'string',
-          description:   window.signerAddress
+          description: window.signerAddress
         },
         SubsPrice: {
           type: 'number',
@@ -125,8 +125,6 @@ export default function CreateDaoModal({ open, onClose }) {
       }
     };
     console.log('======================>Creating Dao');
-
-
 
     var template = await (await fetch(`/template/template.html`)).text();
 
@@ -142,24 +140,22 @@ export default function CreateDaoModal({ open, onClose }) {
     ];
     let formatted_template = formatTemplate(template, changings);
 
-    toast.update(id, { render: "Creating Dao...", isLoading: true });
+    toast.update(id, { render: 'Creating Dao...', isLoading: true });
 
-    if (PolkadotLoggedIn) {  
-      await api._extrinsics.daos.createDao(userWalletPolkadot,JSON.stringify(createdObject), formatted_template).signAndSend(userWalletPolkadot,{signer:userSigner}, (status) => {
+    if (PolkadotLoggedIn) {
+      await api._extrinsics.daos.createDao(userWalletPolkadot, JSON.stringify(createdObject), formatted_template).signAndSend(userWalletPolkadot, { signer: userSigner }, (status) => {
         showToast(status, id, 'Created Successfully!', onClose);
       });
     } else {
       try {
         // Creating Dao in Smart contract from metamask chain
-        await sendTransaction(await window.contract.populateTransaction.create_dao(  window.signerAddress, JSON.stringify(createdObject), formatted_template));
-        toast.update(id, { render: 'Created Successfully!', type: "success", isLoading: false });
+        await sendTransaction(await window.contract.populateTransaction.create_dao(window.signerAddress, JSON.stringify(createdObject), formatted_template));
+        toast.update(id, { render: 'Created Successfully!', type: 'success', isLoading: false });
       } catch (error) {
         console.error(error);
         return;
       }
     }
-
-
   }
 
   function FilehandleChange(dao) {
@@ -235,11 +231,11 @@ export default function CreateDaoModal({ open, onClose }) {
             </div>
 
             <div className="flex flex-col gap-2">
-              <h6>Images</h6>
+              <h6>Image</h6>
               <div className="flex gap-4">
                 <input className="file-input" hidden onChange={FilehandleChange} accept="image/*" id="DaoImage" name="DaoImage" type="file" />
                 <div className="flex flex-col gap-4">
-                  <AddImageInput onClick={AddBTNClick} />
+                  {DaoImage.length < 1 && <AddImageInput onClick={AddBTNClick} />}
                   <ImageListDisplay images={DaoImage} onDeleteImage={DeleteSelectedImages} />
                 </div>
               </div>

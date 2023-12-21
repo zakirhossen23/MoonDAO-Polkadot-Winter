@@ -264,7 +264,7 @@ export default function GrantIdeas() {
         <div className={`gap-8 flex flex-col w-full bg-gohan pt-10 pb-6 border-beerus border`}>
           <div className="container flex w-full justify-between relative">
             <div className="flex flex-col gap-1">
-              <h5 className="font-semibold">Harvard University &gt; Goals &gt; Ideas</h5>
+              <h5 className="font-semibold">Community &gt; Goals &gt; Ideas</h5>
               <h1 className="text-moon-32 font-bold">{IdeasURI.Title}</h1>
               <h3 className="flex gap-2 whitespace-nowrap">
                 <div>
@@ -288,11 +288,11 @@ export default function GrantIdeas() {
               <Button iconLeft={IdeasURI.isVoted ? <GenericHeart fill="red" color="red" /> : <GenericHeart />} variant="secondary" onClick={VoteIdea}>
                 Vote
               </Button>
-              {IdeasURI.isOwner && (
+              {/* {IdeasURI.isOwner && (
                 <Button iconLeft={<GenericEdit />} variant="secondary" className="w-full">
                   Edit
                 </Button>
-              )}
+              )} */}
             </div>
           </div>
         </div>

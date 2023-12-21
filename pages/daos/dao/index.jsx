@@ -159,11 +159,11 @@ export default function DAO() {
                   </Button>
                 </Link>
               )}
-              {isOwner && (
+              {/* {isOwner && (
                 <Button iconLeft={<GenericDelete />} className="bg-dodoria" onClick={deleteDao}>
                   Delete
                 </Button>
-              )}
+              )} */}
               {!isJoined && !isOwner && (
                 <Button iconLeft={<ControlsPlus />} onClick={JoinCommunity}>
                   Join
