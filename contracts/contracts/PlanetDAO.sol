@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 import '@openzeppelin/contracts/utils/Strings.sol';
 import '@openzeppelin/contracts/token/ERC20/ERC20.sol';
 
-contract MoonDAO {
+contract PlanetDAO {
     struct dao_uri_struct {
         string dao_wallet;
         string dao_uri;

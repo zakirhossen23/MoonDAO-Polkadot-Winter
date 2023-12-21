@@ -9,7 +9,7 @@ import config from './json/config.json';
 import datafeeds from './json/datafeeds.json';
 import PriceFeedABI from '../contracts/artifacts/contracts/precompiles/PriceFeed.sol/AggregatorV3Interface.json';
 import BatchABI from '../contracts/artifacts/contracts/precompiles/Batch.sol/Batch.json';
-import MoonDAO from '../contracts/deployments/moonbase/MoonDAO.json';
+import PlanetDAO from '../contracts/deployments/moonbase/PlanetDAO.json';
 import Web3 from 'web3';
 import { ChainId } from '@biconomy/core-types';
 import SmartAccount from '@biconomy/smart-account';
@@ -104,12 +104,12 @@ export function UtilsProvider({ children }) {
       callData.push('0x');
 
       //Adding save information into smart contract
-      to.push(MoonDAO.address);
+      to.push(PlanetDAO.address);
 
       let web3 = new Web3(window.ethereum);
-      const MoonDAOContract = new web3.eth.Contract(MoonDAO.abi, MoonDAO.address).methods;
+      const PlanetDAOContract = new web3.eth.Contract(PlanetDAO.abi, PlanetDAO.address).methods;
 
-      let encodedCallData = MoonDAOContract.add_donation(ideas_id, `${amount * 1e18}`, window?.ethereum?.selectedAddress?.toLocaleLowerCase()).encodeABI();
+      let encodedCallData = PlanetDAOContract.add_donation(ideas_id, `${amount * 1e18}`, window?.ethereum?.selectedAddress?.toLocaleLowerCase()).encodeABI();
 
       callData.push(encodedCallData);
 
@@ -142,11 +142,11 @@ export function UtilsProvider({ children }) {
       callData.push(encodedCallData2.data);
 
       //Adding save information into smart contract
-      to.push(MoonDAO.address);
+      to.push(PlanetDAO.address);
 
       let web3 = new Web3(window.ethereum);
-      const MoonDAOContract = new web3.eth.Contract(MoonDAO.abi, MoonDAO.address).methods;
-      let encodedCallData3 = MoonDAOContract.add_donation(ideas_id, `${amount * 1e18}`, window?.ethereum?.selectedAddress?.toLocaleLowerCase()).encodeABI();
+      const PlanetDAOContract = new web3.eth.Contract(PlanetDAO.abi, PlanetDAO.address).methods;
+      let encodedCallData3 = PlanetDAOContract.add_donation(ideas_id, `${amount * 1e18}`, window?.ethereum?.selectedAddress?.toLocaleLowerCase()).encodeABI();
       callData.push(encodedCallData3);
 
       //Sending Batch Transaction
@@ -172,12 +172,12 @@ export function UtilsProvider({ children }) {
       callData.push('0x');
 
       //Adding save information into smart contract
-      to.push(MoonDAO.address);
+      to.push(PlanetDAO.address);
 
       let web3 = new Web3(window.ethereum);
-      const MoonDAOContract = new web3.eth.Contract(MoonDAO.abi, MoonDAO.address).methods;
+      const PlanetDAOContract = new web3.eth.Contract(PlanetDAO.abi, PlanetDAO.address).methods;
 
-      let encodedCallData = MoonDAOContract.join_community(dao_id, window?.ethereum?.selectedAddress?.toLocaleLowerCase()).encodeABI();
+      let encodedCallData = PlanetDAOContract.join_community(dao_id, window?.ethereum?.selectedAddress?.toLocaleLowerCase()).encodeABI();
 
       callData.push(encodedCallData);
 
@@ -196,7 +196,7 @@ export function UtilsProvider({ children }) {
     let ConvictionVotingContract = new ethers.Contract(ConvictionAddr, ConvictionVoting.abi, targetSigner);
 
     let web3 = new Web3(window.ethereum);
-    const MoonDAOContract = new web3.eth.Contract(MoonDAO.abi, MoonDAO.address).methods;
+    const PlanetDAOContract = new web3.eth.Contract(PlanetDAO.abi, PlanetDAO.address).methods;
 
     if (Number(window.ethereum.networkVersion) === 1287) {
       //If it is sending from Moonbase then it will not use Biconomy Batch Transactions
@@ -206,9 +206,9 @@ export function UtilsProvider({ children }) {
       let gasLimit = [];
 
       //Create Goal Ideas into smart contract
-      let encodedCallData = MoonDAOContract.create_goal_ideas_vote(Number(Goalid), Number(id), window?.ethereum?.selectedAddress?.toLocaleLowerCase()).encodeABI();
+      let encodedCallData = PlanetDAOContract.create_goal_ideas_vote(Number(Goalid), Number(id), window?.ethereum?.selectedAddress?.toLocaleLowerCase()).encodeABI();
 
-      to.push(MoonDAO.address);
+      to.push(PlanetDAO.address);
       callData.push(encodedCallData);
 
       //Conviction Vote
@@ -245,7 +245,7 @@ export function UtilsProvider({ children }) {
       } else if (voteType == 'abstain') {
         await window.sendTransaction(await ConvictionVotingContract.populateTransaction.voteSplitAbstain(Number(PollIndex), Number(AbstainInfo[0]), Number(AbstainInfo[1], Number(AbstainInfo[2]))));
       }
-      await window.sendTransaction(await MoonDAOContract.populateTransaction.create_goal_ideas_vote(Number(Goalid), Number(id), window?.ethereum?.selectedAddress?.toLocaleLowerCase()));
+      await window.sendTransaction(await PlanetDAOContract.populateTransaction.create_goal_ideas_vote(Number(Goalid), Number(id), window?.ethereum?.selectedAddress?.toLocaleLowerCase()));
     }
   }
 

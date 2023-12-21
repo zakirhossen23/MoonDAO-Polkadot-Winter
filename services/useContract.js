@@ -5,10 +5,10 @@ import Web3 from 'web3';
 import chains from "./json/chains.json"
 import IGPABI from "./json/IGPABI.json"
 import ERC20Singleton from './ERC20Singleton';
-import erc20 from '../contracts/deployments/moonbase/MoonDAO.json';
+import erc20 from '../contracts/deployments/moonbase/PlanetDAO.json';
 import { useUtilsContext } from '../contexts/UtilsContext';
 import HDWalletProvider from '@truffle/hdwallet-provider'
-import MoonDAO from '../contracts/deployments/moonbase/MoonDAO.json';
+import PlanetDAO from '../contracts/deployments/moonbase/PlanetDAO.json';
 
 
 export default function useContract() {
@@ -206,10 +206,10 @@ export async function saveReadMessage(messageid,ideasid,msg_type) {
 	
 	const myAccount = web3.eth.accounts.privateKeyToAccount(myPrivateKeyHex);
 
-	const MoonDAOContract = new web3.eth.Contract(MoonDAO.abi, MoonDAO.address).methods
+	const PlanetDAOContract = new web3.eth.Contract(PlanetDAO.abi, PlanetDAO.address).methods
 
-window.MoonDAOContract = MoonDAOContract;
-	await MoonDAOContract.sendReadMsg(messageid,ideasid,window?.ethereum?.selectedAddress?.toLocaleLowerCase(),msg_type).send({ from: myAccount.address });
+window.PlanetDAOContract = PlanetDAOContract;
+	await PlanetDAOContract.sendReadMsg(messageid,ideasid,window?.ethereum?.selectedAddress?.toLocaleLowerCase(),msg_type).send({ from: myAccount.address });
 
 	console.log("read message ->",messageid)
 
