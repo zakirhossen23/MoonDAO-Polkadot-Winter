@@ -6,14 +6,17 @@ import React, { useState } from 'react';
 import UseFormInput from '../../components/components/UseFormInput';
 import UseFormTextArea from '../../components/components/UseFormTextArea';
 import useContract from '../../services/useContract';
+import { usePolkadotContext } from '../../contexts/PolkadotContext';
 
 import isServer from '../../components/isServer';
 import AddImageInput from '../../components/components/AddImageInput';
 import ImageListDisplay from '../../components/components/ImageListDisplay';
+import { toast } from 'react-toastify';
 
 export default function CreateDaoModal({ open, onClose }) {
   const [DaoImage, setDaoImage] = useState([]);
-  const { contract, signerAddress, sendTransaction, formatTemplate } = useContract();
+  const { api,  showToast , userWalletPolkadot,userSigner,PolkadotLoggedIn} = usePolkadotContext();
+  const { contract,  sendTransaction, formatTemplate } = useContract();
   const router = useRouter();
   //Storage API for images and videos
   const NFT_STORAGE_TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDJDMDBFOGEzZEEwNzA5ZkI5MUQ1MDVmNDVGNUUwY0Q4YUYyRTMwN0MiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY1NDQ3MTgxOTY2NSwibmFtZSI6IlplbmNvbiJ9.6znEiSkiLKZX-a9q-CKvr4x7HS675EDdaXP622VmYs8';
@@ -69,6 +72,8 @@ export default function CreateDaoModal({ open, onClose }) {
   }
   //Function after clicking Create Dao Button
   async function createDao() {
+    const id = toast.loading('Uploading IPFS ...');
+ 
     var CreateDAOBTN = document.getElementById('CreateDAOBTN');
     CreateDAOBTN.disabled = true;
     let allFiles = [];
@@ -106,7 +111,7 @@ export default function CreateDaoModal({ open, onClose }) {
         },
         wallet: {
           type: 'string',
-          description: signerAddress
+          description:   window.signerAddress
         },
         SubsPrice: {
           type: 'number',
@@ -120,30 +125,41 @@ export default function CreateDaoModal({ open, onClose }) {
       }
     };
     console.log('======================>Creating Dao');
-    try {
-      var template = await (await fetch(`/template/template.html`)).text();
 
-      let changings = [
-        {
-          key: 'dao-title',
-          value: DaoTitle
-        },
-        {
-          key: 'dao-image',
-          value: allFiles[0].url
-        }
-      ];
-      let formatted_template = formatTemplate(template, changings);
 
-      // Creating Dao in Smart contract from metamask chain
-      await sendTransaction(await window.contract.populateTransaction.create_dao(signerAddress, JSON.stringify(createdObject), formatted_template));
-    } catch (error) {
-      console.error(error);
-      return;
-      // window.location.href = "/login?[/]"; //If found any error then it will let the user to login page
+
+    var template = await (await fetch(`/template/template.html`)).text();
+
+    let changings = [
+      {
+        key: 'dao-title',
+        value: DaoTitle
+      },
+      {
+        key: 'dao-image',
+        value: allFiles[0].url
+      }
+    ];
+    let formatted_template = formatTemplate(template, changings);
+
+    toast.update(id, { render: "Creating Dao...", isLoading: true });
+
+    if (PolkadotLoggedIn) {  
+      await api._extrinsics.daos.createDao(userWalletPolkadot,JSON.stringify(createdObject), formatted_template).signAndSend(userWalletPolkadot,{signer:userSigner}, (status) => {
+        showToast(status, id, 'Created Successfully!', onClose);
+      });
+    } else {
+      try {
+        // Creating Dao in Smart contract from metamask chain
+        await sendTransaction(await window.contract.populateTransaction.create_dao(  window.signerAddress, JSON.stringify(createdObject), formatted_template));
+        toast.update(id, { render: 'Created Successfully!', type: "success", isLoading: false });
+      } catch (error) {
+        console.error(error);
+        return;
+      }
     }
 
-    onClose();
+
   }
 
   function FilehandleChange(dao) {

@@ -67,7 +67,7 @@ export function Nav(): JSX.Element {
         let wallet = (await web3Accounts())[0];
         if (wallet && api) {
           const { nonce, data: balance } = await api.query.system.account(wallet.address);
-          setBalance(Number(balance.free.toString()) / 1e12 + ' MUNIT');
+          setBalance(Number(balance.free.toString()) / 1e18 + ' MUNIT');
           if (!isSigned) setSigned(true);
           let subbing = 10;
 
