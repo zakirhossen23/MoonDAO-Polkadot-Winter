@@ -61,16 +61,6 @@ export default function CreateDaoModal({ open, onClose }) {
     CheckTransaction();
   }
 
-  //Creating plugin function
-  async function CreatePlugin(src) {
-    const output = `<html><head></head><body><iframe src="${src}" style="width: 100%;height: 100%;" /></body></html>`;
-    // Download it
-    const blob = new Blob([output]);
-    const fileDownloadUrl = URL.createObjectURL(blob);
-    downloadURI(fileDownloadUrl, 'Generated Plugin.html');
-    console.log(output);
-  }
-
   async function CheckTransaction() {
     let params = new URL(window.location).searchParams;
     if (params.get('transactionHashes') !== null) {
@@ -231,7 +221,7 @@ export default function CreateDaoModal({ open, onClose }) {
             <div className="flex flex-col gap-2">
               <h6>Images</h6>
               <div className="flex gap-4">
-                <input className="file-input" hidden onChange={FilehandleChange} accept="image/*" id="DaoImage" name="DaoImage" type="file" multiple="multiple" />
+                <input className="file-input" hidden onChange={FilehandleChange} accept="image/*" id="DaoImage" name="DaoImage" type="file" />
                 <div className="flex flex-col gap-4">
                   <AddImageInput onClick={AddBTNClick} />
                   <ImageListDisplay images={DaoImage} onDeleteImage={DeleteSelectedImages} />

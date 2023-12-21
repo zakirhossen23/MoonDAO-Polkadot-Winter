@@ -140,7 +140,6 @@ export default function CreateGoalModal({ open, onClose }) {
     }
     for (let index2 = 0; index2 < goal.target.files.length; index2++) {
       setGoalImage((pre) => [...pre, goal.target.files[index2]]);
-      console.log('SET');
     }
   }
   if (!isServer()) {
@@ -211,7 +210,7 @@ export default function CreateGoalModal({ open, onClose }) {
             <div className="flex flex-col gap-2">
               <h6>Images</h6>
               <div className="content-start flex flex-row flex-wrap gap-4 justify-start overflow-auto relative text-center text-white w-full">
-                <input className="file-input" hidden onChange={FilehandleChange} accept="image/*" id="GoalImage" name="GoalImage" type="file" multiple="multiple" />
+                <input className="file-input" hidden onChange={FilehandleChange} accept="image/*" id="GoalImage" name="GoalImage" type="file" />
 
                 <div className="flex flex-col gap-4">
                   <AddImageInput onClick={AddBTNClick} />

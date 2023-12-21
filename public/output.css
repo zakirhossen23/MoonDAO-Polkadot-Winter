@@ -1214,6 +1214,10 @@ video {
   height: 100%;
 }
 
+.h-\[480px\]{
+  height: 480px;
+}
+
 .max-h-\[18\.75rem\]{
   max-height: 18.75rem;
 }
@@ -2035,6 +2039,11 @@ video {
 
 .stroke-\[0\.5rem\]{
   stroke-width: 0.5rem;
+}
+
+.object-contain{
+  -o-object-fit: contain;
+     object-fit: contain;
 }
 
 .object-cover{

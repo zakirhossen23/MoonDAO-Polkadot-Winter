@@ -51,13 +51,10 @@ export default function DesignDao() {
   }
 
   async function LoadEditor() {
-    console.log('1');
-
     if (typeof window == 'undefined' || contract === null || id === null) {
       return null;
     }
     await fetchContractData();
-    console.log('2');
     if (editor != null) return;
     await sleep(500);
     var editor = grapesjs.init({

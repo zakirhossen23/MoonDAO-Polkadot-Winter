@@ -104,6 +104,7 @@ export default function GrantIdeas() {
         const goalURI = JSON.parse(await contract.goal_uri(Number(Goalid))); //Getting goal URI
         let isvoted = false;
         const Allvotes = await contract.get_ideas_votes_from_goal(Number(Goalid), Number(id)); //Getting all votes
+
         for (let i = 0; i < Allvotes.length; i++) {
           const element = Allvotes[i];
           if (element === signerAddress) isvoted = true;
@@ -127,7 +128,6 @@ export default function GrantIdeas() {
         });
 
         setimageList(object.properties.allFiles);
-        console.log(object.properties.allFiles);
         setLoading(false);
 
         // Comments and Replies
@@ -195,7 +195,7 @@ export default function GrantIdeas() {
       console.error(error);
       return;
     }
-    window.location.reload();
+    setIdeasURI({ ...IdeasURI, isVoted: !IdeasURI.isVoted });
   }
 
   async function DonateToAddress() {
@@ -236,7 +236,6 @@ export default function GrantIdeas() {
   async function saveMessage(newComment) {
     await sendTransaction(await window.contract.populateTransaction.sendMsg(Number(ideaId), JSON.stringify(newComment), window?.ethereum?.selectedAddress?.toLocaleLowerCase()));
     removeElementFromArrayBYID(emptydata, 0, setemptydata);
-    console.log('Saved Messages');
   }
 
   async function sendReply(replyText, MessageId, MessageIndex) {
@@ -250,16 +249,9 @@ export default function GrantIdeas() {
     CommentsList[MessageIndex].replies.push(newReply);
     await sendTransaction(await window.contract.populateTransaction.sendReply(Number(MessageId), JSON.stringify(newReply), Number(ideaId), window?.ethereum?.selectedAddress?.toLocaleLowerCase()));
     removeElementFromArrayBYID(emptydata, 0, setemptydata);
-    console.log('Saved Reply');
   }
 
-  const uniqueAndSort = (comments) => {
-    console.log('comments', comments);
-    const ebat = comments.sort((a, b) => new Date(b.date) - new Date(a.date));
-    console.log(ebat);
-
-    return ebat;
-  };
+  const uniqueAndSort = (comments) => Array.from(new Map(comments.map((item) => [item.id, item])).values()).sort((a, b) => new Date(b.date) - new Date(a.date));
 
   return (
     <>
