@@ -241,13 +241,13 @@ export default function CreateDaoModal({ open, onClose }) {
               <h6>Images</h6>
               <div className="flex gap-4">
                 <input className="file-input" hidden onChange={FilehandleChange} id="DaoImage" name="DaoImage" type="file" multiple="multiple" />
-                <div className="flex gap-4">
+                <div className="flex flex-wrap gap-4">
                   {DaoImage.map((item, i) => {
                     return (
                       <div key={i} className="flex gap-4">
                         <button onClick={DeleteSelectedImages} name="deleteBTN" id={i}>
                           {item.type.includes('image') ? (
-                            <img src={URL.createObjectURL(item)} />
+                            <img className='h-[128px] w-[170px] object-cover rounded' src={URL.createObjectURL(item)} />
                           ) : (
                             <>
                               <div className="Dao-Uploaded-File-Container">
