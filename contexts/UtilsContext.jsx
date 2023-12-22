@@ -179,7 +179,7 @@ export function UtilsProvider({ children }) {
       let web3 = new Web3(window.ethereum);
       const PlanetDAOContract = new web3.eth.Contract(PlanetDAO.abi, PlanetDAO.address).methods;
 
-      let encodedCallData = PlanetDAOContract.join_community(dao_id, window?.ethereum?.selectedAddress?.toLocaleLowerCase()).encodeABI();
+      let encodedCallData = PlanetDAOContract.join_community(dao_id, Number(window.userid)).encodeABI();
 
       callData.push(encodedCallData);
 

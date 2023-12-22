@@ -150,6 +150,8 @@ export default function GrantIdeas() {
           const object = JSON.parse(commentInfo.message);
           let newComment = {
             address: object.address,
+            user_info: object?.userid != undefined ? await getUserInfoById( object?.userid) : {fullName:object.address,imgIpfs:""},
+
             message: object.message,
             date: object.date,
             id: object.id,
@@ -164,6 +166,7 @@ export default function GrantIdeas() {
             const object = JSON.parse(replyInfo.message);
             let newReply = {
               id: object.id,
+              user_info: object?.userid != undefined ? await getUserInfoById( object?.userid) : {fullName:object.address,imgIpfs:""},
               message: object.message,
               address: object.address,
               date: object.date
@@ -172,9 +175,9 @@ export default function GrantIdeas() {
           });
 
           CommentsList.push(newComment);
-          setCommentsList(CommentsList);
+          removeElementFromArrayBYID(emptydata, 0, setemptydata);
         });
-        removeElementFromArrayBYID(emptydata, 0, setemptydata);
+        setCommentsList(CommentsList);
       }
     } catch (error) {
       console.error(error);
@@ -231,6 +234,7 @@ export default function GrantIdeas() {
 
     let messLatestId = Number(await contract._message_ids());
     let newComment = {
+      userid:Number(window.userid),
       address: window?.ethereum?.selectedAddress?.toLocaleLowerCase().toString(),
       message: Comment,
       date: new Date().toISOString(),
@@ -253,6 +257,7 @@ export default function GrantIdeas() {
     let newReply = {
       id: replyLatestId,
       message: replyText,
+      userid:Number(window.userid),
       address: window?.ethereum?.selectedAddress?.toLocaleLowerCase().toString(),
       date: new Date().toISOString()
     };
@@ -274,9 +279,9 @@ export default function GrantIdeas() {
         <div className={`gap-8 flex flex-col w-full bg-gohan pt-10 pb-6 border-beerus border`}>
           <div className="container flex w-full justify-between relative">
             <div className="flex flex-col gap-1">
-              <h5 className="font-semibold">{IdeasURI?.daoURI?.Title} &gt; {IdeasURI?.goalURI?.properties?.Title?.description} &gt; {IdeasURI?.Title}</h5>
-              <h1 className="text-moon-32 font-bold">{IdeasURI.Title}</h1>
-              <h3 className="flex gap-2 whitespace-nowrap">
+              <Loader loading={loading} width={300} element={<h5 className="font-semibold">{IdeasURI?.daoURI?.Title} &gt; {IdeasURI?.goalURI?.properties?.Title?.description} &gt; {IdeasURI?.Title}</h5>} />
+              <Loader loading={loading} width={300} element={<h1 className="text-moon-32 font-bold">{IdeasURI.Title}</h1>} />
+              <Loader loading={loading} width={770} element={<h3 className="flex gap-2 whitespace-nowrap">
                 <div>
                   Donated <span className="text-hit font-semibold">DEV {IdeasURI.donation}</span>
                 </div>
@@ -288,7 +293,7 @@ export default function GrantIdeas() {
                 <div className="flex">
                   Created by &nbsp;<a href={'/Profile/' + IdeasURI?.user_info?.id} className="truncate text-piccolo max-w-[120px]">@{IdeasURI?.user_info?.fullName}</a>
                 </div>
-              </h3>
+              </h3>} />
             </div>
             <div className="flex flex-col gap-2">
               {!IdeasURI.isOwner && (
@@ -298,7 +303,7 @@ export default function GrantIdeas() {
               )}
               {(!IdeasURI.isOwner) && (
                 IdeasURI.isVoted ? (
-                  <Button iconLeft={<GenericHeart fill="red" color="red" /> } variant="secondary" disabled={true}>
+                  <Button iconLeft={<GenericHeart fill="red" color="red" />} variant="secondary" disabled={true}>
                     Voted
                   </Button>
                 ) : (<Button iconLeft={<GenericHeart />} variant="secondary" onClick={VoteIdea}>
@@ -312,7 +317,7 @@ export default function GrantIdeas() {
 
         <div className="container flex flex-col gap-6">
           <p>{IdeasURI.Description}</p>
-          <Loader
+          <div className='flex justify-center'><Loader
             element={
 
               imageList.length > 1 ? (
@@ -321,8 +326,8 @@ export default function GrantIdeas() {
                 </>
               ) : (
                 <>
-                  {imageList[0] && (
-                    <div className="relative w-auto max-[w-720px] h-[480px] object-contain">
+                   {imageList[0] && (
+                     <div className="relative w-auto max-[w-720px] h-[480px] object-contain">
                       <Image src={imageList[0].url} fill className="object-contain" />
                     </div>
                   )}
@@ -332,7 +337,7 @@ export default function GrantIdeas() {
             loading={loading}
             width={800}
             height={500}
-          />{' '}
+          /></div>{' '}
           <div className="full-w">
             <form onSubmit={PostComment} className="full-w flex flex-col gap-2">
               {CommentInput}
@@ -343,7 +348,7 @@ export default function GrantIdeas() {
               </div>
             </form>
           </div>
-          <div className="flex flex-col gap-6 pb-8">{uniqueAndSort(CommentsList).map((listItem, index) => (listItem.address !== '' ? <CommentBox address={listItem.address} MessageID={listItem.id} MessageIndex={index} date={listItem.date} sendReply={sendReply} message={listItem.message} replies={listItem.replies} id={listItem.id} key={listItem.id} /> : <></>))}</div>
+          <div className="flex flex-col gap-6 pb-8">{uniqueAndSort(CommentsList).map((listItem, index) => (listItem.address !== '' ? <CommentBox user_info={listItem.user_info} address={listItem.address} MessageID={listItem.id} MessageIndex={index} date={listItem.date} sendReply={sendReply} message={listItem.message} replies={listItem.replies} id={listItem.id} key={listItem.id} /> : <></>))}</div>
         </div>
       </div>
 

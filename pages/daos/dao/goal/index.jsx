@@ -81,7 +81,7 @@ export default function Goal() {
             const element = Allvotes[i];
             if (element == Number(window.userid)) isvoted = true;
           }
-
+          if (totalIdeas[i] == "") continue;
           const object = JSON.parse(totalIdeas[i]);
           if (object) {
             let donation = Number((await contract._ideas_uris(Number(ideasId))).donation) / 1e18;
@@ -97,7 +97,7 @@ export default function Goal() {
               logo: object.properties.logo.description?.url,
               allfiles: object.properties.allfiles,
               isOwner: object.properties.user_id.description == Number(window.userid) ? true : false,
-              isVoted:isvoted
+              isVoted: isvoted
             });
           }
         }
@@ -126,7 +126,7 @@ export default function Goal() {
       console.error('Could not load contract');
     }
   }
-  async function DonateToIdeas(ideasId,wallet) {
+  async function DonateToIdeas(ideasId, wallet) {
     setDonatemodalShow(true);
     setSelectedIdeasId(ideasId);
     setSelectedIdeasWallet(wallet)
@@ -162,11 +162,12 @@ export default function Goal() {
       </Head>
       <div className="flex items-center flex-col gap-8">
         <div className="gap-8 flex flex-col w-full bg-gohan pt-10 border-beerus border">
+
           <div className="container flex w-full justify-between">
             <div className="flex flex-col gap-1 overflow-hidden">
-              <h5 className="font-semibold">{GoalURI?.Dao?.Title} &gt; Goals</h5>
-              <h1 className="text-moon-32 font-bold">{GoalURI.Title}</h1>
-              <h3 className="flex gap-2 whitespace-nowrap">
+              <Loader loading={loading} width={300} element={<h5 className="font-semibold">{GoalURI?.Dao?.Title} &gt; Goals</h5>} />
+              <Loader loading={loading} width={300} element={<h1 className="text-moon-32 font-bold">{GoalURI.Title}</h1>} />
+              <Loader loading={loading} width={770} element={ <h3 className="flex gap-2 whitespace-nowrap">
                 <div>
                   <span className="text-hit font-semibold">DEV {GoalURI.total_donated}</span> of DEV {GoalURI.Budget}
                 </div>
@@ -176,7 +177,7 @@ export default function Goal() {
                 <div className="flex">
                   Created by &nbsp;<a href={'/Profile/' + GoalURI?.user_info?.id} className="truncate text-piccolo max-w-[120px]">@{GoalURI?.user_info?.fullName.toString()}</a>
                 </div>
-              </h3>
+              </h3>} />
             </div>
             <div className="flex flex-col gap-2">
               {
@@ -184,10 +185,6 @@ export default function Goal() {
                   Create idea
                 </Button></> : <></>
               }
-
-              {/* <Button iconLeft={<GenericEdit />} variant="secondary">
-                Edit
-              </Button> */}
             </div>
           </div>
           <div className="container">
@@ -211,7 +208,7 @@ export default function Goal() {
         )}
         {tabIndex === 1 && (
           <div className="flex flex-col gap-8 container items-center">
-            <Loader element={list.length > 0 ? list.map((listItem, index) => <IdeaCard onClickVote={() => { VoteIdea(listItem.ideasId, index) }} onClickDonate={()=>{DonateToIdeas(listItem.ideasId,listItem.wallet)}} item={listItem} key={index} />) : <EmptyState icon={<GenericIdea className="text-moon-48" />} label="This goal doesn’t have any ideas yet." />} width={768} height={236} many={3} loading={loading} />{' '}
+            <Loader element={list.length > 0 ? list.map((listItem, index) => <IdeaCard onClickVote={() => { VoteIdea(listItem.ideasId, index) }} onClickDonate={() => { DonateToIdeas(listItem.ideasId, listItem.wallet) }} item={listItem} key={index} />) : <EmptyState icon={<GenericIdea className="text-moon-48" />} label="This goal doesn’t have any ideas yet." />} width={768} height={236} many={3} loading={loading} />{' '}
           </div>
         )}
       </div>

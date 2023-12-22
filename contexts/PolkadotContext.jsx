@@ -13,7 +13,7 @@ const AppContext = createContext({
   userWalletPolkadot: "",
   userSigner:null,
   PolkadotLoggedIn:false,
-  GetAllDaos:()=>{},
+  GetAllDaos:async ()=>{},
   getUserInfoById: ()=>{}
 });
 
@@ -102,10 +102,12 @@ export function PolkadotProvider({ children }) {
         let user_info = await getUserInfoById(object.properties?.user_id?.description)
         arr.push({
           //Pushing all data into array
+          id : i,
           daoId: prefix + i,
           Title: object.properties.Title.description,
           Start_Date: object.properties.Start_Date.description,
           user_info: user_info,
+          user_id: object.properties?.user_id?.description,
           logo: object.properties.logo.description?.url,
           wallet: object.properties.wallet.description,
           SubsPrice: object.properties?.SubsPrice?.description
