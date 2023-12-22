@@ -65,6 +65,7 @@ const LoginCard = ({ step, onConnectMetamask, onConnectPolkadot, setStep }: { st
     for (let i = 0; i < totalUserCount; i++) {
       const element = await api._query.users.userById(i);
       if (element.email.toString()==Email && element.password.toString() == Password ){
+        localStorage.setItem("user_id", (i).toString());
         toast.update(ToastId, { 
           render: "Logged in Successfully!", type: "success", isLoading: false ,  
          autoClose: 1000,
