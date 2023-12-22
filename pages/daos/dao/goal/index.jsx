@@ -84,7 +84,7 @@ export default function Goal() {
           End_Date: goalURI.properties.End_Date?.description,
           wallet: goalURI.properties.wallet.description,
           logo: goalURI.properties.logo.description?.url,
-          isOwner: goalURI.properties.wallet.description.toString().toLocaleLowerCase() === signerAddress.toString().toLocaleLowerCase() ? true : false
+          isOwner: goalURI.properties.user_id.description === Number(window.userid) ? true : false
         });
 
         setLoading(false);

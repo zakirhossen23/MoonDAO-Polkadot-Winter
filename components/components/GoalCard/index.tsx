@@ -23,7 +23,7 @@ const GoalCard = ({ item, preview }: { item: Goal; preview?: boolean }) => {
             <p>reached of DEV {item.Budget} goal</p>
           </div>
           <div>
-            <p className="font-semibold text-moon-20 text-hit">4</p>
+            <p className="font-semibold text-moon-20 text-hit">{item?.ideasCount?.toString()}</p>
             <p>Ideas</p>
           </div>
           <Link href={`/daos/dao/goal?[${item.goalId}]`}>

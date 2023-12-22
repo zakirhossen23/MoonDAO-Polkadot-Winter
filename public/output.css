@@ -1181,6 +1181,10 @@ video {
   height: 32%;
 }
 
+.h-\[480px\]{
+  height: 480px;
+}
+
 .h-\[64\%\]{
   height: 64%;
 }
@@ -1212,10 +1216,6 @@ video {
 
 .h-full{
   height: 100%;
-}
-
-.h-\[480px\]{
-  height: 480px;
 }
 
 .max-h-\[18\.75rem\]{

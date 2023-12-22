@@ -35,7 +35,7 @@ const DAOCard = ({ item }: { item: Dao }) => {
           <p className="font-semibold text-moon-18">{item.Title}</p>
           <p>Subscription of ${item.SubsPrice} p/month</p>
           <p>
-            Managed by <span className="text-piccolo">{item.wallet}</span>
+            Managed by <a href={'/Profile/' + item?.user_info?.id?.toString()} className="text-piccolo">@{item?.user_info?.fullName.toString()}</a>
           </p>
           {!hasAlreadyPast && <p className="text-hit font-bold">Opens in {formattedDuration}</p>}
           <Link href={`/daos/dao?[${item.daoId}]`}>

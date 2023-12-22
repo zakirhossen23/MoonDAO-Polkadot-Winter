@@ -8,7 +8,9 @@ import isServer from '../../components/isServer';
 import useContract from '../../services/useContract';
 import AddImageInput from '../../components/components/AddImageInput';
 import ImageListDisplay from '../../components/components/ImageListDisplay';
-import Image from 'next/image';
+
+import { toast } from 'react-toastify';
+
 
 export default function CreateGoalModal({ open, onClose }) {
   const [GoalImage, setGoalImage] = useState([]);
@@ -73,6 +75,7 @@ export default function CreateGoalModal({ open, onClose }) {
 
   //Function after clicking Create Goal Button
   async function createGoal() {
+    const ToastId = toast.loading('Uploading IPFS ...');
     let allFiles = [];
     for (let index = 0; index < GoalImage.length; index++) {
       //Gathering all files link
@@ -106,6 +109,10 @@ export default function CreateGoalModal({ open, onClose }) {
           type: 'string',
           description: EndDate
         },
+        user_id:{
+          type:'string',
+          description: window.userid
+        },
         wallet: {
           type: 'string',
           description: signerAddress
@@ -118,10 +125,15 @@ export default function CreateGoalModal({ open, onClose }) {
       }
     };
     console.log('======================>Creating Goal');
+    toast.update(ToastId, { render: "Creating Goal...", isLoading: true });
 
     try {
       // Creating Goal in Smart contract
-      await sendTransaction(await window.contract.populateTransaction.create_goal(JSON.stringify(createdObject), Number(id), signerAddress.toLocaleLowerCase()));
+      await sendTransaction(await window.contract.populateTransaction.create_goal(JSON.stringify(createdObject), id, Number(window.userid)));
+      toast.update(ToastId, { render: 'Created Successfully!', type: "success", isLoading: false,  autoClose: 1000,
+      closeButton: true,
+      closeOnClick: true,
+      draggable: true  });
       onClose();
     } catch (error) {
       console.error(error);

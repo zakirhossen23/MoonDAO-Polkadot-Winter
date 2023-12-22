@@ -12,7 +12,8 @@ const AppContext = createContext({
   userInfo:{},
   userWalletPolkadot: "",
   userSigner:null,
-  PolkadotLoggedIn:false
+  PolkadotLoggedIn:false,
+  getUserInfoById: ()=>{}
 });
 
 export function PolkadotProvider({ children }) {
@@ -38,6 +39,14 @@ export function PolkadotProvider({ children }) {
     }
   }
 
+  async function getUserInfoById(userid){
+    if (api){
+      return await api.query.users.userById(userid);
+    }else{
+      return {};
+    }
+  }
+
 
   useEffect(() => {
     (async function () {
@@ -56,19 +65,24 @@ export function PolkadotProvider({ children }) {
   
         const {web3Enable,web3Accounts, web3FromAddress} = require('@polkadot/extension-dapp');
       
-        if (window.localStorage.getItem('loggedin') == "true" && window.localStorage.getItem('login-type') == "polkadot" ){
-          setPolkadotLoggedIn(true);
-          await web3Enable('PlanetDAO');
-          let wallet = (await web3Accounts())[0];
-          const injector = await web3FromAddress(wallet.address);
-
-          setUserSigner(injector.signer);
-
-          setUserWalletPolkadot(wallet.address)
-          window.signerAddress = wallet.address;
+        if (window.localStorage.getItem('loggedin') == "true"  ){
+        
           let userid = window.localStorage.getItem('user_id');
+          window.userid = userid;
           const userInformation = await _api.query.users.userById(userid);
-          setUserInfo(userInformation);
+          setUserInfo(userInformation); 
+          
+          if (window.localStorage.getItem('login-type') == "polkadot"){
+            setPolkadotLoggedIn(true);
+            await web3Enable('PlanetDAO');
+            let wallet = (await web3Accounts())[0];
+            const injector = await web3FromAddress(wallet.address);
+  
+            setUserSigner(injector.signer);
+  
+            setUserWalletPolkadot(wallet.address)
+            window.signerAddress = wallet.address;
+          }
         }
       }catch(e){
 
@@ -78,7 +92,7 @@ export function PolkadotProvider({ children }) {
   },[])
 
 
-  return <AppContext.Provider value={{api:api,deriveAcc:deriveAcc,showToast:showToast,userWalletPolkadot:userWalletPolkadot,userSigner:userSigner,PolkadotLoggedIn:PolkadotLoggedIn, userInfo:userInfo}}>{children}</AppContext.Provider>;
+  return <AppContext.Provider value={{api:api,deriveAcc:deriveAcc,showToast:showToast,getUserInfoById:getUserInfoById,userWalletPolkadot:userWalletPolkadot,userSigner:userSigner,PolkadotLoggedIn:PolkadotLoggedIn, userInfo:userInfo}}>{children}</AppContext.Provider>;
 }
 
 export const usePolkadotContext = () => useContext(AppContext);

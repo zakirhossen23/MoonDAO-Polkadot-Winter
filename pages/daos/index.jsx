@@ -10,7 +10,7 @@ import CreateDaoModal from '../../features/CreateDaoModal';
 import { usePolkadotContext } from '../../contexts/PolkadotContext';
 
 export default function DAOs() {
-  const { api, showToast, userWalletPolkadot, PolkadotLoggedIn } = usePolkadotContext();
+  const { api, showToast, userWalletPolkadot,getUserInfoById, PolkadotLoggedIn } = usePolkadotContext();
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showCreateDaoModal, setShowCreateDaoModal] = useState(false);
@@ -27,18 +27,20 @@ export default function DAOs() {
     setList(arr);
   }
 
-  function InsertData(totalDAOCount, allDAOs, prefix) {
+  async function InsertData(totalDAOCount, allDAOs, prefix) {
     const arr = [];
     for (let i = 0; i < totalDAOCount; i++) {
       //total dao number Iteration
       const object = JSON.parse(allDAOs[i]);
 
       if (object) {
+        let user_info = await getUserInfoById(object.properties?.user_id?.description)
         arr.push({
           //Pushing all data into array
           daoId: prefix + i,
           Title: object.properties.Title.description,
           Start_Date: object.properties.Start_Date.description,
+          user_info: user_info,
           logo: object.properties.logo.description?.url,
           wallet: object.properties.wallet.description,
           SubsPrice: object.properties?.SubsPrice?.description
@@ -66,6 +68,7 @@ export default function DAOs() {
         }
 
         let arr = InsertData(totalDAOCount, await totalDao(), "p_");
+        setLoading(false);
         return arr;
       }
     } catch (error) { }
@@ -80,6 +83,7 @@ export default function DAOs() {
         const totalDao = await contract.get_all_daos(); //Getting total dao (Number)
         let totalDAOCount = Object.keys(totalDao).length;
         let arr = InsertData(totalDAOCount, totalDao, "m_");
+        setLoading(false);
         return arr;
       }
     } catch (error) { }

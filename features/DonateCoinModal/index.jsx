@@ -88,7 +88,7 @@ export default function DonateCoin({ ideasid, show, onHide, address }) {
         token: output?.wrappedAsset
       });
       // Saving Donation count on smart contract
-      await sendTransaction(await window.contract.populateTransaction.add_donation(Number(ideasid), ethers.utils.parseUnits(amount.value, 'gwei'), CurrentAddress));
+      await sendTransaction(await window.contract.populateTransaction.add_donation(Number(ideasid), ethers.utils.parseUnits(amount.value, 'gwei'), Number(window.userid)));
     }
 
     // if (Number(window.ethereum.networkVersion) === 1287) {

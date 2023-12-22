@@ -120,6 +120,10 @@ export default function CreateIdeaModal({ show, onClose }) {
           type: 'string',
           description: signerAddress
         },
+        user_id: {
+          type: 'string',
+          description: window.userid
+        },
         logo: {
           type: 'string',
           description: allFiles[0]
@@ -130,7 +134,7 @@ export default function CreateIdeaModal({ show, onClose }) {
     console.log('======================>Creating Ideas');
     try {
       // Creating Ideas in Smart contract
-      await sendTransaction(await window.contract.populateTransaction.create_ideas(JSON.stringify(createdObject), Number(id), smart_contracts, signerAddress.toLocaleLowerCase()));
+      await sendTransaction(await window.contract.populateTransaction.create_ideas(JSON.stringify(createdObject), Number(id), smart_contracts, Number(window.userid)));
     } catch (error) {
       console.error(error);
       return;

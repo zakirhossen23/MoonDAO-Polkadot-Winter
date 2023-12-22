@@ -123,7 +123,7 @@ export default function GrantIdeas() {
           votesAmount: Object.keys(Allvotes).length,
           donation: Number((await contract._ideas_uris(Number(id))).donation) / 1e18,
           isVoted: isvoted,
-          isOwner: object.properties.wallet.description.toString().toLocaleLowerCase() === signerAddress.toString().toLocaleLowerCase() ? true : false,
+          isOwner: object.properties.user_id.description === Number(window.userid) ? true : false,
           allfiles: object.properties.allFiles
         });
 
@@ -190,7 +190,7 @@ export default function GrantIdeas() {
       return;
     }
     try {
-      await sendTransaction(await window.contract.populateTransaction.create_goal_ideas_vote(Number(Goalid), Number(id), signerAddress));
+      await sendTransaction(await window.contract.populateTransaction.create_goal_ideas_vote(Number(Goalid), Number(id), signerAddress,Number(window.userid)));
     } catch (error) {
       console.error(error);
       return;
@@ -234,7 +234,7 @@ export default function GrantIdeas() {
   }
 
   async function saveMessage(newComment) {
-    await sendTransaction(await window.contract.populateTransaction.sendMsg(Number(ideaId), JSON.stringify(newComment), window?.ethereum?.selectedAddress?.toLocaleLowerCase()));
+    await sendTransaction(await window.contract.populateTransaction.sendMsg(Number(ideaId), JSON.stringify(newComment), window?.ethereum?.selectedAddress?.toLocaleLowerCase(),Number(window.userid)));
     removeElementFromArrayBYID(emptydata, 0, setemptydata);
   }
 
@@ -247,7 +247,7 @@ export default function GrantIdeas() {
       date: new Date().toISOString()
     };
     CommentsList[MessageIndex].replies.push(newReply);
-    await sendTransaction(await window.contract.populateTransaction.sendReply(Number(MessageId), JSON.stringify(newReply), Number(ideaId), window?.ethereum?.selectedAddress?.toLocaleLowerCase()));
+    await sendTransaction(await window.contract.populateTransaction.sendReply(Number(MessageId), JSON.stringify(newReply), Number(ideaId), Number(window.userid)));
     removeElementFromArrayBYID(emptydata, 0, setemptydata);
   }
 

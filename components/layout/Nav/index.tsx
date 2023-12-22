@@ -16,7 +16,7 @@ export function Nav(): JSX.Element {
   const { api, userInfo } = usePolkadotContext();
   const [acc, setAcc] = useState('');
   const [logo, setLogo] = useState('');
-  const [accFull, setAccFull] = useState('');
+  const [user_id, setUser_id] = useState(-1);
   const [Balance, setBalance] = useState('');
   const [count, setCount] = useState(0);
   const [isSigned, setSigned] = useState(false);
@@ -31,21 +31,21 @@ export function Nav(): JSX.Element {
       return;
     }
     if (window.localStorage.getItem('login-type') === 'metamask') {
-      if (window?.ethereum?.selectedAddress?.toLocaleLowerCase() != null) {
+      if (window?.ethereum?.selectedAddress?.toLocaleLowerCase() != null && api  && userInfo) {
         try {
           const Web3 = require('web3');
           const web3 = new Web3(window.ethereum);
           let Balance = await web3.eth.getBalance(window?.ethereum?.selectedAddress?.toLocaleLowerCase());
-          let subbing = 10;
-
-          if (window.innerWidth > 500) {
-            subbing = 20;
-          }
+        
+       
           let token = ' ' + getChain(Number(window.ethereum.networkVersion)).nativeCurrency.symbol;
 
-          setAcc(window?.ethereum?.selectedAddress?.toLocaleLowerCase().toString().substring(0, subbing) + '...');
-          setAccFull(window?.ethereum?.selectedAddress?.toLocaleLowerCase());
+          setAcc(userInfo.fullName.toString());
+          setLogo(userInfo.imgIpfs.toString());
+          setUser_id(window.userid);
+
           setBalance(Balance / 1e18 + token);
+
           if (!isSigned) setSigned(true);
 
           window.document.getElementById('withoutSign').style.display = 'none';
@@ -77,7 +77,7 @@ export function Nav(): JSX.Element {
 
           setAcc(userInfo.fullName.toString());
           setLogo(userInfo.imgIpfs.toString());
-          setAccFull(wallet.address?.toLocaleUpperCase());
+          setUser_id(window.userid);
 
           window.document.getElementById('withoutSign').style.display = 'none';
           window.document.getElementById('withSign').style.display = '';
@@ -158,7 +158,7 @@ export function Nav(): JSX.Element {
               <div className="wallet" style={{ height: 48, display: 'flex', alignItems: 'center' }}>
                 <div className="wallet__wrapper gap-4 flex items-center">
                   <div className="wallet__info flex flex-col items-end">
-                    <a href={'/Profile/' + accFull} rel="noreferrer" className="text-primary">
+                    <a href={'/Profile/' + user_id} rel="noreferrer" className="text-primary">
                       <div className="font-medium text-whis">{acc}</div>
                     </a>
                     <div className="text-goten font-semibold whitespace-nowrap">{Balance}</div>
@@ -176,7 +176,7 @@ export function Nav(): JSX.Element {
 
                     <Dropdown.Options className="bg-gohan w-48 min-w-0">
                       <Dropdown.Option>
-                        <Link href={`/Profile/${accFull}`} passHref>
+                        <Link href={`/Profile/${user_id}`} passHref>
                           <MenuItem>Go to my profile</MenuItem>
                         </Link>
                       </Dropdown.Option>

@@ -47,7 +47,7 @@ export default function CreateDaoModal({ open, onClose }) {
   const [SubsPrice, SubsPriceInput] = UseFormInput({
     defaultValue: '',
     type: 'text',
-    placeholder: 'Subscription per month (in DEV)',
+    placeholder: 'Subscription per month (in $)',
     id: 'subs_price'
   });
 
@@ -113,6 +113,10 @@ export default function CreateDaoModal({ open, onClose }) {
           type: 'string',
           description: window.signerAddress
         },
+        user_id: {
+          type: 'string',
+          description: window.userid
+        },
         SubsPrice: {
           type: 'number',
           description: SubsPrice
@@ -149,8 +153,14 @@ export default function CreateDaoModal({ open, onClose }) {
     } else {
       try {
         // Creating Dao in Smart contract from metamask chain
-        await sendTransaction(await window.contract.populateTransaction.create_dao(window.signerAddress, JSON.stringify(createdObject), formatted_template));
-        toast.update(id, { render: 'Created Successfully!', type: 'success', isLoading: false });
+        await sendTransaction(await window.contract.populateTransaction.create_dao(window.signerAddress, JSON.stringify(createdObject), formatted_template,Number(window.userid)));
+        toast.update(id, {
+          render: 'Created Successfully!', type: "success", isLoading: false, autoClose: 1000,
+          closeButton: true,
+          closeOnClick: true,
+          draggable: true
+        });
+        onClose();
       } catch (error) {
         console.error(error);
         return;
