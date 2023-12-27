@@ -8,10 +8,10 @@ import { usePolkadotContext } from '../../../contexts/PolkadotContext';
 import { toast } from 'react-toastify';
 
 
-const LoginCard = ({ step, onConnectMetamask, onConnectPolkadot, setStep }: { step: number; onConnect: MouseEventHandler<HTMLButtonElement>; onConnectMetamask: MouseEventHandler<HTMLButtonElement>; onConnectPolkadot: MouseEventHandler<HTMLButtonElement>; setStep:Dispatch<SetStateAction<number>> }) => {
+const LoginCard = ({ step, onConnectMetamask, onConnectPolkadot, setStep }: { step: number; onConnect: MouseEventHandler<HTMLButtonElement>; onConnectMetamask: MouseEventHandler<HTMLButtonElement>; onConnectPolkadot: MouseEventHandler<HTMLButtonElement>; setStep: Dispatch<SetStateAction<number>> }) => {
 
 
-  const { api, deriveAcc, showToast } = usePolkadotContext();
+  const { api, deriveAcc, showToast,EasyToast } = usePolkadotContext();
 
 
   const [Email, EmailInput] = UseFormInput({
@@ -38,21 +38,22 @@ const LoginCard = ({ step, onConnectMetamask, onConnectPolkadot, setStep }: { st
           user_data = JSON.parse(data.toString())
         }
       });
-      if (user_data.length > 0){
+      if (user_data.length > 0) {
         localStorage.setItem("user_id", (user_data[0]).toString());
         if (user_data[1] == true) {
-          toast.update(id, { 
-            render: "Logged in Successfully!", type: "success", isLoading: false ,  
-           autoClose: 1000,
-          closeButton: true,
-          closeOnClick: true,
-          draggable: true});
+          toast.update(id, {
+            render: "Logged in Successfully!", type: "success", isLoading: false,
+            autoClose: 1000,
+            closeButton: true,
+            closeOnClick: true,
+            draggable: true
+          });
           setStep(2); return;
         }
-      }else{
+      } else {
         toast.update(id, { render: "Incorrect email or password!", type: "error", isLoading: false });
       }
-    
+
     }
     await api._extrinsics.users.loginUser(Email, Password).signAndSend(deriveAcc, ({ status, events }) => { showToast(status, id, "Logged in Successfully!", doAfter, false, events); });
 
@@ -61,21 +62,21 @@ const LoginCard = ({ step, onConnectMetamask, onConnectPolkadot, setStep }: { st
   async function OnClickLoginStep1() {
     const ToastId = toast.loading("Logging in  ...")
     let totalUserCount = Number(await api._query.users.userIds());
-       
+    var  found = false
     for (let i = 0; i < totalUserCount; i++) {
       const element = await api._query.users.userById(i);
-      if (element.email.toString()==Email && element.password.toString() == Password ){
+      if (element.email.toString() == Email && element.password.toString() == Password) {
+        found = true
         localStorage.setItem("user_id", (i).toString());
-        toast.update(ToastId, { 
-          render: "Logged in Successfully!", type: "success", isLoading: false ,  
-         autoClose: 1000,
-        closeButton: true,
-        closeOnClick: true,
-        draggable: true});
+        EasyToast("Logged in Successfully!", "success",true,ToastId.toString())
+    
         setStep(2); return;
-      }else{
-        toast.update(ToastId, { render: "Incorrect email or password!", type: "error", isLoading: false });
+      } else {
+        found = false
       }
+    }
+    if (!found) {
+      EasyToast("Incorrect email or password!", "error",true,ToastId.toString())
     }
 
 

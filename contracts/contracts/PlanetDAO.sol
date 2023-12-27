@@ -76,6 +76,18 @@ contract PlanetDAO {
         bool comment;
         bool reply;
     }
+    
+    struct feed_struct {
+        uint256 user_id;
+        bool dao;
+        bool joined;
+        bool goal;
+        bool ideas;
+        bool vote;
+        bool donation;
+        bool comment;
+        bool reply;
+    }
     uint256 public _dao_ids;
     uint256 public _donations_ids;
     uint256 public _goal_ids;
@@ -86,6 +98,7 @@ contract PlanetDAO {
     uint256 public _message_ids;
     uint256 public _message_read_ids;
     uint256 public _reply_ids;
+    uint256 public _feed_ids;
     mapping(uint256 => dao_uri_struct) public _dao_uris; //_dao_ids              => (Dao)                    Dao Wallet + Dao URI   + Finished
     mapping(uint256 => string) public _template_uris; //_dao_ids              => (Dao)                   Template HTML Code
     mapping(uint256 => join_struct) public _joined_person; //_join_ids             => (Dao)                  join_struct
@@ -93,6 +106,7 @@ contract PlanetDAO {
     mapping(uint256 => goal_uri_struct) public _goal_uris; //_goal_ids             => (Goal)                   Dao ID + Goal URI
     mapping(uint256 => ideas_uri_struct) public _ideas_uris; //_ideas_ids            => (Ideas)                  Goal ID + Ideas URI
     mapping(uint256 => uint256) public _donated; //uint256            => (Donated to ideas)                amount
+    mapping(uint256 => string) public _feeds; //_feed_ids            => (Feeds)
     mapping(uint256 => donation_struct) public _donations; //uint256            => donation_struct
     mapping(uint256 => smart_contract_uri_struct) public _smart_contracts_uris; //_smart_contract_ids   => (Ideas Smart contract)   Goal ID + Ideas URI
     mapping(uint256 => goal_ideas_votes_struct) public all_goal_ideas_votes; //_ideas_vote_ids       => (Vote)                   Goal ID + Ideas ID + User Id

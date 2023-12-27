@@ -13,6 +13,7 @@ import AddImageInput from '../../components/components/AddImageInput';
 import ImageListDisplay from '../../components/components/ImageListDisplay';
 import { toast } from 'react-toastify';
 
+let addedDate = false
 export default function CreateDaoModal({ open, onClose }) {
   const [DaoImage, setDaoImage] = useState([]);
   const { api, showToast, userWalletPolkadot, userSigner, PolkadotLoggedIn } = usePolkadotContext();
@@ -37,9 +38,9 @@ export default function CreateDaoModal({ open, onClose }) {
     rows: 4
   });
 
-  const [StartDate, StartDateInput] = UseFormInput({
+  const [StartDate, StartDateInput,setStartDate] = UseFormInput({
     defaultValue: '',
-    type: 'datetime-local',
+    type: 'date',
     placeholder: 'Start date',
     id: 'startdate'
   });
@@ -58,9 +59,13 @@ const [RecieveWallet, RecieveWalletInput,setRecieveWallet] = UseFormInput({
   });
 
   useEffect(()=>{
+    let dateTime = new Date()
     if (!PolkadotLoggedIn){
       setRecieveWallet(signerAddress)
+
     }
+    if (!addedDate)
+    setStartDate(dateTime.toISOString().split('T')[0]      )
   },[])
 
   //Downloading plugin function
@@ -82,6 +87,7 @@ const [RecieveWallet, RecieveWalletInput,setRecieveWallet] = UseFormInput({
       window.location.href = '/daos';
     }
   }
+  
   //Function after clicking Create Dao Button
   async function createDao() {
     const id = toast.loading('Uploading IPFS ...');

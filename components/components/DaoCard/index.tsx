@@ -10,19 +10,25 @@ import { useState } from 'react';
 const DAOCard = ({ item }: { item: Dao }) => {
   const [showPlaceholder, setShowPlaceholder] = useState(false);
 
+    // Format the duration
+    let formattedDuration = '';
   const startDate = new Date();
-  const endDate = new Date(item.Start_Date); // 5 days later
+  let hasAlreadyPast = false
+  if (item.Start_Date){
+    const endDate = new Date(item.Start_Date); // 5 days later
 
-  const duration = intervalToDuration({ start: startDate, end: endDate });
-
-  // Format the duration
-  let formattedDuration = '';
-  formattedDuration += duration.days > 0 ? `${duration.days} days ` : '';
-  formattedDuration += duration.hours > 0 ? `${duration.hours} hours ` : '';
-  formattedDuration += duration.minutes > 0 ? `and ${duration.minutes} min` : '';
-  formattedDuration = formattedDuration.trim();
-
-  const hasAlreadyPast = isPast(item.Start_Date);
+    const duration = intervalToDuration({ start: startDate, end: endDate });
+  
+    formattedDuration += duration.days > 0 ? `${duration.days} days ` : '';
+    formattedDuration += duration.hours > 0 ? `${duration.hours} hours ` : '';
+    formattedDuration += duration.minutes > 0 ? `and ${duration.minutes} min` : '';
+    formattedDuration = formattedDuration.trim();
+  
+    hasAlreadyPast =  isPast(item.Start_Date);
+  
+  }else{
+    hasAlreadyPast = true
+  }
 
   return (
     <Card className="max-w-[720px]">
@@ -37,7 +43,7 @@ const DAOCard = ({ item }: { item: Dao }) => {
           <p>
             Managed by <a href={'/Profile/' + item?.user_info?.id?.toString()} className="text-piccolo">@{item?.user_info?.fullName.toString()}</a>
           </p>
-          {!hasAlreadyPast && <p className="text-hit font-bold">Opens in {formattedDuration}</p>}
+          {!hasAlreadyPast ? <p className="text-hit font-bold">Opens in {formattedDuration}</p>:<p className="text-hit font-bold">Opened</p>}
           <Link href={`/daos/dao?[${item.daoId}]`}>
             <Button className="absolute bottom-0 right-0" iconLeft={<ArrowsRightShort />}>
               Go to community
