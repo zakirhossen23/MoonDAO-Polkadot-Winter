@@ -12,7 +12,8 @@ const DAOCard = ({ item }: { item: Dao }) => {
 
     // Format the duration
     let formattedDuration = '';
-  const startDate = new Date();
+    let today_iso = (new Date()).toISOString().split("T")[0]
+  const startDate = new Date(today_iso);
   let hasAlreadyPast = false
   if (item.Start_Date){
     const endDate = new Date(item.Start_Date); // 5 days later
@@ -24,7 +25,7 @@ const DAOCard = ({ item }: { item: Dao }) => {
     formattedDuration += duration.minutes > 0 ? `and ${duration.minutes} min` : '';
     formattedDuration = formattedDuration.trim();
   
-    hasAlreadyPast =  isPast(item.Start_Date);
+    hasAlreadyPast =  isPast(item.Start_Date) || endDate.toISOString().split("T")[0] == today_iso;
   
   }else{
     hasAlreadyPast = true

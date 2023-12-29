@@ -67,7 +67,7 @@ export default function JoinCommunityModal({ SubsPrice, show, onHide, address, t
         window.location.reload();
       }, 1000);
     } else {
-      let output = await sendTransfer(Number(window.ethereum.networkVersion), Amount, address, ShowAlert);
+      let output = await sendTransfer(Number(window.ethereum.networkVersion),`${Number( Amount) }`, address, ShowAlert);
       setTransaction({
         link: output.transaction,
         token: output?.wrappedAsset
@@ -124,9 +124,9 @@ export default function JoinCommunityModal({ SubsPrice, show, onHide, address, t
           <div className="flex flex-col gap-8 w-full p-8">
             <div className="flex justify-between pt-8">
               <h4 className="font-semibold text-moon-18">Total</h4>
-              <h4 className="font-semibold text-moon-18">{Amount} DEV</h4>
+              <h4 className="font-semibold text-moon-18">{Amount} {Token}</h4>
             </div>
-            {Amount > Balance ? <p className="pb-8 text-right text-dodoria">Insufficient funds</p> : <p className="pb-8 text-right">Your balance is {Balance} DEV</p>}
+            {Amount > Balance ? <p className="pb-8 text-right text-dodoria">Insufficient funds</p> : <p className="pb-8 text-right">Your balance is {Balance} {Token}</p>}
           </div>
 
           <div className="flex justify-between border-t border-beerus w-full p-6">

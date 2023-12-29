@@ -8,11 +8,15 @@ import isServer from '../../components/isServer';
 import useContract from '../../services/useContract';
 import AddImageInput from '../../components/components/AddImageInput';
 import ImageListDisplay from '../../components/components/ImageListDisplay';
+import { usePolkadotContext } from '../../contexts/PolkadotContext';
+
 import { toast } from 'react-toastify';
 
 export default function CreateIdeaModal({ show, onClose }) {
   const [IdeasImage, setIdeasImage] = useState([]);
   const { contract, signerAddress, sendTransaction } = useContract();
+  const { userInfo } = usePolkadotContext();
+
   if (isServer()) return null;
 
   //Storage API for images and videos
@@ -135,9 +139,19 @@ export default function CreateIdeaModal({ show, onClose }) {
     };
     console.log('======================>Creating Ideas');
     toast.update(ToastId, { render: "Creating Ideas...", isLoading: true });
+    const goalURIFull = await contract._goal_uris(Number(id)); //Getting total goal (Number)
+    const goalURI = JSON.parse(goalURIFull.goal_uri);
+    
+    let feed = JSON.stringify({
+      name: userInfo.name,
+      goalTitle: goalURI.properties.Title.description,
+      idea: {
+        Title: IdeasTitle
+      }
+    })
     try {
       // Creating Ideas in Smart contract
-      await sendTransaction(await window.contract.populateTransaction.create_ideas(JSON.stringify(createdObject), Number(id), smart_contracts, Number(window.userid)));
+      await sendTransaction(await window.contract.populateTransaction.create_ideas(JSON.stringify(createdObject), Number(id), smart_contracts, Number(window.userid),feed));
       toast.update(ToastId, {
         render: 'Created Successfully!', type: "success", isLoading: false, autoClose: 1000,
         closeButton: true,

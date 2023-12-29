@@ -69,7 +69,8 @@ export default function Goal() {
 
         let user_info = await getUserInfoById(Number(goalURI.properties?.user_id?.description))
 
-        const totalIdeas = await contract.get_all_ideas_by_goal_id(Number(id)); //Getting total goal (Number)
+        const totalIdeasWithEmpty = await contract.get_all_ideas_by_goal_id(Number(goalid)); //Getting total goal (Number)
+        let totalIdeas = totalIdeasWithEmpty.filter(e => e !== "")
         const arr = [];
         let total_donated = 0;
         for (let i = 0; i < Object.keys(totalIdeas).length; i++) {

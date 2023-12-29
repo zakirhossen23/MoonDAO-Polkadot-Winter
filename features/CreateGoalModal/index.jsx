@@ -1,20 +1,23 @@
 import { Button, IconButton, Modal } from '@heathmont/moon-core-tw';
 import { ControlsClose, ControlsPlus, GenericPicture } from '@heathmont/moon-icons-tw';
 import { NFTStorage } from 'nft.storage';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import UseFormInput from '../../components/components/UseFormInput';
 import UseFormTextArea from '../../components/components/UseFormTextArea';
 import isServer from '../../components/isServer';
 import useContract from '../../services/useContract';
 import AddImageInput from '../../components/components/AddImageInput';
 import ImageListDisplay from '../../components/components/ImageListDisplay';
+import { usePolkadotContext } from '../../contexts/PolkadotContext';
 
 import { toast } from 'react-toastify';
 
 
+let addedDate = false
 export default function CreateGoalModal({ open, onClose }) {
   const [GoalImage, setGoalImage] = useState([]);
   const { signerAddress, sendTransaction } = useContract();
+  const { userInfo } = usePolkadotContext();
 
   //Storage API for images and videos
   const NFT_STORAGE_TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDJDMDBFOGEzZEEwNzA5ZkI5MUQ1MDVmNDVGNUUwY0Q4YUYyRTMwN0MiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY1NDQ3MTgxOTY2NSwibmFtZSI6IlplbmNvbiJ9.6znEiSkiLKZX-a9q-CKvr4x7HS675EDdaXP622VmYs8';
@@ -35,9 +38,9 @@ export default function CreateGoalModal({ open, onClose }) {
     rows: 4
   });
 
-  const [EndDate, EndDateInput] = UseFormInput({
+  const [EndDate, EndDateInput, setEndDate] = UseFormInput({
     defaultValue: '',
-    type: 'datetime-local',
+    type: 'date',
     placeholder: 'End date',
     id: 'enddate'
   });
@@ -109,8 +112,8 @@ export default function CreateGoalModal({ open, onClose }) {
           type: 'string',
           description: EndDate
         },
-        user_id:{
-          type:'string',
+        user_id: {
+          type: 'string',
           description: window.userid
         },
         wallet: {
@@ -126,14 +129,23 @@ export default function CreateGoalModal({ open, onClose }) {
     };
     console.log('======================>Creating Goal');
     toast.update(ToastId, { render: "Creating Goal...", isLoading: true });
+    let feed = JSON.stringify({
+      name: userInfo.name,
+      goal: {
+        Title: GoalTitle,
+        budget: Budget
+      }
+    })
 
     try {
       // Creating Goal in Smart contract
-      await sendTransaction(await window.contract.populateTransaction.create_goal(JSON.stringify(createdObject), id, Number(window.userid)));
-      toast.update(ToastId, { render: 'Created Successfully!', type: "success", isLoading: false,  autoClose: 1000,
-      closeButton: true,
-      closeOnClick: true,
-      draggable: true  });
+      await sendTransaction(await window.contract.populateTransaction.create_goal(JSON.stringify(createdObject), id, Number(window.userid),feed));
+      toast.update(ToastId, {
+        render: 'Created Successfully!', type: "success", isLoading: false, autoClose: 1000,
+        closeButton: true,
+        closeOnClick: true,
+        draggable: true
+      });
       onClose();
     } catch (error) {
       console.error(error);
@@ -187,6 +199,11 @@ export default function CreateGoalModal({ open, onClose }) {
     }
     setGoalImage(newImages);
   }
+  useEffect(() => {
+    let dateTime = new Date()
+    if (!addedDate)
+      setEndDate(dateTime.toISOString().split('T')[0])
+  }, [])
 
   return (
     <Modal open={open} onClose={onClose}>
