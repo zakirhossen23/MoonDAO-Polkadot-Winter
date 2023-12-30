@@ -2,7 +2,7 @@ import { formatDuration, intervalToDuration } from 'date-fns';
 import Card from '../Card';
 import { Activity } from '../../../data-model/activity';
 import { Avatar, IconButton } from '@heathmont/moon-core-tw';
-import { GenericHeart, GenericIdea, GenericPending, GenericUser, ShopCryptoCoin, SportDarts, SportSpecials } from '@heathmont/moon-icons-tw';
+import { GenericHeart, GenericIdea, GenericPending, GenericUser, ShopWallet, SportDarts, SportSpecials } from '@heathmont/moon-icons-tw';
 import IdeaCard from '../IdeaCard';
 import GoalCard from '../GoalCard';
 
@@ -60,7 +60,7 @@ const DonationActivity = ({ data }) => (
   <div className="flex flex-col gap-3">
     <div className="flex gap-4 w-full items-center">
       <Avatar size="lg" className="rounded-full bg-cell text-bulma shrink-0">
-        <ShopCryptoCoin className="text-moon-32" />
+        <ShopWallet className="text-moon-32" />
       </Avatar>
       <p>
         <span className="font-bold">DEV {data.donated} donated</span> on an idea for the goal <span className="font-bold">{data.goalTitle}</span>

@@ -3,7 +3,7 @@ import { Idea } from '../../../data-model/idea';
 import Card from '../Card';
 import Link from 'next/link';
 import { Button } from '@heathmont/moon-core-tw';
-import { ArrowsRightShort, GenericHeart, GenericIdea, ShopCryptoCoin } from '@heathmont/moon-icons-tw';
+import { ArrowsRightShort, GenericHeart, GenericIdea, ShopWallet } from '@heathmont/moon-icons-tw';
 import { useState } from 'react';
 
 const IdeaCard = ({ item, onClickVote, onClickDonate, preview, hideGoToButton }: { item: Idea; onClickVote?; onClickDonate?; preview?: boolean; hideGoToButton?: boolean }) => {
@@ -34,7 +34,7 @@ const IdeaCard = ({ item, onClickVote, onClickDonate, preview, hideGoToButton }:
             )}
 
             {!item.isOwner && !preview && (
-              <Button variant="secondary" iconLeft={<ShopCryptoCoin />} onClick={onClickDonate}>
+              <Button variant="secondary" iconLeft={<ShopWallet />} onClick={onClickDonate}>
                 Donate
               </Button>
             )}

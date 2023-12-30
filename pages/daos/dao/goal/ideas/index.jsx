@@ -1,5 +1,5 @@
 import { Button } from '@heathmont/moon-core-tw';
-import { GenericEdit, GenericHeart, ShopCryptoCoin } from '@heathmont/moon-icons-tw';
+import { GenericEdit, GenericHeart, ShopWallet } from '@heathmont/moon-icons-tw';
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
 import CommentBox from '../../../../../components/components/CommentBox';
@@ -315,7 +315,7 @@ export default function GrantIdeas() {
             </div>
             <div className="flex flex-col gap-2">
               {!IdeasURI.isOwner && (
-                <Button iconLeft={<ShopCryptoCoin />} onClick={onClickDonate}>
+                <Button iconLeft={<ShopWallet />} onClick={onClickDonate}>
                   Donate
                 </Button>
               )}
