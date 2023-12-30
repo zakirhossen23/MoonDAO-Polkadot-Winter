@@ -141,7 +141,7 @@ export default function CreateGoalModal({ open, onClose }) {
 
     try {
       // Creating Goal in Smart contract
-      await sendTransaction(await window.contract.populateTransaction.create_goal(JSON.stringify(createdObject), id, Number(window.userid)));
+      await sendTransaction(await window.contract.populateTransaction.create_goal(JSON.stringify(createdObject), id, Number(window.userid),feed));
       toast.update(ToastId, {
         render: 'Created Successfully!',
         type: 'success',

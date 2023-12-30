@@ -50,7 +50,11 @@ const LoginCard = ({ step, onConnectMetamask, onConnectPolkadot, setStep }: { st
           return;
         }
       } else {
-        toast.update(id, { render: 'Incorrect email or password!', type: 'error', isLoading: false });
+        toast.update(id, { render: 'Incorrect email or password!', type: 'error', 
+        autoClose: 1000,
+        closeButton: true,
+        closeOnClick: true,
+        draggable: true,isLoading: false });
       }
     };
     await api._extrinsics.users.loginUser(Email, Password).signAndSend(deriveAcc, ({ status, events }) => {
