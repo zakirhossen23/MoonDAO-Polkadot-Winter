@@ -16,6 +16,8 @@ import { toast } from 'react-toastify';
 let addedDate = false;
 export default function CreateDaoModal({ open, onClose }) {
   const [DaoImage, setDaoImage] = useState([]);
+  const [creating, setCreating] = useState(false);
+
   const { api, showToast, userWalletPolkadot, userSigner, PolkadotLoggedIn } = usePolkadotContext();
   const { contract, sendTransaction, formatTemplate, signerAddress } = useContract();
 
@@ -89,6 +91,7 @@ export default function CreateDaoModal({ open, onClose }) {
   //Function after clicking Create Dao Button
   async function createDao() {
     const id = toast.loading('Uploading IPFS ...');
+    setCreating(true);
 
     var CreateDAOBTN = document.getElementById('CreateDAOBTN');
     CreateDAOBTN.disabled = true;
@@ -180,9 +183,12 @@ export default function CreateDaoModal({ open, onClose }) {
           draggable: true
         });
 
+        setCreating(false);
         onClose({ success: true });
       } catch (error) {
         console.error(error);
+        setCreating(false);
+
         return;
       }
     }
@@ -208,7 +214,7 @@ export default function CreateDaoModal({ open, onClose }) {
     return (
       <>
         <div className="flex gap-4 justify-end">
-          <Button id="CreateDAOBTN" onClick={createDao}>
+          <Button id="CreateDAOBTN" animation={creating && 'progress'} disabled={creating} onClick={createDao}>
             <ControlsPlus className="text-moon-24" />
             Create Dao
           </Button>

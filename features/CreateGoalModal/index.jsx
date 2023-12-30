@@ -15,6 +15,7 @@ import { toast } from 'react-toastify';
 let addedDate = false;
 export default function CreateGoalModal({ open, onClose }) {
   const [GoalImage, setGoalImage] = useState([]);
+  const [creating, setCreating] = useState(false);
   const { signerAddress, sendTransaction } = useContract();
   const { userInfo } = usePolkadotContext();
 
@@ -77,6 +78,8 @@ export default function CreateGoalModal({ open, onClose }) {
 
   //Function after clicking Create Goal Button
   async function createGoal() {
+    setCreating(true);
+
     const ToastId = toast.loading('Uploading IPFS ...');
     let allFiles = [];
     for (let index = 0; index < GoalImage.length; index++) {
@@ -148,9 +151,13 @@ export default function CreateGoalModal({ open, onClose }) {
         closeOnClick: true,
         draggable: true
       });
+
+      setCreating(false);
       onClose({ success: true });
     } catch (error) {
+      setCreating(false);
       console.error(error);
+
       return;
       // window.location.href = "/login?[/]"; //If found any error then it will let the user to login page
     }
@@ -322,7 +329,7 @@ export default function CreateGoalModal({ open, onClose }) {
           <Button variant="ghost" onClick={onClose}>
             Cancel
           </Button>
-          <Button id="CreateGoalBTN" onClick={createGoal}>
+          <Button id="CreateGoalBTN" animation={creating && 'progress'} disabled={creating} onClick={createGoal}>
             <ControlsPlus className="text-moon-24" />
             Create goal
           </Button>

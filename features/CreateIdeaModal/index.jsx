@@ -14,6 +14,8 @@ import { toast } from 'react-toastify';
 
 export default function CreateIdeaModal({ show, onClose }) {
   const [IdeasImage, setIdeasImage] = useState([]);
+  const [creating, setCreating] = useState(false);
+
   const { contract, signerAddress, sendTransaction } = useContract();
   const { userInfo } = usePolkadotContext();
 
@@ -72,6 +74,8 @@ export default function CreateIdeaModal({ show, onClose }) {
   //Function after clicking Create Ideas Button
   async function createIdeas() {
     const ToastId = toast.loading('Uploading IPFS ...');
+    setCreating(true);
+
     var CreateIdeasBTN = document.getElementById('CreateIdeasBTN');
     CreateIdeasBTN.disabled = true;
     let allFiles = [];
@@ -161,20 +165,23 @@ export default function CreateIdeaModal({ show, onClose }) {
         closeOnClick: true,
         draggable: true
       });
+      setCreating(false);
+      onClose({ success: true });
+
       window.location.reload();
     } catch (error) {
       console.error(error);
+      setCreating(false);
+
       return;
     }
-
-    onClose({ success: true });
   }
 
   function CreateIdeasBTN() {
     return (
       <>
         <div className="flex gap-4 justify-end">
-          <Button id="CreateIdeasBTN" onClick={createIdeas}>
+          <Button id="CreateIdeasBTN" animation={creating && 'progress'} disabled={creating} onClick={createIdeas}>
             <ControlsPlus className="text-moon-24" />
             Create idea
           </Button>
