@@ -13,11 +13,11 @@ import AddImageInput from '../../components/components/AddImageInput';
 import ImageListDisplay from '../../components/components/ImageListDisplay';
 import { toast } from 'react-toastify';
 
-let addedDate = false
+let addedDate = false;
 export default function CreateDaoModal({ open, onClose }) {
   const [DaoImage, setDaoImage] = useState([]);
   const { api, showToast, userWalletPolkadot, userSigner, PolkadotLoggedIn } = usePolkadotContext();
-  const { contract, sendTransaction, formatTemplate,signerAddress } = useContract();
+  const { contract, sendTransaction, formatTemplate, signerAddress } = useContract();
 
   //Storage API for images and videos
   const NFT_STORAGE_TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDJDMDBFOGEzZEEwNzA5ZkI5MUQ1MDVmNDVGNUUwY0Q4YUYyRTMwN0MiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY1NDQ3MTgxOTY2NSwibmFtZSI6IlplbmNvbiJ9.6znEiSkiLKZX-a9q-CKvr4x7HS675EDdaXP622VmYs8';
@@ -38,13 +38,13 @@ export default function CreateDaoModal({ open, onClose }) {
     rows: 4
   });
 
-  const [StartDate, StartDateInput,setStartDate] = UseFormInput({
+  const [StartDate, StartDateInput, setStartDate] = UseFormInput({
     defaultValue: '',
     type: 'date',
     placeholder: 'Start date',
     id: 'startdate'
   });
-const [RecieveWallet, RecieveWalletInput,setRecieveWallet] = UseFormInput({
+  const [RecieveWallet, RecieveWalletInput, setRecieveWallet] = UseFormInput({
     defaultValue: '',
     type: 'text',
     placeholder: 'Wallet Address (EVM)',
@@ -58,15 +58,13 @@ const [RecieveWallet, RecieveWalletInput,setRecieveWallet] = UseFormInput({
     id: 'subs_price'
   });
 
-  useEffect(()=>{
-    let dateTime = new Date()
-    if (!PolkadotLoggedIn){
-      setRecieveWallet(signerAddress)
-
+  useEffect(() => {
+    let dateTime = new Date();
+    if (!PolkadotLoggedIn) {
+      setRecieveWallet(signerAddress);
     }
-    if (!addedDate)
-    setStartDate(dateTime.toISOString().split('T')[0]      )
-  },[])
+    if (!addedDate) setStartDate(dateTime.toISOString().split('T')[0]);
+  }, []);
 
   //Downloading plugin function
   function downloadURI(uri, name) {
@@ -87,7 +85,7 @@ const [RecieveWallet, RecieveWalletInput,setRecieveWallet] = UseFormInput({
       window.location.href = '/daos';
     }
   }
-  
+
   //Function after clicking Create Dao Button
   async function createDao() {
     const id = toast.loading('Uploading IPFS ...');
@@ -171,14 +169,18 @@ const [RecieveWallet, RecieveWalletInput,setRecieveWallet] = UseFormInput({
     } else {
       try {
         // Creating Dao in Smart contract from metamask chain
-        await sendTransaction(await window.contract.populateTransaction.create_dao(window.signerAddress, JSON.stringify(createdObject), formatted_template,Number(window.userid)));
+        await sendTransaction(await window.contract.populateTransaction.create_dao(window.signerAddress, JSON.stringify(createdObject), formatted_template, Number(window.userid)));
         toast.update(id, {
-          render: 'Created Successfully!', type: "success", isLoading: false, autoClose: 1000,
+          render: 'Created Successfully!',
+          type: 'success',
+          isLoading: false,
+          autoClose: 1000,
           closeButton: true,
           closeOnClick: true,
           draggable: true
         });
-        onClose();
+
+        onClose({ success: true });
       } catch (error) {
         console.error(error);
         return;
@@ -247,7 +249,7 @@ const [RecieveWallet, RecieveWalletInput,setRecieveWallet] = UseFormInput({
             <div className="flex flex-col gap-2">
               <h6>Description</h6>
               {DaoDescriptionInput}
-            </div> 
+            </div>
             <div className="flex flex-col gap-2">
               <h6>Recipeint</h6>
               {RecieveWalletInput}

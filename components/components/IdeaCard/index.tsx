@@ -6,9 +6,8 @@ import { Button } from '@heathmont/moon-core-tw';
 import { ArrowsRightShort, GenericHeart, GenericIdea, ShopCryptoCoin } from '@heathmont/moon-icons-tw';
 import { useState } from 'react';
 
-const IdeaCard = ({ item,onClickVote, onClickDonate, preview, hideGoToButton }: { item: Idea;onClickVote?; onClickDonate?; preview?: boolean; hideGoToButton?: boolean }) => {
+const IdeaCard = ({ item, onClickVote, onClickDonate, preview, hideGoToButton }: { item: Idea; onClickVote?; onClickDonate?; preview?: boolean; hideGoToButton?: boolean }) => {
   const [showPlaceholder, setShowPlaceholder] = useState(false);
-
 
   return (
     <Card className={`max-w-[720px] ${preview && '!bg-goku'}`}>
@@ -28,13 +27,13 @@ const IdeaCard = ({ item,onClickVote, onClickDonate, preview, hideGoToButton }: 
             <p>Votes</p>
           </div>
           <div className="absolute bottom-0 right-0 flex gap-2">
-            {(!item.isVoted && !item.isOwner) && (
+            {!item.isVoted && !hideGoToButton && !item.isOwner && (
               <Button variant="secondary" iconLeft={<GenericHeart />} onClick={onClickVote}>
                 Vote
               </Button>
             )}
 
-            {!item.isOwner && (
+            {!item.isOwner && !hideGoToButton && (
               <Button variant="secondary" iconLeft={<ShopCryptoCoin />} onClick={onClickDonate}>
                 Donate
               </Button>

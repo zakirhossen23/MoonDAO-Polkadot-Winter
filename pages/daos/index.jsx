@@ -4,10 +4,11 @@ import DAOCard from '../../components/components/DaoCard';
 import Loader from '../../components/components/Loader';
 import EmptyState from '../../components/components/EmptyState';
 import useContract from '../../services/useContract';
-import { Button, Modal } from '@heathmont/moon-core-tw';
+import { Button } from '@heathmont/moon-core-tw';
 import { ControlsPlus, GenericUsers } from '@heathmont/moon-icons-tw';
 import CreateDaoModal from '../../features/CreateDaoModal';
 import { usePolkadotContext } from '../../contexts/PolkadotContext';
+import { sortDate } from '../../utils/sort-date';
 
 export default function DAOs() {
   const { api, GetAllDaos } = usePolkadotContext();
@@ -18,21 +19,23 @@ export default function DAOs() {
   const { contract } = useContract();
 
   useEffect(() => {
-    fetchData()
+    fetchData();
   }, [contract, api]);
-  async function fetchData() {
-    if (contract && api){
-      setLoading(true)
-      let arr = await GetAllDaos();
-      setLoading(false)
-      setList(arr);
-    }
 
+  async function fetchData() {
+    if (contract && api) {
+      setLoading(true);
+      let arr = await GetAllDaos();
+
+      setLoading(false);
+      setList(sortDate(arr, 'Start_Date'));
+    }
   }
 
-  function closeModal() {
-    setShowCreateDaoModal(false);
-    fetchData();
+  function closeModal(event) {
+    if (event) {
+      setShowCreateDaoModal(false);
+    }
   }
   function openModal() {
     setShowCreateDaoModal(true);
