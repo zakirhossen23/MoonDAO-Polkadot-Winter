@@ -59,7 +59,7 @@ export default function Profile() {
     let allDaos = await GetAllDaos();
     let allIdeas = await contract.get_all_ideas();
     let donated = Number(await contract._donated(Number(user_id))) / 1e18;
-    let allBadges = { ... await contract._user_badges(user_id) };
+    let allBadges = { ... (await contract._user_badges(user_id)) };
 
 
     let total_read = 0;

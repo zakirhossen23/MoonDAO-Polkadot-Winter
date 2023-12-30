@@ -52,7 +52,7 @@ const GoalActivity = ({ data }) => (
         <span className="text-piccolo">{data.name}</span> just created a goal
       </p>
     </div>
-    <GoalCard item={data.goal} />
+    <GoalCard item={data.goal} preview />
   </div>
 );
 

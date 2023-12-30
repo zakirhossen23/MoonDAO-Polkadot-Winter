@@ -8,7 +8,6 @@ import { Button } from '@heathmont/moon-core-tw';
 import { ControlsPlus, GenericUsers } from '@heathmont/moon-icons-tw';
 import CreateDaoModal from '../../features/CreateDaoModal';
 import { usePolkadotContext } from '../../contexts/PolkadotContext';
-import { sortDate } from '../../utils/sort-date';
 
 export default function DAOs() {
   const { api, GetAllDaos } = usePolkadotContext();
@@ -28,7 +27,7 @@ export default function DAOs() {
       let arr = await GetAllDaos();
 
       setLoading(false);
-      setList(sortDate(arr, 'Start_Date'));
+      setList(arr.reverse());
     }
   }
 

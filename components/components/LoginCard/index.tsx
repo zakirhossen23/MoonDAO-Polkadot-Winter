@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import Image from "next/legacy/image";
 import Card from '../Card';
 import { Button } from '@heathmont/moon-core-tw';
 import { SoftwareLogin } from '@heathmont/moon-icons-tw';

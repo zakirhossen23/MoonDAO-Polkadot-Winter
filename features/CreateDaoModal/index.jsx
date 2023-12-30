@@ -54,7 +54,7 @@ export default function CreateDaoModal({ open, onClose }) {
   const [SubsPrice, SubsPriceInput] = UseFormInput({
     defaultValue: '',
     type: 'text',
-    placeholder: 'Subscription per month (in $)',
+    placeholder: '0.00',
     id: 'subs_price'
   });
 
@@ -260,7 +260,7 @@ export default function CreateDaoModal({ open, onClose }) {
             </div>
 
             <div className="flex flex-col gap-2">
-              <h6>Subscription Price Per Month</h6>
+              <h6>Monthly subscription in USD</h6>
               {SubsPriceInput}
             </div>
 

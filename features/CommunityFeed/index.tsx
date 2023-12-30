@@ -1,6 +1,5 @@
 import ActivityCard from '../../components/components/ActivityCard';
 import { Activity } from '../../data-model/activity';
-import { Idea } from '../../data-model/idea';
 
 const mockItems = [
   {
@@ -66,7 +65,7 @@ const mockItems = [
 
 const CommunityFeed = () => {
   return (
-    <div className="container flex flex-col gap-2 w-full items-center pb-10">
+    <div className="flex flex-col gap-2 w-full items-center pb-10 w-[540px] min-w-[540px]">
       {mockItems.map((item, index) => (
         <ActivityCard key={index} date={item.date} type={item.type} data={item.data}></ActivityCard>
       ))}

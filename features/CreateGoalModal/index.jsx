@@ -1,5 +1,5 @@
 import { Button, IconButton, Modal } from '@heathmont/moon-core-tw';
-import { ControlsClose, ControlsPlus, GenericPicture } from '@heathmont/moon-icons-tw';
+import { ControlsClose, ControlsPlus } from '@heathmont/moon-icons-tw';
 import { NFTStorage } from 'nft.storage';
 import { useEffect, useState } from 'react';
 import UseFormInput from '../../components/components/UseFormInput';
@@ -12,8 +12,7 @@ import { usePolkadotContext } from '../../contexts/PolkadotContext';
 
 import { toast } from 'react-toastify';
 
-
-let addedDate = false
+let addedDate = false;
 export default function CreateGoalModal({ open, onClose }) {
   const [GoalImage, setGoalImage] = useState([]);
   const { signerAddress, sendTransaction } = useContract();
@@ -48,7 +47,7 @@ export default function CreateGoalModal({ open, onClose }) {
   const [Budget, BudgetInput] = UseFormInput({
     defaultValue: '',
     type: 'text',
-    placeholder: 'Budget',
+    placeholder: '0.00',
     id: 'goal'
   });
   let id = -1;
@@ -128,25 +127,28 @@ export default function CreateGoalModal({ open, onClose }) {
       }
     };
     console.log('======================>Creating Goal');
-    toast.update(ToastId, { render: "Creating Goal...", isLoading: true });
+    toast.update(ToastId, { render: 'Creating Goal...', isLoading: true });
     let feed = JSON.stringify({
       name: userInfo.name,
       goal: {
         Title: GoalTitle,
         budget: Budget
       }
-    })
+    });
 
     try {
       // Creating Goal in Smart contract
-      await sendTransaction(await window.contract.populateTransaction.create_goal(JSON.stringify(createdObject), id, Number(window.userid),feed));
+      await sendTransaction(await window.contract.populateTransaction.create_goal(JSON.stringify(createdObject), id, Number(window.userid)));
       toast.update(ToastId, {
-        render: 'Created Successfully!', type: "success", isLoading: false, autoClose: 1000,
+        render: 'Created Successfully!',
+        type: 'success',
+        isLoading: false,
+        autoClose: 1000,
         closeButton: true,
         closeOnClick: true,
         draggable: true
       });
-      onClose();
+      onClose({ success: true });
     } catch (error) {
       console.error(error);
       return;
@@ -200,10 +202,9 @@ export default function CreateGoalModal({ open, onClose }) {
     setGoalImage(newImages);
   }
   useEffect(() => {
-    let dateTime = new Date()
-    if (!addedDate)
-      setEndDate(dateTime.toISOString().split('T')[0])
-  }, [])
+    let dateTime = new Date();
+    if (!addedDate) setEndDate(dateTime.toISOString().split('T')[0]);
+  }, []);
 
   return (
     <Modal open={open} onClose={onClose}>
@@ -226,7 +227,7 @@ export default function CreateGoalModal({ open, onClose }) {
             </div>
             <div className="flex gap-8 w-full">
               <div className="flex flex-col gap-2 w-full">
-                <h6>Budget</h6>
+                <h6>Goal amount in USD</h6>
                 {BudgetInput}
               </div>
             </div>
@@ -239,10 +240,9 @@ export default function CreateGoalModal({ open, onClose }) {
             <div className="flex flex-col gap-2">
               <h6></h6>
               <div className="content-start flex flex-row flex-wrap gap-4 justify-start overflow-auto relative text-center text-white w-full">
-                <input className="file-input" hidden onChange={FilehandleChange} accept="image/*" id="GoalImage" name="GoalImage" type="file" multiple="multiple" />
-
+                <input className="file-input" hidden onChange={FilehandleChange} accept="image/*" id="GoalImage" name="GoalImage" type="file" />
                 <div className="flex flex-col gap-4">
-                  <AddImageInput onClick={AddBTNClick} />
+                  {GoalImage.length < 1 && <AddImageInput onClick={AddBTNClick} />}
                   <ImageListDisplay images={GoalImage} onDeleteImage={DeleteSelectedImages} />
                 </div>
               </div>
