@@ -132,7 +132,7 @@ export default function CreateGoalModal({ open, onClose }) {
     console.log('======================>Creating Goal');
     toast.update(ToastId, { render: 'Creating Goal...', isLoading: true });
     let feed = JSON.stringify({
-      name: userInfo.name,
+      name: userInfo?.fullName,
       goal: {
         Title: GoalTitle,
         budget: Budget

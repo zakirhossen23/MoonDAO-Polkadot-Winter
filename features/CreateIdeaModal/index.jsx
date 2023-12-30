@@ -147,7 +147,7 @@ export default function CreateIdeaModal({ show, onClose }) {
     const goalURI = JSON.parse(goalURIFull.goal_uri);
 
     let feed = JSON.stringify({
-      name: userInfo.name,
+      name: userInfo?.fullName,
       goalTitle: goalURI.properties.Title.description,
       idea: {
         Title: IdeasTitle
